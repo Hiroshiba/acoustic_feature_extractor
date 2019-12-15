@@ -106,9 +106,9 @@ def extract_f0(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig')
-    parser.add_argument('--output_directory', '-od', type=Path)
-    parser.add_argument('--sampling_rate', '-sr', type=int)
+    parser.add_argument('--input_glob', '-ig', required=True)
+    parser.add_argument('--output_directory', '-od', type=Path, required=True)
+    parser.add_argument('--sampling_rate', '-sr', type=int, required=True)
     parser.add_argument('--frame_period', '-fp', type=float, default=5.0)
     parser.add_argument('--f0_floor', '-ff', type=int, default=71.0)
     parser.add_argument('--f0_ceil', '-fc', type=int, default=800.0)

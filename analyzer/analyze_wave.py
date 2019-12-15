@@ -46,8 +46,8 @@ def analyze_wave(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig')
-    parser.add_argument('--sampling_rate', '-sr', type=int)
+    parser.add_argument('--input_glob', '-ig', required=True)
+    parser.add_argument('--sampling_rate', '-sr', type=int, required=True)
     analyze_wave(**vars(parser.parse_args()))
 
 

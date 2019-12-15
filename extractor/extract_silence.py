@@ -3,7 +3,6 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Optional
 
 import librosa
 import numpy
@@ -21,7 +20,7 @@ def extract_silence(
         input_glob,
         output_directory: Path,
         sampling_rate: int,
-        silence_top_db: Optional,
+        silence_top_db: float,
 ):
     output_directory.mkdir(exist_ok=True)
     save_arguments(locals(), output_directory / 'arguments.json')
@@ -48,10 +47,10 @@ def extract_silence(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig')
-    parser.add_argument('--output_directory', '-od', type=Path)
-    parser.add_argument('--sampling_rate', '-sr', type=int)
-    parser.add_argument('--silence_top_db', '-st', type=float)
+    parser.add_argument('--input_glob', '-ig', required=True)
+    parser.add_argument('--output_directory', '-od', type=Path, required=True)
+    parser.add_argument('--sampling_rate', '-sr', type=int, required=True)
+    parser.add_argument('--silence_top_db', '-st', type=float, default=60)
     extract_silence(**vars(parser.parse_args()))
 
 

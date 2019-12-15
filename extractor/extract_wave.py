@@ -35,7 +35,7 @@ def extract_wave(
         input_glob,
         output_directory: Path,
         sampling_rate: int,
-        clipping_range: Optional,
+        clipping_range: Optional[Tuple[float, float]],
         clipping_auto: bool,
 ):
     assert clipping_range is None or not clipping_auto
@@ -59,9 +59,9 @@ def extract_wave(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig')
-    parser.add_argument('--output_directory', '-od', type=Path)
-    parser.add_argument('--sampling_rate', '-sr', type=int)
+    parser.add_argument('--input_glob', '-ig', required=True)
+    parser.add_argument('--output_directory', '-od', type=Path, required=True)
+    parser.add_argument('--sampling_rate', '-sr', type=int, required=True)
     parser.add_argument('--clipping_range', '-cr', type=float, nargs=2, help='(min, max)')
     parser.add_argument('--clipping_auto', '-ca', action='store_true')
     extract_wave(**vars(parser.parse_args()))

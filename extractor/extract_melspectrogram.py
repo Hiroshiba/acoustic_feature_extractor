@@ -53,7 +53,7 @@ def extract_melspectrogram(
         input_glob,
         output_directory: Path,
         sampling_rate: int,
-        preemph: Optional,
+        preemph: Optional[float],
         n_mels: int,
         n_fft: int,
         win_length: int,
@@ -88,8 +88,8 @@ def extract_melspectrogram(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig')
-    parser.add_argument('--output_directory', '-od', type=Path)
+    parser.add_argument('--input_glob', '-ig', required=True)
+    parser.add_argument('--output_directory', '-od', type=Path, required=True)
     parser.add_argument('--sampling_rate', '-sr', type=int, default=24000)
     parser.add_argument('--preemph', type=float, default=0.97)
     parser.add_argument('--n_mels', type=int, default=80)

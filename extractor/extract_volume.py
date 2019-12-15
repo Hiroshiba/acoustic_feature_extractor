@@ -66,9 +66,9 @@ def extract_volume(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig')
-    parser.add_argument('--output_directory', '-od', type=Path)
-    parser.add_argument('--sampling_rate', '-sr', type=int)
+    parser.add_argument('--input_glob', '-ig', required=True)
+    parser.add_argument('--output_directory', '-od', type=Path, required=True)
+    parser.add_argument('--sampling_rate', '-sr', type=int, required=True)
     parser.add_argument('--frame_length', '-fl', type=int, default=800)
     parser.add_argument('--hop_length', '-hl', type=int, default=200)
     parser.add_argument('--top_db', '-td', type=int, default=80)

@@ -75,8 +75,8 @@ def extract_phoneme(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig')
-    parser.add_argument('--output_directory', '-od', type=Path)
+    parser.add_argument('--input_glob', '-ig', required=True)
+    parser.add_argument('--output_directory', '-od', type=Path, required=True)
     parser.add_argument('--phoneme_type', '-pt', type=PhonemeType, default=PhonemeType.seg_kit)
     parser.add_argument('--with_pre_post', '-wpp', action='store_true')
     parser.add_argument('--with_duration', '-wd', action='store_true')

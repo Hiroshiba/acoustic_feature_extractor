@@ -34,7 +34,7 @@ def process(
 def extract_midi_note(
         input_glob,
         output_directory: Path,
-        pitch_range: Tuple,
+        pitch_range: Tuple[int, int],
         pitch_shift: int,
         with_position: bool,
         rate: int,
@@ -58,8 +58,8 @@ def extract_midi_note(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig')
-    parser.add_argument('--output_directory', '-od', type=Path)
+    parser.add_argument('--input_glob', '-ig', required=True)
+    parser.add_argument('--output_directory', '-od', type=Path, required=True)
     parser.add_argument('--pitch_range', '-pr', nargs=2, type=int, default=(53, 76))
     parser.add_argument('--pitch_shift', '-ps', type=int, default=0)
     parser.add_argument('--without_position', '-wp', action='store_true')

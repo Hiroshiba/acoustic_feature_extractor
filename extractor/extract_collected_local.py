@@ -93,9 +93,9 @@ def extract_collected_local(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob_list', '-igl', nargs='+')
-    parser.add_argument('--output_directory', '-od', type=Path)
-    parser.add_argument('--rate', '-r', type=int)
+    parser.add_argument('--input_glob_list', '-igl', nargs='+', required=True)
+    parser.add_argument('--output_directory', '-od', type=Path, required=True)
+    parser.add_argument('--rate', '-r', type=int, required=True)
     parser.add_argument('--mode', '-m', choices=['min', 'max'], default='min')
     parser.add_argument('--error_time_length', '-etl', type=float, default=0.015)
     parser.add_argument('--ignore_error', '-ig', action='store_true')
