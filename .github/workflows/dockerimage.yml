@@ -12,12 +12,12 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --name acoustic_feature_extractor
+      run: docker build . --file Dockerfile --tag acoustic_feature_extractor:latest
 
     - name: Build the Docker image
       run: |-
         docker run \
-          acoustic_feature_extractor \
+          acoustic_feature_extractor:latest \
           python -m unittest -v tests
 
     - name: Test pip install
