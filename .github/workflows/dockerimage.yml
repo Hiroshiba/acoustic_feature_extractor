@@ -10,12 +10,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-      
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile
-      
-    - name: pip install
+      run: docker build . --file Dockerfile --name acoustic_feature_extractor
+
+    - name: Build the Docker image
       run: |-
-        docker run -it --rm \
+        docker run \
+          acoustic_feature_extractor \
+          python -m unittest -v tests
+
+    - name: Test pip install
+      run: |-
+        docker run \
           hiroshiba/hiho-deep-docker-base:miniconda-python3.7.5 \
           bash -c 'pip install git+https://github.com/Hiroshiba/acoustic_feature_extractor'

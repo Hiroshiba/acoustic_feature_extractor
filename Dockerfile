@@ -1,6 +1,6 @@
 FROM hiroshiba/hiho-deep-docker-base:miniconda-python3.7.5-ssh
 
-RUN apt-get update && apt-get install -y swig libasound2-dev && apt-get clean
+RUN apt-get update && apt-get install -y swig libsndfile1-dev libasound2-dev && apt-get clean
 RUN conda install -y cython numpy numba
 
 WORKDIR /app
@@ -13,3 +13,5 @@ RUN pip install -r requirements.txt
 COPY analyzer /app/analyzer
 COPY data /app/data
 COPY extractor /app/extractor
+COPY utility /app/utility
+COPY tests /app/tests
