@@ -3,14 +3,23 @@ from pathlib import Path
 from setuptools import setup, find_packages
 
 # console scripts
+console_scripts = []
+
 extractors = list(Path('extractor').glob('extract_*'))
 assert len(extractors) > 0
-
-console_scripts = [
+console_scripts += [
     f'{path.stem.replace("extract_", "acoustic_feature_extract_")}=extractor.{path.stem}:main'
     for path in extractors
 ]
 
+analyzers = list(Path('analyzer').glob('analyze_*'))
+assert len(analyzers) > 0
+console_scripts += [
+    f'{path.stem.replace("analyze_", "acoustic_feature_analyze_")}=analyzer.{path.stem}:main'
+    for path in analyzers
+]
+
+# setup
 setup(
     name='acoustic_feature_extractor',
     version='0.0.1',
