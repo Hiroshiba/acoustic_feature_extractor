@@ -15,7 +15,7 @@ jobs:
       run: docker build . --file Dockerfile
       
     - name: pip install
-      run: -|
+      run: |-
         docker run -it --rm \
           hiroshiba/hiho-deep-docker-base:miniconda-python3.7.5 \
           bash -c 'pip install git+https://github.com/Hiroshiba/acoustic_feature_extractor'
