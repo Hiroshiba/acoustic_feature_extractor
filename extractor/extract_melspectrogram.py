@@ -91,7 +91,7 @@ def main():
     parser.add_argument('--input_glob', '-ig', required=True)
     parser.add_argument('--output_directory', '-od', type=Path, required=True)
     parser.add_argument('--sampling_rate', '-sr', type=int, default=24000)
-    parser.add_argument('--preemph', type=float, default=0.97)
+    parser.add_argument('--preemph', type=float, default=None)
     parser.add_argument('--n_mels', type=int, default=80)
     parser.add_argument('--n_fft', type=int, default=2048)
     parser.add_argument('--win_length', type=int, default=1024)
