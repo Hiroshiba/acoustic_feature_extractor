@@ -3,7 +3,7 @@ from pathlib import Path
 import librosa
 import numpy
 
-from data.sampling_data import SamplingData
+from acoustic_feature_extractor.data.sampling_data import SamplingData
 
 
 class Wave(object):

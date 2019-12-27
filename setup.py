@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 # console scripts
 console_scripts = []
@@ -23,7 +23,7 @@ console_scripts += [
 setup(
     name='acoustic_feature_extractor',
     version='0.0.1',
-    packages=find_packages(),
+    packages=find_namespace_packages(),
     url='https://github.com/Hiroshiba/acoustic_feature_extractor',
     author='Kazuyuki Hiroshiba',
     author_email='hihokaruta@gmail.com',

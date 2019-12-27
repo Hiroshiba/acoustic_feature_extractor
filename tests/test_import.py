@@ -32,24 +32,24 @@ class TestImport(unittest.TestCase):
         dir(extract_wave)
 
     def test_import_data(self):
-        from data import linguistic_feature
+        from acoustic_feature_extractor.data import linguistic_feature
         dir(linguistic_feature)
 
-        from data import midi_feature
+        from acoustic_feature_extractor.data import midi_feature
         dir(midi_feature)
 
-        from data import phoneme
+        from acoustic_feature_extractor.data import phoneme
         dir(phoneme)
 
-        from data import sampling_data
+        from acoustic_feature_extractor.data import sampling_data
         dir(sampling_data)
 
-        from data import spectrogram
+        from acoustic_feature_extractor.data import spectrogram
         dir(spectrogram)
 
-        from data import wave
+        from acoustic_feature_extractor.data import wave
         dir(wave)
 
     def test_import_utility(self):
-        from utility import json_utility
+        from acoustic_feature_extractor.utility import json_utility
         dir(json_utility)

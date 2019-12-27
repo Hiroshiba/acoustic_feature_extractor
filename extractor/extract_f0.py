@@ -10,8 +10,8 @@ import pyworld
 import tqdm
 from scipy.interpolate import interp1d
 
-from data.wave import Wave
-from utility.json_utility import save_arguments
+from acoustic_feature_extractor.data import Wave
+from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
 def process(

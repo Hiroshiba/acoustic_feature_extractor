@@ -8,9 +8,9 @@ from typing import Optional
 import numpy
 import tqdm
 
-from data.spectrogram import to_log_melspectrogram
-from data.wave import Wave
-from utility.json_utility import save_arguments
+from acoustic_feature_extractor.data.spectrogram import to_log_melspectrogram
+from acoustic_feature_extractor.data import Wave
+from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
 def process(

@@ -11,7 +11,7 @@ RUN pip install -r requirements.txt
 
 # add applications
 COPY analyzer /app/analyzer
-COPY data /app/data
+COPY acoustic_feature_extractor/data /app/data
 COPY extractor /app/extractor
-COPY utility /app/utility
+COPY acoustic_feature_extractor/utility /app/utility
 COPY tests /app/tests

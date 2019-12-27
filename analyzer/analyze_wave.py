@@ -7,7 +7,7 @@ from typing import NamedTuple
 
 import tqdm
 
-from data.wave import Wave
+from acoustic_feature_extractor.data import Wave
 
 
 class WaveData(NamedTuple):

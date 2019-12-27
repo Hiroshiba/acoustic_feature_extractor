@@ -9,8 +9,8 @@ import numpy
 import tqdm
 from kiritan_singing_label_reader import MidiNoteReader
 
-from data.midi_feature import MidiFeature
-from utility.json_utility import save_arguments
+from acoustic_feature_extractor.data import MidiFeature
+from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
 def process(

@@ -3,7 +3,7 @@ from typing import List, Sequence, Union, Type
 
 import numpy
 
-from data.phoneme import SegKitPhoneme, BasePhoneme
+from acoustic_feature_extractor.data.phoneme import SegKitPhoneme, BasePhoneme
 
 
 class LinguisticFeature(object):
