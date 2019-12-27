@@ -61,7 +61,7 @@ def extract_melspectrogram(
         fmin: float,
         fmax: float,
         min_level_db: float,
-        normalize: bool,
+        disable_normalize: bool,
 ):
     output_directory.mkdir(exist_ok=True)
     save_arguments(locals(), output_directory / 'arguments.json')
@@ -79,7 +79,7 @@ def extract_melspectrogram(
         fmin=fmin,
         fmax=fmax,
         min_level_db=min_level_db,
-        normalize=normalize,
+        disable_normalize=disable_normalize,
     )
 
     pool = multiprocessing.Pool()
