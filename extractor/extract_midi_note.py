@@ -36,7 +36,7 @@ def extract_midi_note(
         output_directory: Path,
         pitch_range: Tuple[int, int],
         pitch_shift: int,
-        with_position: bool,
+        without_position: bool,
         rate: int,
 ):
     output_directory.mkdir(exist_ok=True)
@@ -48,7 +48,7 @@ def extract_midi_note(
         output_directory=output_directory,
         pitch_range=pitch_range,
         pitch_shift=pitch_shift,
-        with_position=with_position,
+        with_position=not without_position,
         rate=rate,
     )
 

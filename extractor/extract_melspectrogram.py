@@ -25,7 +25,7 @@ def process(
         fmin: float,
         fmax: float,
         min_level_db: float,
-        normalize: bool,
+        disable_normalize: bool,
 ):
     wave = Wave.load(path, sampling_rate)
 
@@ -40,7 +40,7 @@ def process(
         fmin=fmin,
         fmax=fmax,
         min_level_db=min_level_db,
-        normalize=normalize,
+        normalize=not disable_normalize,
     )
 
     rate = sampling_rate / hop_length
