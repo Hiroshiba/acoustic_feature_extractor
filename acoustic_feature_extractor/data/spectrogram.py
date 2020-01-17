@@ -2,7 +2,6 @@ from typing import Optional
 
 import librosa
 import numpy
-import numpy
 import pysptk
 import scipy.signal
 

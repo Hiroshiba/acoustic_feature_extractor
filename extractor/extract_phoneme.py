@@ -8,7 +8,7 @@ from typing import Sequence
 import numpy
 import tqdm
 
-from acoustic_feature_extractor.data import LinguisticFeature
+from acoustic_feature_extractor.data.linguistic_feature import LinguisticFeature
 from acoustic_feature_extractor.data.phoneme import PhonemeType, phoneme_type_to_class
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
