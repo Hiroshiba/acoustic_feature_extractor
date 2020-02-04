@@ -15,6 +15,3 @@ COPY extractor /app/extractor
 COPY acoustic_feature_extractor /app/acoustic_feature_extractor
 COPY tests /app/tests
 COPY setup.py /app/setup.py
-
-# install applications
-RUN pip install -e .
