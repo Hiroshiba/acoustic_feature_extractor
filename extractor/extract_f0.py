@@ -81,11 +81,13 @@ def extract_f0(
         f0_floor: float,
         f0_ceil: float,
         with_vuv: bool,
-        input_statistics: Path,
-        target_statistics: Path,
+        input_statistics: Optional[Path],
+        target_statistics: Optional[Path],
 ):
     output_directory.mkdir(exist_ok=True)
     save_arguments(locals(), output_directory / 'arguments.json')
+
+    assert (input_statistics is None) == (target_statistics is None)
 
     paths = [Path(p) for p in glob.glob(str(input_glob))]
     _process = partial(
