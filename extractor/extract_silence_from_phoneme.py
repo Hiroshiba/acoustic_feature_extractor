@@ -5,7 +5,7 @@ from functools import partial
 from pathlib import Path
 from typing import Tuple
 
-import numpy as np
+import numpy
 import tqdm
 
 from acoustic_feature_extractor.data.phoneme import PhonemeType, phoneme_type_to_class
@@ -25,7 +25,7 @@ def process(
     phonemes = phoneme_class.load_julius_list(phoneme_path)
 
     length = len(Wave.load(wave_path, sampling_rate=sampling_rate).wave)
-    array = np.ones((length,), dtype=np.bool)
+    array = numpy.ones((length,), dtype=numpy.bool)
 
     for p in filter(lambda p: p.phoneme != phoneme_class.space_phoneme, phonemes):
         s = int(round(p.start * sampling_rate))
@@ -33,7 +33,7 @@ def process(
         array[s:e + 1] = False
 
     out = output_directory / (wave_path.stem + '.npy')
-    np.save(str(out), dict(array=array, rate=sampling_rate))
+    numpy.save(str(out), dict(array=array, rate=sampling_rate))
 
 
 def extract_silence_from_phoneme(
