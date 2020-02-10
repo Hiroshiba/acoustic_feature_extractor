@@ -17,11 +17,15 @@ jobs:
     - name: Test
       run: |-
         docker run \
+          -v `pwd`:`pwd` \
+          -w `pwd` \
           acoustic_feature_extractor:latest \
           python -m unittest -v
 
     - name: Test pip install
       run: |-
         docker run \
+          -v `pwd`:`pwd` \
+          -w `pwd` \
           acoustic_feature_extractor:latest \
           bash -c 'pip install git+https://github.com/Hiroshiba/acoustic_feature_extractor'

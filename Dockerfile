@@ -8,10 +8,3 @@ WORKDIR /app
 # install requirements
 COPY requirements.txt /app/
 RUN pip install -r requirements.txt
-
-# add source cord
-COPY analyzer /app/analyzer
-COPY extractor /app/extractor
-COPY acoustic_feature_extractor /app/acoustic_feature_extractor
-COPY tests /app/tests
-COPY setup.py /app/setup.py
