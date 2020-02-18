@@ -33,7 +33,7 @@ def extract_f0_statistics(
         output: Path,
         with_vuv: bool,
 ):
-    paths = [Path(p) for p in sorted(glob.glob(input_glob))]
+    paths = [Path(p) for p in sorted(glob.glob(str(input_glob)))]
 
     _process = partial(
         load_f0_log,

@@ -1,10 +1,12 @@
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, NamedTuple
+from typing import Dict
 
 import numpy
 
 
-class SamplingData(NamedTuple):
+@dataclass
+class SamplingData:
     array: numpy.ndarray  # shape: (N, ?)
     rate: float
 
@@ -22,15 +24,18 @@ class SamplingData(NamedTuple):
         i = index - ni * scale
         return array[i:i + length]
 
-    @staticmethod
-    def load(path: Path):
+    @classmethod
+    def load(cls, path: Path):
         d: Dict = numpy.load(str(path), allow_pickle=True).item()
         array, rate = d['array'], d['rate']
 
         if array.ndim == 1:
             array = array[:, numpy.newaxis]
 
-        return SamplingData(
+        return cls(
             array=array,
             rate=rate,
         )
+
+    def save(self, path: Path):
+        numpy.save(str(path), dict(array=self.array, rate=self.rate))

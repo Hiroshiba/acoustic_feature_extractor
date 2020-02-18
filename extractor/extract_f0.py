@@ -3,13 +3,12 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Optional
 
 import numpy
-import pyworld
 import tqdm
-from scipy.interpolate import interp1d
 
+from acoustic_feature_extractor.data.f0 import F0
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -25,52 +24,22 @@ def process(
         input_statistics: Optional[Path],
         target_statistics: Optional[Path],
 ):
-    w = Wave.load(path, sampling_rate).wave.astype(numpy.float64)
-
-    f0, t = pyworld.harvest(
-        w,
-        sampling_rate,
+    f0 = F0.form_wave(
+        wave=Wave.load(path, sampling_rate),
         frame_period=frame_period,
         f0_floor=f0_floor,
         f0_ceil=f0_ceil,
+        with_vuv=with_vuv,
     )
-    f0 = pyworld.stonemask(w, f0, t, sampling_rate)
 
-    if input_statistics is not None:
-        stat: Dict = numpy.load(input_statistics, allow_pickle=True).item()
-        im, iv = stat['mean'], stat['var']
-
-        stat: Dict = numpy.load(target_statistics, allow_pickle=True).item()
-        tm, tv = stat['mean'], stat['var']
-
-        f0 = numpy.copy(f0)
-        f0[f0.nonzero()] = numpy.exp((tv / iv) * (numpy.log(f0[f0.nonzero()]) - im) + tm)
-
-    vuv = f0 != 0
-    f0_log = numpy.zeros_like(f0)
-    f0_log[vuv] = numpy.log(f0[vuv])
-
-    if not with_vuv:
-        array = f0_log
-    else:
-        f0_log_voiced = f0_log[vuv]
-        t_voiced = t[vuv]
-
-        interp = interp1d(
-            t_voiced,
-            f0_log_voiced,
-            kind='linear',
-            bounds_error=False,
-            fill_value=(f0_log_voiced[0], f0_log_voiced[-1]),
+    if input_statistics is not None and target_statistics is not None:
+        f0.convert(
+            input_statistics=numpy.load(str(input_statistics), allow_pickle=True).item(),
+            target_statistics=numpy.load(str(target_statistics), allow_pickle=True).item(),
         )
-        f0_log = interp(t)
-
-        array = numpy.stack([f0_log, vuv.astype(f0_log.dtype)], axis=1)
-
-    rate = int(1000 // frame_period)
 
     out = output_directory / (path.stem + '.npy')
-    numpy.save(str(out), dict(array=array, rate=rate))
+    f0.save(out)
 
 
 def extract_f0(
