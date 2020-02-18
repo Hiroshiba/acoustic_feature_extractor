@@ -33,14 +33,24 @@ class F0(SamplingData):
         )
         f0 = pyworld.stonemask(w, f0, t, sampling_rate)
 
-        # voice / unvoice
-        vuv = f0 != 0
+        return F0.from_frequency(frequency=f0, frame_period=frame_period, with_vuv=with_vuv)
+
+    @staticmethod
+    def from_frequency(
+            frequency: numpy.ndarray,
+            frame_period: float,
+            with_vuv: bool,
+    ):
+        f0 = frequency
+
+        vuv = f0 != 0  # voice / unvoice
         f0_log = numpy.zeros_like(f0)
         f0_log[vuv] = numpy.log(f0[vuv])
 
         if not with_vuv:
             array = f0_log
         else:
+            t = numpy.arange(len(frequency)) * frame_period / 1000
             f0_log_voiced = f0_log[vuv]
             t_voiced = t[vuv]
 
@@ -84,11 +94,14 @@ class F0(SamplingData):
         else:
             tm, tv = target_mean, target_var
 
+        self.array = self.array.copy()
         if self.with_vuv:
-            f0 = self.array[:, 0]
-            f0 = numpy.exp((tv / iv) * (numpy.log(f0) - im) + tm)
-            self.array[:, 0] = f0
+            f0_log = self.array[:, 0]
+            f0_log = (tv / iv) * (f0_log - im) + tm
+            self.array[:, 0] = f0_log
         else:
-            f0 = self.array
-            f0[f0.nonzero()] = numpy.exp((tv / iv) * (numpy.log(f0[f0.nonzero()]) - im) + tm)
-            self.array = f0
+            f0_log = self.array
+            f0_log[f0_log != 0] = (tv / iv) * (f0_log[f0_log != 0] - im) + tm
+            self.array = f0_log
+
+        return self

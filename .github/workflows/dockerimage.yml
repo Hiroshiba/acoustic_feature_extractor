@@ -20,7 +20,7 @@ jobs:
           -v `pwd`:`pwd` \
           -w `pwd` \
           acoustic_feature_extractor:latest \
-          python -m unittest -v
+          pytest -s -v ./tests/
 
     - name: Test pip install
       run: |-
