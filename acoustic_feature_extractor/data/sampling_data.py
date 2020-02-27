@@ -1,6 +1,7 @@
+from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Sequence, Union
 
 import numpy
 
@@ -23,6 +24,43 @@ class SamplingData:
 
         i = index - ni * scale
         return array[i:i + length]
+
+    def split(
+            self,
+            keypoint_seconds: Union[Sequence[float], numpy.ndarray],
+    ):
+        keypoint_seconds = numpy.array(keypoint_seconds)
+        indexes = (keypoint_seconds * self.rate).astype(numpy.int32)
+        arrays = numpy.split(self.array, indexes)
+        return [
+            self.__class__(array=array, rate=self.rate)
+            for array in arrays
+        ]
+
+    def estimate_padding_value(self):
+        values = numpy.concatenate((self.array[:5], self.array[-5:]), axis=0)
+        assert len(values) > 0
+
+        value = values[0]
+        for i in range(1, len(values)):
+            assert numpy.all(value == values[i])
+
+        return value[numpy.newaxis]
+
+    @staticmethod
+    def padding(datas: Sequence['SamplingData'], padding_value: numpy.ndarray):
+        datas = deepcopy(datas)
+
+        max_length = max(len(d.array) for d in datas)
+        for data in datas:
+            padding_array = padding_value.repeat(max_length - len(data.array), axis=0)
+            data.array = numpy.concatenate([data.array, padding_array])
+
+        return datas
+
+    def all_same(self):
+        value = self.array[0][numpy.newaxis]
+        return numpy.all(value == self.array)
 
     @classmethod
     def load(cls, path: Path):
