@@ -105,3 +105,13 @@ class F0(SamplingData):
             self.array = f0_log
 
         return self
+
+    @property
+    def valid_f0_log(self):
+        if self.with_vuv:
+            f0_log = self.array[:, 0]
+            vuv = self.array[:, 1].astype(bool)
+        else:
+            f0_log = self.array
+            vuv = f0_log.nonzero()
+        return f0_log[vuv]

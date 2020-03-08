@@ -22,29 +22,7 @@ def process(
     assert all(paths[0].stem == p.stem for p in paths[1:])
 
     datas = [SamplingData.load(p) for p in paths]
-    scales = [(rate // d.rate) for d in datas]
-    arrays: List[numpy.ndarray] = [d.resample(
-        sampling_rate=rate,
-        index=0,
-        length=int(len(d.array) * s)
-    ) for d, s in zip(datas, scales)]
-
-    # assert that nearly length
-    max_length = max(len(a) for a in arrays)
-    for a in arrays:
-        assert abs((max_length - len(a)) / rate) <= error_time_length, f'{max_length / rate}, {len(a) / rate}, {paths}'
-
-    if mode == 'min':
-        min_length = min(len(a) for a in arrays)
-        array = numpy.concatenate([a[:min_length] for a in arrays], axis=1).astype(numpy.float32)
-    elif mode == 'max':
-        arrays = [
-            numpy.pad(a, ((0, max_length - len(a)), (0, 0))) if len(a) < max_length else a
-            for a in arrays
-        ]
-        array = numpy.concatenate(arrays, axis=1).astype(numpy.float32)
-    else:
-        raise ValueError(mode)
+    array = SamplingData.collect(datas, rate=rate, mode=mode, error_time_length=error_time_length)
 
     out = output_directory / (paths[0].stem + '.npy')
     numpy.save(str(out), dict(array=array, rate=rate))

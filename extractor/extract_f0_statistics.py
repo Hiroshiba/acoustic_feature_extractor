@@ -7,37 +7,23 @@ from pathlib import Path
 import numpy
 import tqdm
 
-from acoustic_feature_extractor.data.sampling_data import SamplingData
+from acoustic_feature_extractor.data.f0 import F0
 
 
 def load_f0_log(
         path: Path,
-        with_vuv: bool,
 ):
-    array = SamplingData.load(path).array
-
-    if with_vuv:
-        assert array.shape[1] == 2
-        f0_log = array[:, 0]
-        vuv = array[:, 1].astype(bool)
-    else:
-        assert array.ndim == 1 or array.shape[1] == 1
-        f0_log = array
-        vuv = f0_log.nonzero()
-
-    return f0_log[vuv]
+    return F0.load(path).valid_f0_log
 
 
 def extract_f0_statistics(
         input_glob,
         output: Path,
-        with_vuv: bool,
 ):
     paths = [Path(p) for p in sorted(glob.glob(str(input_glob)))]
 
     _process = partial(
         load_f0_log,
-        with_vuv=with_vuv,
     )
 
     pool = multiprocessing.Pool()
@@ -54,7 +40,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_glob', '-i', required=True)
     parser.add_argument('--output', '-o', type=Path, required=True)
-    parser.add_argument('--with_vuv', '-wv', action='store_true')
     extract_f0_statistics(**vars(parser.parse_args()))
 
 
