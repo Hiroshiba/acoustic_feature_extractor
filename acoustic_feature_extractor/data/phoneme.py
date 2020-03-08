@@ -99,7 +99,7 @@ class JvsPhoneme(BasePhoneme):
     space_phoneme = 'pau'
 
     @classmethod
-    def convert(cls, phonemes: List['SegKitPhoneme']):
+    def convert(cls, phonemes: List['JvsPhoneme']):
         if 'sil' in phonemes[0].phoneme:
             phonemes[0].phoneme = cls.space_phoneme
         if 'sil' in phonemes[-1].phoneme:
@@ -117,7 +117,7 @@ class KiritanPhoneme(BasePhoneme):
     space_phoneme = 'pau'
 
     @classmethod
-    def convert(cls, phonemes: List['SegKitPhoneme']):
+    def convert(cls, phonemes: List['KiritanPhoneme']):
         for phoneme in phonemes:
             if phoneme.phoneme == 'br':
                 phoneme.phoneme = cls.space_phoneme
