@@ -10,12 +10,10 @@ import tqdm
 
 from acoustic_feature_extractor.data.spectrogram import to_log_melspectrogram
 from acoustic_feature_extractor.data.wave import Wave
-from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
 def process(
     path: Path,
-    output_directory: Path,
     sampling_rate: int,
     preemph: Optional[float],
     n_mels: int,
@@ -24,12 +22,11 @@ def process(
     hop_length: int,
     fmin: float,
     fmax: float,
-    min_level_db: float,
-    max_level_db: Optional[float],
-    disable_normalize: bool,
+    eliminate_silence: bool,
 ):
     wave = Wave.load(path, sampling_rate)
 
+    min_level_db = -300
     ms = to_log_melspectrogram(
         x=wave.wave,
         sampling_rate=sampling_rate,
@@ -41,19 +38,18 @@ def process(
         fmin=fmin,
         fmax=fmax,
         min_level_db=min_level_db,
-        max_level_db=max_level_db,
-        normalize=not disable_normalize,
+        max_level_db=None,
+        normalize=False,
     )
 
-    rate = sampling_rate / hop_length
+    if eliminate_silence:
+        ms[ms == min_level_db] = ms[ms != min_level_db].min()
 
-    out = output_directory / (path.stem + ".npy")
-    numpy.save(str(out), dict(array=ms, rate=rate))
+    return ms.min(), ms.max()
 
 
-def extract_melspectrogram(
+def analyze_melspectrogram(
     input_glob,
-    output_directory: Path,
     sampling_rate: int,
     preemph: Optional[float],
     n_mels: int,
@@ -62,17 +58,11 @@ def extract_melspectrogram(
     hop_length: int,
     fmin: float,
     fmax: float,
-    min_level_db: float,
-    max_level_db: Optional[float],
-    disable_normalize: bool,
+    eliminate_silence: bool,
 ):
-    output_directory.mkdir(exist_ok=True)
-    save_arguments(locals(), output_directory / "arguments.json")
-
     paths = [Path(p) for p in glob.glob(str(input_glob))]
     _process = partial(
         process,
-        output_directory=output_directory,
         sampling_rate=sampling_rate,
         preemph=preemph,
         n_mels=n_mels,
@@ -81,25 +71,24 @@ def extract_melspectrogram(
         hop_length=hop_length,
         fmin=fmin,
         fmax=fmax,
-        min_level_db=min_level_db,
-        max_level_db=max_level_db,
-        disable_normalize=disable_normalize,
+        eliminate_silence=eliminate_silence,
     )
 
-    with multiprocessing.Pool() as pool:
-        list(
-            tqdm.tqdm(
-                pool.imap(_process, paths),
-                total=len(paths),
-                desc="extract_melspectrogram",
-            )
+    pool = multiprocessing.Pool()
+    datas = list(
+        tqdm.tqdm(
+            pool.imap(_process, paths), total=len(paths), desc="analyze_melspectrogram"
         )
+    )
+
+    m = numpy.array(datas)
+    print("min", m[:, 0].min())
+    print("max", m[:, 1].max())
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
     parser.add_argument("--sampling_rate", "-sr", type=int, default=24000)
     parser.add_argument("--preemph", type=float, default=None)
     parser.add_argument("--n_mels", type=int, default=80)
@@ -108,10 +97,8 @@ def main():
     parser.add_argument("--hop_length", type=int, default=256)
     parser.add_argument("--fmin", type=float, default=125)
     parser.add_argument("--fmax", type=float, default=12000)
-    parser.add_argument("--min_level_db", type=float, default=-100)
-    parser.add_argument("--max_level_db", type=float)
-    parser.add_argument("--disable_normalize", action="store_true")
-    extract_melspectrogram(**vars(parser.parse_args()))
+    parser.add_argument("--eliminate_silence", action="store_true")
+    analyze_melspectrogram(**vars(parser.parse_args()))
 
 
 if __name__ == "__main__":

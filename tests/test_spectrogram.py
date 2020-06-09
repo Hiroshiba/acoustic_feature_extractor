@@ -10,17 +10,18 @@ from acoustic_feature_extractor.data.spectrogram import to_log_melspectrogram
 class TestToLogMelspectrogram(unittest.TestCase):
     @staticmethod
     def _to_log_melspectrogram(
-            x: numpy.ndarray = None,
-            sampling_rate: int = 24000,
-            preemph: Optional[float] = 0.97,
-            n_mels: int = 80,
-            n_fft: int = 2048,
-            win_length: int = 1024,
-            hop_length: int = 256,
-            fmin: float = 125,
-            fmax: float = 12000,
-            min_level_db: float = -100,
-            normalize: bool = True,
+        x: numpy.ndarray = None,
+        sampling_rate: int = 24000,
+        preemph: Optional[float] = 0.97,
+        n_mels: int = 80,
+        n_fft: int = 2048,
+        win_length: int = 1024,
+        hop_length: int = 256,
+        fmin: float = 125,
+        fmax: float = 12000,
+        min_level_db: float = -100,
+        max_level_db: float = None,
+        normalize: bool = True,
     ):
         if x is None:
             x, _ = librosa.load(librosa.util.example_audio_file(), sr=sampling_rate)
@@ -36,6 +37,7 @@ class TestToLogMelspectrogram(unittest.TestCase):
             fmin=fmin,
             fmax=fmax,
             min_level_db=min_level_db,
+            max_level_db=max_level_db,
             normalize=normalize,
         )
 
@@ -53,10 +55,25 @@ class TestToLogMelspectrogram(unittest.TestCase):
         sp = self._to_log_melspectrogram(min_level_db=-100, normalize=False)
         self.assertGreaterEqual(sp.min(), -100)
 
-    def test_can_convert_to_log_melspectrogram_with_normalize(self):
-        sp = self._to_log_melspectrogram(normalize=False)
-        self.assertGreaterEqual(sp.min(), -100)
+    def test_can_convert_to_log_melspectrogram_with_max_level_db(self):
+        sp = self._to_log_melspectrogram(max_level_db=10, normalize=False)
+        self.assertLessEqual(sp.max(), 10)
 
-        sp = self._to_log_melspectrogram(normalize=True)
-        self.assertLessEqual(sp.max(), 1)
-        self.assertGreaterEqual(sp.min(), 0)
+        sp = self._to_log_melspectrogram(max_level_db=100, normalize=False)
+        self.assertLessEqual(sp.max(), 100)
+
+    def test_can_convert_to_log_melspectrogram_with_normalize(self):
+        sp = self._to_log_melspectrogram(
+            min_level_db=-100, max_level_db=100, normalize=False
+        )
+        min_level_db = sp.min() + 10
+        max_level_db = sp.max() - 10
+
+        sp = self._to_log_melspectrogram(min_level_db=min_level_db, normalize=True)
+        self.assertEqual(sp.min(), 0)
+
+        sp = self._to_log_melspectrogram(
+            min_level_db=min_level_db, max_level_db=max_level_db, normalize=True
+        )
+        self.assertEqual(sp.min(), 0)
+        self.assertEqual(sp.max(), 1)
