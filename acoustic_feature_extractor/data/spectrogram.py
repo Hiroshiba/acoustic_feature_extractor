@@ -50,7 +50,7 @@ def to_log_melspectrogram(
         else:
             log_sp = (log_sp - min_level_db) / (max_level_db - min_level_db)
 
-    return log_sp.astype(numpy.float32).T[:-1]
+    return log_sp.astype(numpy.float32).T
 
 
 def to_melcepstrum(
