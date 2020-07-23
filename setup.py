@@ -29,5 +29,13 @@ setup(
     author_email="hihokaruta@gmail.com",
     license="MIT License",
     entry_points=dict(console_scripts=console_scripts),
-    install_requires=["numpy", "scipy", "librosa<0.8.0", "pyworld", "pysptk", "tqdm"],
+    install_requires=[
+        "numpy",
+        "scipy",
+        "librosa<0.8.0",
+        "pyworld",
+        "pysptk",
+        "tqdm",
+        "AMFM-decompy<1.1.0",
+    ],
 )

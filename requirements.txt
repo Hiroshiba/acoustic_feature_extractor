@@ -5,3 +5,4 @@ pyworld
 pysptk
 tqdm
 pytest
+AMFM-decompy<1.1.0

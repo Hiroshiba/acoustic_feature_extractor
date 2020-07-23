@@ -1,11 +1,19 @@
+from enum import Enum
 from typing import Dict
 
 import numpy
 import pyworld
+from amfm_decompy import pYAAPT
+from amfm_decompy.basic_tools import SignalObj
 from scipy.interpolate import interp1d
 
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 from acoustic_feature_extractor.data.wave import Wave
+
+
+class F0Type(str, Enum):
+    world = "world"
+    yaapt = "yaapt"
 
 
 class F0(SamplingData):
@@ -14,27 +22,44 @@ class F0(SamplingData):
     """
 
     @staticmethod
-    def form_wave(
+    def from_wave(
         wave: Wave,
         frame_period: float,
         f0_floor: float,
         f0_ceil: float,
         with_vuv: bool,
+        f0_type: F0Type,
     ):
         w = wave.wave.astype(numpy.float64)
         sampling_rate = wave.sampling_rate
 
-        f0, t = pyworld.harvest(
-            w,
-            sampling_rate,
-            frame_period=frame_period,
-            f0_floor=f0_floor,
-            f0_ceil=f0_ceil,
-        )
-        f0 = pyworld.stonemask(w, f0, t, sampling_rate)
+        if f0_type == F0Type.world:
+            f0, t = pyworld.harvest(
+                w,
+                sampling_rate,
+                frame_period=frame_period,
+                f0_floor=f0_floor,
+                f0_ceil=f0_ceil,
+            )
+            f0 = pyworld.stonemask(w, f0, t, sampling_rate)
+        elif f0_type == F0Type.yaapt:
+            frame_length = 35
+            signal = SignalObj(data=w, fs=sampling_rate)
+            pitch = pYAAPT.yaapt(
+                signal,
+                frame_space=frame_period,
+                f0_min=f0_floor,
+                f0_max=f0_ceil,
+                frame_length=frame_length,
+                tda_frame_length=frame_length,
+            )
+            f0 = pitch.samp_values
+            f0 = numpy.pad(
+                f0, pad_width=frame_length // int(frame_period) // 2, mode="edge"
+            )
 
         return F0.from_frequency(
-            frequency=f0, frame_period=frame_period, with_vuv=with_vuv
+            frequency=f0, frame_period=frame_period, with_vuv=with_vuv,
         )
 
     @staticmethod

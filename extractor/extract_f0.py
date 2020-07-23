@@ -6,7 +6,7 @@ from pathlib import Path
 
 import tqdm
 
-from acoustic_feature_extractor.data.f0 import F0
+from acoustic_feature_extractor.data.f0 import F0, F0Type
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -19,13 +19,15 @@ def process(
     f0_floor: float,
     f0_ceil: float,
     with_vuv: bool,
+    f0_type: F0Type,
 ):
-    f0 = F0.form_wave(
+    f0 = F0.from_wave(
         wave=Wave.load(path, sampling_rate),
         frame_period=frame_period,
         f0_floor=f0_floor,
         f0_ceil=f0_ceil,
         with_vuv=with_vuv,
+        f0_type=f0_type,
     )
 
     out = output_directory / (path.stem + ".npy")
@@ -40,6 +42,7 @@ def extract_f0(
     f0_floor: float,
     f0_ceil: float,
     with_vuv: bool,
+    f0_type: F0Type,
 ):
     output_directory.mkdir(exist_ok=True)
     save_arguments(locals(), output_directory / "arguments.json")
@@ -53,10 +56,11 @@ def extract_f0(
         f0_floor=f0_floor,
         f0_ceil=f0_ceil,
         with_vuv=with_vuv,
+        f0_type=f0_type,
     )
 
-    pool = multiprocessing.Pool()
-    list(tqdm.tqdm(pool.imap_unordered(_process, paths), total=len(paths)))
+    with multiprocessing.Pool() as pool:
+        list(tqdm.tqdm(pool.imap_unordered(_process, paths), total=len(paths)))
 
 
 def main():
@@ -68,6 +72,7 @@ def main():
     parser.add_argument("--f0_floor", "-ff", type=int, default=71.0)
     parser.add_argument("--f0_ceil", "-fc", type=int, default=800.0)
     parser.add_argument("--with_vuv", "-wv", action="store_true")
+    parser.add_argument("--f0_type", "-ft", type=F0Type, default=F0Type.world)
     extract_f0(**vars(parser.parse_args()))
 
 

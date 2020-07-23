@@ -1,7 +1,7 @@
 FROM hiroshiba/hiho-deep-docker-base:miniconda-python3.7.5
 
 RUN apt-get update && apt-get install -y swig libsndfile1-dev libasound2-dev && apt-get clean
-RUN conda install -y cython numpy numba
+RUN conda install -y cython numpy "numba<0.50"
 
 WORKDIR /app
 
