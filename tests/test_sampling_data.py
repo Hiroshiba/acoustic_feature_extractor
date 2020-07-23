@@ -35,7 +35,7 @@ class TestSamplingData(unittest.TestCase):
             data = SamplingData(array=sample, rate=rate)
 
             a = data.resample(sampling_rate=rate * scale, index=index, length=length)
-            b = numpy.repeat(sample, scale, axis=0)[index:index + length]
+            b = numpy.repeat(sample, scale, axis=0)[index : index + length]
             numpy.testing.assert_equal(a, b)
 
     def test_split(self):
@@ -52,12 +52,16 @@ class TestSamplingData(unittest.TestCase):
     def test_estimate_padding_value(self):
         sample100 = numpy.arange(100)
         sample100[:5] = sample100[-5:] = 0
-        self.assertEqual(SamplingData(array=sample100, rate=100).estimate_padding_value(), 0)
+        self.assertEqual(
+            SamplingData(array=sample100, rate=100).estimate_padding_value(), 0
+        )
 
     def test_estimate_padding_value_assert(self):
         sample100 = numpy.arange(100)
         with self.assertRaises(BaseException):
-            self.assertEqual(SamplingData(array=sample100, rate=100).estimate_padding_value(), 0)
+            self.assertEqual(
+                SamplingData(array=sample100, rate=100).estimate_padding_value(), 0
+            )
 
     def test_padding(self):
         sample100 = numpy.arange(100)

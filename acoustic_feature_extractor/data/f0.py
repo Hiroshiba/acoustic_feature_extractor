@@ -15,11 +15,11 @@ class F0(SamplingData):
 
     @staticmethod
     def form_wave(
-            wave: Wave,
-            frame_period: float,
-            f0_floor: float,
-            f0_ceil: float,
-            with_vuv: bool,
+        wave: Wave,
+        frame_period: float,
+        f0_floor: float,
+        f0_ceil: float,
+        with_vuv: bool,
     ):
         w = wave.wave.astype(numpy.float64)
         sampling_rate = wave.sampling_rate
@@ -33,13 +33,13 @@ class F0(SamplingData):
         )
         f0 = pyworld.stonemask(w, f0, t, sampling_rate)
 
-        return F0.from_frequency(frequency=f0, frame_period=frame_period, with_vuv=with_vuv)
+        return F0.from_frequency(
+            frequency=f0, frame_period=frame_period, with_vuv=with_vuv
+        )
 
     @staticmethod
     def from_frequency(
-            frequency: numpy.ndarray,
-            frame_period: float,
-            with_vuv: bool,
+        frequency: numpy.ndarray, frame_period: float, with_vuv: bool,
     ):
         f0 = frequency
 
@@ -57,7 +57,7 @@ class F0(SamplingData):
             interp = interp1d(
                 t_voiced,
                 f0_log_voiced,
-                kind='linear',
+                kind="linear",
                 bounds_error=False,
                 fill_value=(f0_log_voiced[0], f0_log_voiced[-1]),
             )
@@ -73,24 +73,26 @@ class F0(SamplingData):
         return self.array.ndim == 2 and self.array.shape[1] == 2
 
     def convert(
-            self,
-            input_statistics: Dict[str, float] = None,
-            target_statistics: Dict[str, float] = None,
-            input_mean: float = None,
-            input_var: float = None,
-            target_mean: float = None,
-            target_var: float = None,
+        self,
+        input_statistics: Dict[str, float] = None,
+        target_statistics: Dict[str, float] = None,
+        input_mean: float = None,
+        input_var: float = None,
+        target_mean: float = None,
+        target_var: float = None,
     ):
         assert (input_statistics is None) != (input_mean is None and input_var is None)
-        assert (target_statistics is None) != (target_mean is None and target_var is None)
+        assert (target_statistics is None) != (
+            target_mean is None and target_var is None
+        )
 
         if input_statistics is not None:
-            im, iv = input_statistics['mean'], input_statistics['var']
+            im, iv = input_statistics["mean"], input_statistics["var"]
         else:
             im, iv = input_mean, input_var
 
         if target_statistics is not None:
-            tm, tv = target_statistics['mean'], target_statistics['var']
+            tm, tv = target_statistics["mean"], target_statistics["var"]
         else:
             tm, tv = target_mean, target_var
 

@@ -13,13 +13,13 @@ from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
 def process(
-        path: Path,
-        output_directory: Path,
-        sampling_rate: int,
-        frame_length: int,
-        hop_length: int,
-        top_db: int,
-        normalize: bool,
+    path: Path,
+    output_directory: Path,
+    sampling_rate: int,
+    frame_length: int,
+    hop_length: int,
+    top_db: int,
+    normalize: bool,
 ):
     assert sampling_rate % hop_length == 0
 
@@ -33,21 +33,21 @@ def process(
 
     rate = sampling_rate // hop_length
 
-    out = output_directory / (path.stem + '.npy')
+    out = output_directory / (path.stem + ".npy")
     numpy.save(str(out), dict(array=array, rate=rate))
 
 
 def extract_volume(
-        input_glob,
-        output_directory: Path,
-        sampling_rate: int,
-        frame_length: int,
-        hop_length: int,
-        top_db: int,
-        normalize: bool,
+    input_glob,
+    output_directory: Path,
+    sampling_rate: int,
+    frame_length: int,
+    hop_length: int,
+    top_db: int,
+    normalize: bool,
 ):
     output_directory.mkdir(exist_ok=True)
-    save_arguments(locals(), output_directory / 'arguments.json')
+    save_arguments(locals(), output_directory / "arguments.json")
 
     paths = [Path(p) for p in glob.glob(str(input_glob))]
     _process = partial(
@@ -66,15 +66,15 @@ def extract_volume(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig', required=True)
-    parser.add_argument('--output_directory', '-od', type=Path, required=True)
-    parser.add_argument('--sampling_rate', '-sr', type=int, required=True)
-    parser.add_argument('--frame_length', '-fl', type=int, default=800)
-    parser.add_argument('--hop_length', '-hl', type=int, default=200)
-    parser.add_argument('--top_db', '-td', type=int, default=80)
-    parser.add_argument('--normalize', '-n', action='store_true')
+    parser.add_argument("--input_glob", "-ig", required=True)
+    parser.add_argument("--output_directory", "-od", type=Path, required=True)
+    parser.add_argument("--sampling_rate", "-sr", type=int, required=True)
+    parser.add_argument("--frame_length", "-fl", type=int, default=800)
+    parser.add_argument("--hop_length", "-hl", type=int, default=200)
+    parser.add_argument("--top_db", "-td", type=int, default=80)
+    parser.add_argument("--normalize", "-n", action="store_true")
     extract_volume(**vars(parser.parse_args()))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

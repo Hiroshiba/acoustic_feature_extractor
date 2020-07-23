@@ -1,20 +1,20 @@
 from enum import Enum
-from typing import List, Sequence, Union, Type
+from typing import List, Sequence, Type, Union
 
 import numpy
 
-from acoustic_feature_extractor.data.phoneme import SegKitPhoneme, BasePhoneme
+from acoustic_feature_extractor.data.phoneme import BasePhoneme, SegKitPhoneme
 
 
 class LinguisticFeature(object):
     class FeatureType(str, Enum):
-        PHONEME = 'PHONEME'
-        PRE_PHONEME = 'PRE_PHONEME'
-        POST_PHONEME = 'POST_PHONEME'
-        PHONEME_DURATION = 'PHONEME_DURATION'
-        PRE_PHONEME_DURATION = 'PRE_PHONEME_DURATION'
-        POST_PHONEME_DURATION = 'POST_PHONEME_DURATION'
-        POS_IN_PHONEME = 'POS_IN_PHONEME'
+        PHONEME = "PHONEME"
+        PRE_PHONEME = "PRE_PHONEME"
+        POST_PHONEME = "POST_PHONEME"
+        PHONEME_DURATION = "PHONEME_DURATION"
+        PRE_PHONEME_DURATION = "PRE_PHONEME_DURATION"
+        POST_PHONEME_DURATION = "POST_PHONEME_DURATION"
+        POS_IN_PHONEME = "POS_IN_PHONEME"
 
         def is_phoneme(self):
             return self in (
@@ -27,11 +27,11 @@ class LinguisticFeature(object):
             )
 
     def __init__(
-            self,
-            phonemes: List[BasePhoneme],
-            phoneme_class: Type[BasePhoneme],
-            rate: int,
-            feature_types: Sequence[Union[FeatureType, str]],
+        self,
+        phonemes: List[BasePhoneme],
+        phoneme_class: Type[BasePhoneme],
+        rate: int,
+        feature_types: Sequence[Union[FeatureType, str]],
     ) -> None:
         self.phonemes = phonemes
         self.phoneme_class = phoneme_class
@@ -81,7 +81,9 @@ class LinguisticFeature(object):
     def _make_phoneme_array(self):
         types = list(filter(self.FeatureType.is_phoneme, self.types))
 
-        array = numpy.zeros((len(self.phonemes), self.sum_dims(types)), dtype=numpy.float32)
+        array = numpy.zeros(
+            (len(self.phonemes), self.sum_dims(types)), dtype=numpy.float32
+        )
         for i in range(len(self.phonemes)):
             features = [
                 {
@@ -89,29 +91,41 @@ class LinguisticFeature(object):
                     self.FeatureType.PRE_PHONEME: self._get_phoneme(i - 1).onehot,
                     self.FeatureType.POST_PHONEME: self._get_phoneme(i + 1).onehot,
                     self.FeatureType.PHONEME_DURATION: self._get_phoneme(i).duration,
-                    self.FeatureType.PRE_PHONEME_DURATION: self._get_phoneme(i - 1).duration,
-                    self.FeatureType.POST_PHONEME_DURATION: self._get_phoneme(i + 1).duration,
+                    self.FeatureType.PRE_PHONEME_DURATION: self._get_phoneme(
+                        i - 1
+                    ).duration,
+                    self.FeatureType.POST_PHONEME_DURATION: self._get_phoneme(
+                        i + 1
+                    ).duration,
                 }[t]
                 for t in types
             ]
-            array[i] = numpy.concatenate([numpy.asarray(f).reshape(1, -1) for f in features], axis=1)
+            array[i] = numpy.concatenate(
+                [numpy.asarray(f).reshape(1, -1) for f in features], axis=1
+            )
         return array
 
     def make_array(self):
         phoneme_array = self._make_phoneme_array()
 
-        array = numpy.zeros((self.len_array, self.sum_dims(self.types)), dtype=numpy.float32)
+        array = numpy.zeros(
+            (self.len_array, self.sum_dims(self.types)), dtype=numpy.float32
+        )
         for i, p in enumerate(self.phonemes):
             s = self._to_index(p.start)
             e = self._to_index(p.end)
 
-            features = [numpy.repeat(phoneme_array[i].reshape(1, -1), repeats=e - s + 1, axis=0)]
+            features = [
+                numpy.repeat(phoneme_array[i].reshape(1, -1), repeats=e - s + 1, axis=0)
+            ]
 
             if self.FeatureType.POS_IN_PHONEME in self.types:
-                pos_start = (self._to_time(numpy.arange(s, e + 1)) - p.start).reshape(-1, 1)
+                pos_start = (self._to_time(numpy.arange(s, e + 1)) - p.start).reshape(
+                    -1, 1
+                )
                 pos_end = p.duration - pos_start
                 features.append(pos_start)
                 features.append(pos_end)
 
-            array[s:e + 1] = numpy.concatenate(features, axis=1)
+            array[s : e + 1] = numpy.concatenate(features, axis=1)
         return array

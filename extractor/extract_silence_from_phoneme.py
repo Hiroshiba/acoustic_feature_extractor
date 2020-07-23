@@ -14,10 +14,10 @@ from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
 def process(
-        paths: Tuple[Path, Path],
-        output_directory: Path,
-        phoneme_type: PhonemeType,
-        sampling_rate: int,
+    paths: Tuple[Path, Path],
+    output_directory: Path,
+    phoneme_type: PhonemeType,
+    sampling_rate: int,
 ):
     wave_path, phoneme_path = paths
 
@@ -30,21 +30,21 @@ def process(
     for p in filter(lambda p: p.phoneme != phoneme_class.space_phoneme, phonemes):
         s = int(round(p.start * sampling_rate))
         e = int(round(p.end * sampling_rate))
-        array[s:e + 1] = False
+        array[s : e + 1] = False
 
-    out = output_directory / (wave_path.stem + '.npy')
+    out = output_directory / (wave_path.stem + ".npy")
     numpy.save(str(out), dict(array=array, rate=sampling_rate))
 
 
 def extract_silence_from_phoneme(
-        input_wave_glob,
-        input_phoneme_glob,
-        output_directory: Path,
-        phoneme_type: PhonemeType,
-        sampling_rate: int,
+    input_wave_glob,
+    input_phoneme_glob,
+    output_directory: Path,
+    phoneme_type: PhonemeType,
+    sampling_rate: int,
 ):
     output_directory.mkdir(exist_ok=True)
-    save_arguments(locals(), output_directory / 'arguments.json')
+    save_arguments(locals(), output_directory / "arguments.json")
 
     wave_paths = sorted(Path(p) for p in glob.glob(input_wave_glob))
     phoneme_paths = sorted(Path(p) for p in glob.glob(input_phoneme_glob))
@@ -65,13 +65,15 @@ def extract_silence_from_phoneme(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_wave_glob', '-iwg')
-    parser.add_argument('--input_phoneme_glob', '-ipg')
-    parser.add_argument('--output_directory', '-od', type=Path)
-    parser.add_argument('--phoneme_type', '-pt', type=PhonemeType, default=PhonemeType.seg_kit)
-    parser.add_argument('--sampling_rate', '-sr', type=int)
+    parser.add_argument("--input_wave_glob", "-iwg")
+    parser.add_argument("--input_phoneme_glob", "-ipg")
+    parser.add_argument("--output_directory", "-od", type=Path)
+    parser.add_argument(
+        "--phoneme_type", "-pt", type=PhonemeType, default=PhonemeType.seg_kit
+    )
+    parser.add_argument("--sampling_rate", "-sr", type=int)
     extract_silence_from_phoneme(**vars(parser.parse_args()))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

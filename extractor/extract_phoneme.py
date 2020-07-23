@@ -14,37 +14,42 @@ from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
 def process(
-        path: Path,
-        output_directory: Path,
-        phoneme_type: PhonemeType,
-        rate: int,
-        types: Sequence[LinguisticFeature.FeatureType],
+    path: Path,
+    output_directory: Path,
+    phoneme_type: PhonemeType,
+    rate: int,
+    types: Sequence[LinguisticFeature.FeatureType],
 ):
     phoneme_class = phoneme_type_to_class[phoneme_type]
     ps = phoneme_class.load_julius_list(path)
-    array = LinguisticFeature(phonemes=ps, phoneme_class=phoneme_class, rate=rate, feature_types=types).make_array()
+    array = LinguisticFeature(
+        phonemes=ps, phoneme_class=phoneme_class, rate=rate, feature_types=types
+    ).make_array()
 
-    out = output_directory / (path.stem + '.npy')
+    out = output_directory / (path.stem + ".npy")
     numpy.save(str(out), dict(array=array, rate=rate))
 
 
 def extract_phoneme(
-        input_glob,
-        output_directory: Path,
-        phoneme_type: PhonemeType,
-        with_pre_post: bool,
-        with_duration: bool,
-        with_relative_pos: bool,
-        rate: int,
+    input_glob,
+    output_directory: Path,
+    phoneme_type: PhonemeType,
+    with_pre_post: bool,
+    with_duration: bool,
+    with_relative_pos: bool,
+    rate: int,
 ):
     output_directory.mkdir(exist_ok=True)
-    save_arguments(locals(), output_directory / 'arguments.json')
+    save_arguments(locals(), output_directory / "arguments.json")
 
     # Linguistic Feature Type
     types = [LinguisticFeature.FeatureType.PHONEME]
 
     if with_pre_post:
-        types += [LinguisticFeature.FeatureType.PRE_PHONEME, LinguisticFeature.FeatureType.POST_PHONEME]
+        types += [
+            LinguisticFeature.FeatureType.PRE_PHONEME,
+            LinguisticFeature.FeatureType.POST_PHONEME,
+        ]
 
     if with_duration:
         types += [LinguisticFeature.FeatureType.PHONEME_DURATION]
@@ -58,7 +63,7 @@ def extract_phoneme(
     if with_relative_pos:
         types += [LinguisticFeature.FeatureType.POS_IN_PHONEME]
 
-    print('types:', [t.value for t in types])
+    print("types:", [t.value for t in types])
 
     paths = [Path(p) for p in glob.glob(str(input_glob))]
     _process = partial(
@@ -75,15 +80,17 @@ def extract_phoneme(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_glob', '-ig', required=True)
-    parser.add_argument('--output_directory', '-od', type=Path, required=True)
-    parser.add_argument('--phoneme_type', '-pt', type=PhonemeType, default=PhonemeType.seg_kit)
-    parser.add_argument('--with_pre_post', '-wpp', action='store_true')
-    parser.add_argument('--with_duration', '-wd', action='store_true')
-    parser.add_argument('--with_relative_pos', '-wrp', action='store_true')
-    parser.add_argument('--rate', '-r', type=int, default=100)
+    parser.add_argument("--input_glob", "-ig", required=True)
+    parser.add_argument("--output_directory", "-od", type=Path, required=True)
+    parser.add_argument(
+        "--phoneme_type", "-pt", type=PhonemeType, default=PhonemeType.seg_kit
+    )
+    parser.add_argument("--with_pre_post", "-wpp", action="store_true")
+    parser.add_argument("--with_duration", "-wd", action="store_true")
+    parser.add_argument("--with_relative_pos", "-wrp", action="store_true")
+    parser.add_argument("--rate", "-r", type=int, default=100)
     extract_phoneme(**vars(parser.parse_args()))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

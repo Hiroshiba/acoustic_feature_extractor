@@ -11,21 +11,16 @@ class BasePhoneme(object):
     num_phoneme = None
     space_phoneme = None
 
-    def __init__(
-            self,
-            phoneme: str,
-            start: float,
-            end: float,
-    ) -> None:
+    def __init__(self, phoneme: str, start: float, end: float,) -> None:
         self.phoneme = phoneme
         self.start = numpy.round(start, decimals=2)
         self.end = numpy.round(end, decimals=2)
 
     def __repr__(self):
-        return f'Phoneme(phoneme=\'{self.phoneme}\', start={self.start}, end={self.end})'
+        return f"Phoneme(phoneme='{self.phoneme}', start={self.start}, end={self.end})"
 
     def verify(self):
-        assert self.phoneme in self.phoneme_list, f'{self.phoneme} is not defined.'
+        assert self.phoneme in self.phoneme_list, f"{self.phoneme} is not defined."
 
     @property
     def phoneme_id(self):
@@ -48,24 +43,16 @@ class BasePhoneme(object):
         Phoneme(phoneme='o:', start=1.74, end=1.91)
         """
         words = s.split()
-        return cls(
-            start=float(words[0]),
-            end=float(words[1]),
-            phoneme=words[2],
-        )
+        return cls(start=float(words[0]), end=float(words[1]), phoneme=words[2],)
 
     @classmethod
     @abstractmethod
-    def convert(cls, phonemes: List['BasePhoneme']) -> List['BasePhoneme']:
+    def convert(cls, phonemes: List["BasePhoneme"]) -> List["BasePhoneme"]:
         pass
 
     @classmethod
     def load_julius_list(cls, path: Path):
-        phonemes = [
-            cls.parse(s)
-            for s in path.read_text().split('\n')
-            if len(s) > 0
-        ]
+        phonemes = [cls.parse(s) for s in path.read_text().split("\n") if len(s) > 0]
         phonemes = cls.convert(phonemes)
 
         for phoneme in phonemes:
@@ -75,59 +62,168 @@ class BasePhoneme(object):
 
 class SegKitPhoneme(BasePhoneme):
     phoneme_list = (
-        'a', 'i', 'u', 'e', 'o', 'a:', 'i:', 'u:', 'e:', 'o:', 'N', 'w', 'y', 'j', 'my', 'ky', 'dy', 'by', 'gy', 'ny',
-        'hy', 'ry', 'py', 'p', 't', 'k', 'ts', 'ch', 'b', 'd', 'g', 'z', 'm', 'n', 's', 'sh', 'h', 'f', 'r', 'q', 'sp',
+        "a",
+        "i",
+        "u",
+        "e",
+        "o",
+        "a:",
+        "i:",
+        "u:",
+        "e:",
+        "o:",
+        "N",
+        "w",
+        "y",
+        "j",
+        "my",
+        "ky",
+        "dy",
+        "by",
+        "gy",
+        "ny",
+        "hy",
+        "ry",
+        "py",
+        "p",
+        "t",
+        "k",
+        "ts",
+        "ch",
+        "b",
+        "d",
+        "g",
+        "z",
+        "m",
+        "n",
+        "s",
+        "sh",
+        "h",
+        "f",
+        "r",
+        "q",
+        "sp",
     )
     num_phoneme = len(phoneme_list)
-    space_phoneme = 'sp'
+    space_phoneme = "sp"
 
     @classmethod
-    def convert(cls, phonemes: List['SegKitPhoneme']):
-        if 'sil' in phonemes[0].phoneme:
+    def convert(cls, phonemes: List["SegKitPhoneme"]):
+        if "sil" in phonemes[0].phoneme:
             phonemes[0].phoneme = cls.space_phoneme
-        if 'sil' in phonemes[-1].phoneme:
+        if "sil" in phonemes[-1].phoneme:
             phonemes[-1].phoneme = cls.space_phoneme
         return phonemes
 
 
 class JvsPhoneme(BasePhoneme):
     phoneme_list = (
-        'pau', 'I', 'N', 'U', 'a', 'b', 'by', 'ch', 'cl', 'd', 'dy', 'e', 'f', 'g', 'gy', 'h', 'hy', 'i', 'j', 'k',
-        'ky', 'm', 'my', 'n', 'ny', 'o', 'p', 'py', 'r', 'ry', 's', 'sh', 't', 'ts', 'u', 'v', 'w', 'y', 'z',
+        "pau",
+        "I",
+        "N",
+        "U",
+        "a",
+        "b",
+        "by",
+        "ch",
+        "cl",
+        "d",
+        "dy",
+        "e",
+        "f",
+        "g",
+        "gy",
+        "h",
+        "hy",
+        "i",
+        "j",
+        "k",
+        "ky",
+        "m",
+        "my",
+        "n",
+        "ny",
+        "o",
+        "p",
+        "py",
+        "r",
+        "ry",
+        "s",
+        "sh",
+        "t",
+        "ts",
+        "u",
+        "v",
+        "w",
+        "y",
+        "z",
     )
     num_phoneme = len(phoneme_list)
-    space_phoneme = 'pau'
+    space_phoneme = "pau"
 
     @classmethod
-    def convert(cls, phonemes: List['JvsPhoneme']):
-        if 'sil' in phonemes[0].phoneme:
+    def convert(cls, phonemes: List["JvsPhoneme"]):
+        if "sil" in phonemes[0].phoneme:
             phonemes[0].phoneme = cls.space_phoneme
-        if 'sil' in phonemes[-1].phoneme:
+        if "sil" in phonemes[-1].phoneme:
             phonemes[-1].phoneme = cls.space_phoneme
         return phonemes
 
 
 class KiritanPhoneme(BasePhoneme):
     phoneme_list = (
-        'pau', 'a', 'b', 'ch', 'cl', 'd', 'e', 'f', 'g', 'gy', 'h', 'hy', 'i', 'j', 'k', 'ky', 'm', 'my', 'n', 'N',
-        'ny', 'o', 'p', 'py', 'r', 'ry', 's', 'sh', 't', 'ts', 'u', 'v', 'w', 'y', 'z',
+        "pau",
+        "a",
+        "b",
+        "ch",
+        "cl",
+        "d",
+        "e",
+        "f",
+        "g",
+        "gy",
+        "h",
+        "hy",
+        "i",
+        "j",
+        "k",
+        "ky",
+        "m",
+        "my",
+        "n",
+        "N",
+        "ny",
+        "o",
+        "p",
+        "py",
+        "r",
+        "ry",
+        "s",
+        "sh",
+        "t",
+        "ts",
+        "u",
+        "v",
+        "w",
+        "y",
+        "z",
     )
 
     num_phoneme = len(phoneme_list)
-    space_phoneme = 'pau'
+    space_phoneme = "pau"
 
     @classmethod
-    def convert(cls, phonemes: List['KiritanPhoneme']):
+    def convert(cls, phonemes: List["KiritanPhoneme"]):
         for phoneme in phonemes:
-            if phoneme.phoneme == 'br':
+            if phoneme.phoneme == "br":
                 phoneme.phoneme = cls.space_phoneme
         return phonemes
 
 
 class PhonemeType(str, Enum):
-    seg_kit = 'seg_kit'
-    jvs = 'jvs'
-    kiritan = 'kiritan'
+    seg_kit = "seg_kit"
+    jvs = "jvs"
+    kiritan = "kiritan"
 
 
 phoneme_type_to_class = {
