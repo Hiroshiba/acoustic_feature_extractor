@@ -1,6 +1,7 @@
 import argparse
 import glob
 import multiprocessing
+from enum import Enum
 from functools import partial
 from pathlib import Path
 
@@ -12,6 +13,13 @@ from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
+class VolumeType(str, Enum):
+    rms_power = "rms_power"
+    mse_power = "mse_power"
+    rms_db = "rms_db"
+    mse_db = "mse_db"
+
+
 def process(
     path: Path,
     output_directory: Path,
@@ -20,13 +28,18 @@ def process(
     hop_length: int,
     top_db: int,
     normalize: bool,
+    volume_type: VolumeType,
 ):
     assert sampling_rate % hop_length == 0
 
     w = Wave.load(path, sampling_rate).wave
 
-    mse = librosa.feature.rms(w, frame_length=frame_length, hop_length=hop_length) ** 2
-    array = librosa.power_to_db(mse.squeeze(), top_db=top_db)[:-1]
+    array = librosa.feature.rms(w, frame_length=frame_length, hop_length=hop_length)
+    array = array.squeeze()
+    if volume_type in (VolumeType.mse_power, VolumeType.mse_db):
+        array = array ** 2
+    if volume_type in (VolumeType.rms_db, VolumeType.mse_db):
+        array = librosa.power_to_db(array, top_db=top_db)
 
     if normalize:
         array = numpy.clip((array - array.max()) / top_db + 1, 0, 1)
@@ -45,6 +58,7 @@ def extract_volume(
     hop_length: int,
     top_db: int,
     normalize: bool,
+    volume_type: VolumeType,
 ):
     output_directory.mkdir(exist_ok=True)
     save_arguments(locals(), output_directory / "arguments.json")
@@ -58,6 +72,7 @@ def extract_volume(
         hop_length=hop_length,
         top_db=top_db,
         normalize=normalize,
+        volume_type=volume_type,
     )
 
     pool = multiprocessing.Pool()
@@ -73,6 +88,9 @@ def main():
     parser.add_argument("--hop_length", "-hl", type=int, default=200)
     parser.add_argument("--top_db", "-td", type=int, default=80)
     parser.add_argument("--normalize", "-n", action="store_true")
+    parser.add_argument(
+        "--volume_type", "-vt", type=VolumeType, default=VolumeType.mse_db
+    )
     extract_volume(**vars(parser.parse_args()))
 
 
