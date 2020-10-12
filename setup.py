@@ -32,6 +32,7 @@ setup(
     install_requires=[
         "numpy",
         "scipy",
+        "numba<0.50.0",
         "librosa<0.8.0",
         "pyworld",
         "pysptk",
