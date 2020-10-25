@@ -3,16 +3,16 @@ from typing import Dict
 
 import numpy
 import pyworld
+from acoustic_feature_extractor.data.sampling_data import SamplingData
+from acoustic_feature_extractor.data.wave import Wave
 from amfm_decompy import pYAAPT
 from amfm_decompy.basic_tools import SignalObj
 from scipy.interpolate import interp1d
 
-from acoustic_feature_extractor.data.sampling_data import SamplingData
-from acoustic_feature_extractor.data.wave import Wave
-
 
 class F0Type(str, Enum):
     world = "world"
+    true_world = "true_world"
     yaapt = "yaapt"
 
 
@@ -33,7 +33,7 @@ class F0(SamplingData):
         w = wave.wave.astype(numpy.float64)
         sampling_rate = wave.sampling_rate
 
-        if f0_type == F0Type.world:
+        if f0_type == F0Type.world or f0_type == F0Type.true_world:
             f0, t = pyworld.harvest(
                 w,
                 sampling_rate,
@@ -41,7 +41,8 @@ class F0(SamplingData):
                 f0_floor=f0_floor,
                 f0_ceil=f0_ceil,
             )
-            f0 = pyworld.stonemask(w, f0, t, sampling_rate)
+            if f0_type != F0Type.true_world:
+                f0 = pyworld.stonemask(w, f0, t, sampling_rate)
         elif f0_type == F0Type.yaapt:
             frame_length = 35
             signal = SignalObj(data=w, fs=sampling_rate)
@@ -59,12 +60,16 @@ class F0(SamplingData):
             )
 
         return F0.from_frequency(
-            frequency=f0, frame_period=frame_period, with_vuv=with_vuv,
+            frequency=f0,
+            frame_period=frame_period,
+            with_vuv=with_vuv,
         )
 
     @staticmethod
     def from_frequency(
-        frequency: numpy.ndarray, frame_period: float, with_vuv: bool,
+        frequency: numpy.ndarray,
+        frame_period: float,
+        with_vuv: bool,
     ):
         f0 = frequency
 

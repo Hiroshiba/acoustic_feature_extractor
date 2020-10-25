@@ -3,7 +3,6 @@ from typing import Optional
 
 import librosa
 import numpy
-
 from acoustic_feature_extractor.data.spectrogram import to_log_melspectrogram
 
 

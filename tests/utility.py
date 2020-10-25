@@ -2,7 +2,6 @@ from pathlib import Path
 
 import librosa
 import numpy
-
 from acoustic_feature_extractor.data.wave import Wave
 
 true_data_base_dir = Path(__file__).parent / "true_data"
@@ -13,7 +12,7 @@ def generate_music_file(data_dir: Path, prefix: str, time_scale: float):
     if path.exists():
         return
 
-    w, sampling_rate = librosa.load(librosa.util.example_audio_file(), sr=24000)
+    w, sampling_rate = librosa.load(librosa.util.example("vibeace"), sr=24000)
     w = librosa.resample(
         w, orig_sr=sampling_rate, target_sr=int(sampling_rate * time_scale)
     )

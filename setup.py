@@ -23,7 +23,7 @@ console_scripts += [
 setup(
     name="acoustic_feature_extractor",
     version="0.0.1",
-    packages=find_namespace_packages(),
+    packages=find_namespace_packages(exclude="tests.*"),
     url="https://github.com/Hiroshiba/acoustic_feature_extractor",
     author="Kazuyuki Hiroshiba",
     author_email="hihokaruta@gmail.com",
@@ -32,11 +32,12 @@ setup(
     install_requires=[
         "numpy",
         "scipy",
-        "numba<0.50.0",
-        "librosa<0.8.0",
+        "numba",
+        "librosa==0.8.0",
         "pyworld",
         "pysptk",
         "tqdm",
+        "pytest",
         "AMFM-decompy<1.1.0",
     ],
 )

@@ -11,7 +11,12 @@ class BasePhoneme(object):
     num_phoneme = None
     space_phoneme = None
 
-    def __init__(self, phoneme: str, start: float, end: float,) -> None:
+    def __init__(
+        self,
+        phoneme: str,
+        start: float,
+        end: float,
+    ):
         self.phoneme = phoneme
         self.start = numpy.round(start, decimals=2)
         self.end = numpy.round(end, decimals=2)
@@ -43,7 +48,11 @@ class BasePhoneme(object):
         Phoneme(phoneme='o:', start=1.74, end=1.91)
         """
         words = s.split()
-        return cls(start=float(words[0]), end=float(words[1]), phoneme=words[2],)
+        return cls(
+            start=float(words[0]),
+            end=float(words[1]),
+            phoneme=words[2],
+        )
 
     @classmethod
     @abstractmethod

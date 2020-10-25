@@ -32,7 +32,7 @@ class LinguisticFeature(object):
         phoneme_class: Type[BasePhoneme],
         rate: int,
         feature_types: Sequence[Union[FeatureType, str]],
-    ) -> None:
+    ):
         self.phonemes = phonemes
         self.phoneme_class = phoneme_class
         self.rate = rate

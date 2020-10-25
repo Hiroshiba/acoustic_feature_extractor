@@ -1,7 +1,6 @@
 import unittest
 
 import numpy
-
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 
 

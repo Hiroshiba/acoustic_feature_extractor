@@ -1,17 +1,17 @@
 from pathlib import Path
 
 import numpy
-import pytest
-
-from acoustic_feature_extractor.data.f0 import F0
+from acoustic_feature_extractor.data.f0 import F0, F0Type
 from extractor.extract_f0 import extract_f0
 from tests.utility import true_data_base_dir
 
 
 def test_extract_f0(
-    data_dir: Path, with_vuv: bool,
+    data_dir: Path,
+    with_vuv: bool,
+    f0_type: F0Type,
 ):
-    output_dir = data_dir / f"output_extract_f0-with_vuv={with_vuv}"
+    output_dir = data_dir / f"output_extract_f0-with_vuv={with_vuv}-f0_type={f0_type}"
     extract_f0(
         input_glob=data_dir / "music*.wav",
         output_directory=output_dir,
@@ -20,16 +20,30 @@ def test_extract_f0(
         f0_floor=71.0,
         f0_ceil=800.0,
         with_vuv=with_vuv,
+        f0_type=f0_type,
     )
 
-    true_data_dir = true_data_base_dir / f"output_extract_f0-with_vuv={with_vuv}"
+    true_data_dir = true_data_base_dir.joinpath(
+        f"output_extract_f0-with_vuv={with_vuv}-f0_type={f0_type}"
+    )
 
-    output_data = list(map(F0.load, sorted(output_dir.glob("*.npy"))))
-    true_data = list(map(F0.load, sorted(true_data_dir.glob("*.npy"))))
-    assert len(output_data) == len(true_data)
+    output_paths = sorted(output_dir.glob("*.npy"))
+    true_paths = sorted(true_data_dir.glob("*.npy"))
 
-    for output_datum, true_datum in zip(output_data, true_data):
+    # # overwrite true data
+    # for output_path in output_paths:
+    #     output_data = F0.load(output_path)
+
+    #     true_data_dir.mkdir(parents=True, exist_ok=True)
+    #     true_path = true_data_dir.joinpath(output_path.name)
+    #     output_data.save(true_path)
+
+    assert len(output_paths) == len(true_paths)
+    for output_path, true_path in zip(output_paths, true_paths):
+        output_data = F0.load(output_path)
+        true_data = F0.load(true_path)
+
         numpy.testing.assert_allclose(
-            output_datum.array, true_datum.array, rtol=0, atol=1e-6
+            output_data.array, true_data.array, rtol=0, atol=1e-6
         )
-        assert output_datum.rate == true_datum.rate
+        assert output_data.rate == true_data.rate

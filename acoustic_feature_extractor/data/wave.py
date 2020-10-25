@@ -2,12 +2,12 @@ from pathlib import Path
 
 import librosa
 import numpy
-
+import soundfile
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 
 
 class Wave(object):
-    def __init__(self, wave: numpy.ndarray, sampling_rate: int,) -> None:
+    def __init__(self, wave: numpy.ndarray, sampling_rate: int):
         self.wave = wave
         self.sampling_rate = sampling_rate
 
@@ -23,4 +23,4 @@ class Wave(object):
             return Wave(wave=wave, sampling_rate=sampling_rate)
 
     def save(self, path: Path):
-        librosa.output.write_wav(str(path), y=self.wave, sr=self.sampling_rate)
+        soundfile.write(str(path), data=self.wave, samplerate=self.sampling_rate)

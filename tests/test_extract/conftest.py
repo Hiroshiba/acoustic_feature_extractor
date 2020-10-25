@@ -3,12 +3,17 @@ from pathlib import Path
 
 import numpy
 import pytest
-
-from tests.utility import generate_music_file, generate_f0_file
+from acoustic_feature_extractor.data.f0 import F0Type
+from tests.utility import generate_f0_file, generate_music_file
 
 
 @pytest.fixture(params=(True, False))
 def with_vuv(request):
+    return request.param
+
+
+@pytest.fixture(params=list(F0Type))
+def f0_type(request):
     return request.param
 
 
