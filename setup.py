@@ -23,7 +23,7 @@ console_scripts += [
 setup(
     name="acoustic_feature_extractor",
     version="0.0.1",
-    packages=find_namespace_packages(exclude="tests.*"),
+    packages=find_namespace_packages(exclude=["tests.*"]),
     url="https://github.com/Hiroshiba/acoustic_feature_extractor",
     author="Kazuyuki Hiroshiba",
     author_email="hihokaruta@gmail.com",
