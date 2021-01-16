@@ -10,16 +10,21 @@ import tqdm
 from acoustic_feature_extractor.data.f0 import F0
 
 
-def load_f0_log(path: Path,):
+def load_f0_log(
+    path: Path,
+):
     return F0.load(path).valid_f0_log
 
 
 def extract_f0_statistics(
-    input_glob, output: Path,
+    input_glob,
+    output: Path,
 ):
     paths = [Path(p) for p in sorted(glob.glob(str(input_glob)))]
 
-    _process = partial(load_f0_log,)
+    _process = partial(
+        load_f0_log,
+    )
 
     pool = multiprocessing.Pool()
     it = pool.imap(_process, paths)

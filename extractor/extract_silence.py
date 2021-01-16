@@ -17,7 +17,10 @@ def process(p: Path, sampling_rate: int):
 
 
 def extract_silence(
-    input_glob, output_directory: Path, sampling_rate: int, silence_top_db: float,
+    input_glob,
+    output_directory: Path,
+    sampling_rate: int,
+    silence_top_db: float,
 ):
     output_directory.mkdir(exist_ok=True)
     save_arguments(locals(), output_directory / "arguments.json")

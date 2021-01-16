@@ -9,7 +9,9 @@ import tqdm
 from acoustic_feature_extractor.data.f0 import F0
 
 
-def load_f0(path: Path,):
+def load_f0(
+    path: Path,
+):
     f0 = F0.load(path)
 
     if f0.with_vuv:
@@ -22,7 +24,9 @@ def load_f0(path: Path,):
     return numpy.exp(f0_log[vuv])
 
 
-def analyze_f0(input_glob,):
+def analyze_f0(
+    input_glob,
+):
     paths = [Path(p) for p in sorted(glob.glob(str(input_glob)))]
 
     pool = multiprocessing.Pool()

@@ -1,14 +1,14 @@
 from pathlib import Path
 
 import numpy
-
 from acoustic_feature_extractor.data.f0 import F0
 from extractor.extract_converted_f0 import extract_converted_f0
 from tests.utility import true_data_base_dir
 
 
 def test_extract_converted_f0(
-    data_dir: Path, with_vuv: bool,
+    data_dir: Path,
+    with_vuv: bool,
 ):
     output_dir = data_dir / f"output_extract_converted_f0-with_vuv={with_vuv}"
 
@@ -25,7 +25,7 @@ def test_extract_converted_f0(
 
     extract_converted_f0(
         input_glob=true_data_base_dir
-        / f"output_extract_f0-with_vuv={with_vuv}"
+        / f"output_extract_f0-with_vuv={with_vuv}-f0_type=world"
         / "*.npy",
         output_directory=output_dir,
         input_statistics=input_stat,

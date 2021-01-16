@@ -5,15 +5,12 @@ import numpy
 import pyworld
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 from acoustic_feature_extractor.data.wave import Wave
-from amfm_decompy import pYAAPT
-from amfm_decompy.basic_tools import SignalObj
 from scipy.interpolate import interp1d
 
 
 class F0Type(str, Enum):
     world = "world"
     true_world = "true_world"
-    yaapt = "yaapt"
 
 
 class F0(SamplingData):
@@ -43,21 +40,8 @@ class F0(SamplingData):
             )
             if f0_type != F0Type.true_world:
                 f0 = pyworld.stonemask(w, f0, t, sampling_rate)
-        elif f0_type == F0Type.yaapt:
-            frame_length = 35
-            signal = SignalObj(data=w, fs=sampling_rate)
-            pitch = pYAAPT.yaapt(
-                signal,
-                frame_space=frame_period,
-                f0_min=f0_floor,
-                f0_max=f0_ceil,
-                frame_length=frame_length,
-                tda_frame_length=frame_length,
-            )
-            f0 = pitch.samp_values
-            f0 = numpy.pad(
-                f0, pad_width=frame_length // int(frame_period) // 2, mode="edge"
-            )
+        else:
+            raise ValueError(f0_type)
 
         return F0.from_frequency(
             frequency=f0,

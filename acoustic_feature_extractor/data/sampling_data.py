@@ -26,7 +26,8 @@ class SamplingData:
         return array[i : i + length]
 
     def split(
-        self, keypoint_seconds: Union[Sequence[float], numpy.ndarray],
+        self,
+        keypoint_seconds: Union[Sequence[float], numpy.ndarray],
     ):
         keypoint_seconds = numpy.array(keypoint_seconds)
         indexes = (keypoint_seconds * self.rate).astype(numpy.int32)
@@ -101,7 +102,7 @@ class SamplingData:
         if array.ndim == 1:
             array = array[:, numpy.newaxis]
 
-        return cls(array=array, rate=rate,)
+        return cls(array=array, rate=rate)
 
     def save(self, path: Path):
         numpy.save(str(path), dict(array=self.array, rate=self.rate))

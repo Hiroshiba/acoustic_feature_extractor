@@ -16,18 +16,26 @@ class WaveData(NamedTuple):
 
 
 def process(
-    path: Path, sampling_rate: int,
+    path: Path,
+    sampling_rate: int,
 ):
     w = Wave.load(path, sampling_rate).wave
-    return WaveData(max=w.max(), min=w.min(),)
+    return WaveData(
+        max=w.max(),
+        min=w.min(),
+    )
 
 
 def analyze_wave(
-    input_glob, sampling_rate: int,
+    input_glob,
+    sampling_rate: int,
 ):
     paths = [Path(p) for p in glob.glob(str(input_glob))]
 
-    _process = partial(process, sampling_rate=sampling_rate,)
+    _process = partial(
+        process,
+        sampling_rate=sampling_rate,
+    )
 
     pool = multiprocessing.Pool()
     all_data = list(tqdm.tqdm(pool.imap(_process, paths), total=len(paths)))
