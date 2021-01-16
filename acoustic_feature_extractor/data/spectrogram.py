@@ -16,8 +16,8 @@ def to_log_melspectrogram(
     hop_length: int,
     fmin: float,
     fmax: float,
-    min_level_db: float,
-    max_level_db: Optional[float],
+    min_level: float,
+    max_level: Optional[float],
     normalize: bool,
 ):
     # pre emphasis
@@ -34,21 +34,20 @@ def to_log_melspectrogram(
     sp = numpy.dot(mel_basis, sp)
 
     # to log scale
-    min_level = 10 ** (min_level_db / 20)
-    sp = numpy.maximum(min_level, sp)
+    log_sp = numpy.log(sp)
 
-    if max_level_db is not None:
-        max_level = 10 ** (max_level_db / 20)
-        sp = numpy.minimum(max_level, sp)
+    log_min = numpy.log(min_level)
+    log_sp = numpy.maximum(log_min, log_sp)
 
-    log_sp = 20 * numpy.log10(sp)
+    if max_level is not None:
+        log_sp = numpy.minimum(numpy.log(max_level), log_sp)
 
     # normalize
     if normalize:
-        if max_level_db is None:
-            log_sp = numpy.clip((log_sp - min_level_db) / -min_level_db, 0, 1)
+        if max_level is None:
+            log_sp = numpy.clip((log_sp - log_min) / -log_min, 0, 1)
         else:
-            log_sp = (log_sp - min_level_db) / (max_level_db - min_level_db)
+            log_sp = (log_sp - log_min) / (numpy.log(max_level) - log_min)
 
     return log_sp.astype(numpy.float32).T
 

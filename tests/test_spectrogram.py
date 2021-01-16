@@ -18,8 +18,8 @@ class TestToLogMelspectrogram(unittest.TestCase):
         hop_length: int = 256,
         fmin: float = 125,
         fmax: float = 12000,
-        min_level_db: float = -100,
-        max_level_db: float = None,
+        min_level: float = 1e-5,
+        max_level: float = None,
         normalize: bool = True,
     ):
         if x is None:
@@ -35,8 +35,8 @@ class TestToLogMelspectrogram(unittest.TestCase):
             hop_length=hop_length,
             fmin=fmin,
             fmax=fmax,
-            min_level_db=min_level_db,
-            max_level_db=max_level_db,
+            min_level=min_level,
+            max_level=max_level,
             normalize=normalize,
         )
 
@@ -47,32 +47,32 @@ class TestToLogMelspectrogram(unittest.TestCase):
         self._to_log_melspectrogram(preemph=None)
         self._to_log_melspectrogram(preemph=0.97)
 
-    def test_can_convert_to_log_melspectrogram_with_min_level_db(self):
-        sp = self._to_log_melspectrogram(min_level_db=-10, normalize=False)
-        self.assertGreaterEqual(sp.min(), -10)
+    def test_can_convert_to_log_melspectrogram_with_min_level(self):
+        sp = self._to_log_melspectrogram(min_level=1e-1, normalize=False)
+        self.assertGreaterEqual(sp.min(), numpy.log(1e-1).astype(numpy.float32))
 
-        sp = self._to_log_melspectrogram(min_level_db=-100, normalize=False)
-        self.assertGreaterEqual(sp.min(), -100)
+        sp = self._to_log_melspectrogram(min_level=1e-5, normalize=False)
+        self.assertGreaterEqual(sp.min(), numpy.log(1e-5).astype(numpy.float32))
 
-    def test_can_convert_to_log_melspectrogram_with_max_level_db(self):
-        sp = self._to_log_melspectrogram(max_level_db=10, normalize=False)
-        self.assertLessEqual(sp.max(), 10)
+    def test_can_convert_to_log_melspectrogram_with_max_level(self):
+        sp = self._to_log_melspectrogram(max_level=1e1, normalize=False)
+        self.assertLessEqual(sp.max(), numpy.log(1e1))
 
-        sp = self._to_log_melspectrogram(max_level_db=100, normalize=False)
-        self.assertLessEqual(sp.max(), 100)
+        sp = self._to_log_melspectrogram(max_level=1e5, normalize=False)
+        self.assertLessEqual(sp.max(), numpy.log(1e5))
 
     def test_can_convert_to_log_melspectrogram_with_normalize(self):
-        sp = self._to_log_melspectrogram(
-            min_level_db=-100, max_level_db=100, normalize=False
-        )
-        min_level_db = sp.min() + 10
-        max_level_db = sp.max() - 10
+        sp = self._to_log_melspectrogram(min_level=1e-5, max_level=1e5, normalize=False)
+        min_level = sp.min() + 1
+        max_level = sp.max() - 1
 
-        sp = self._to_log_melspectrogram(min_level_db=min_level_db, normalize=True)
+        sp = self._to_log_melspectrogram(min_level=numpy.exp(min_level), normalize=True)
         self.assertEqual(sp.min(), 0)
 
         sp = self._to_log_melspectrogram(
-            min_level_db=min_level_db, max_level_db=max_level_db, normalize=True
+            min_level=numpy.exp(min_level),
+            max_level=numpy.exp(max_level),
+            normalize=True,
         )
         self.assertEqual(sp.min(), 0)
         self.assertEqual(sp.max(), 1)

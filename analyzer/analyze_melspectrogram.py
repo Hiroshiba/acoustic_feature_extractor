@@ -7,7 +7,6 @@ from typing import Optional
 
 import numpy
 import tqdm
-
 from acoustic_feature_extractor.data.spectrogram import to_log_melspectrogram
 from acoustic_feature_extractor.data.wave import Wave
 
@@ -26,7 +25,7 @@ def process(
 ):
     wave = Wave.load(path, sampling_rate)
 
-    min_level_db = -300
+    min_level = 1e-15
     ms = to_log_melspectrogram(
         x=wave.wave,
         sampling_rate=sampling_rate,
@@ -37,13 +36,13 @@ def process(
         hop_length=hop_length,
         fmin=fmin,
         fmax=fmax,
-        min_level_db=min_level_db,
-        max_level_db=None,
+        min_level=min_level,
+        max_level=None,
         normalize=False,
     )
 
     if eliminate_silence:
-        ms[ms == min_level_db] = ms[ms != min_level_db].min()
+        ms[ms == min_level] = ms[ms != min_level].min()
 
     return ms.min(), ms.max()
 

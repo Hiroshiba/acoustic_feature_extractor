@@ -7,7 +7,6 @@ from typing import Optional
 
 import numpy
 import tqdm
-
 from acoustic_feature_extractor.data.spectrogram import to_log_melspectrogram
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
@@ -24,8 +23,8 @@ def process(
     hop_length: int,
     fmin: float,
     fmax: float,
-    min_level_db: float,
-    max_level_db: Optional[float],
+    min_level: float,
+    max_level: Optional[float],
     disable_normalize: bool,
 ):
     wave = Wave.load(path, sampling_rate)
@@ -40,8 +39,8 @@ def process(
         hop_length=hop_length,
         fmin=fmin,
         fmax=fmax,
-        min_level_db=min_level_db,
-        max_level_db=max_level_db,
+        min_level=min_level,
+        max_level=max_level,
         normalize=not disable_normalize,
     )
 
@@ -62,8 +61,8 @@ def extract_melspectrogram(
     hop_length: int,
     fmin: float,
     fmax: float,
-    min_level_db: float,
-    max_level_db: Optional[float],
+    min_level: float,
+    max_level: Optional[float],
     disable_normalize: bool,
 ):
     output_directory.mkdir(exist_ok=True)
@@ -81,8 +80,8 @@ def extract_melspectrogram(
         hop_length=hop_length,
         fmin=fmin,
         fmax=fmax,
-        min_level_db=min_level_db,
-        max_level_db=max_level_db,
+        min_level=min_level,
+        max_level=max_level,
         disable_normalize=disable_normalize,
     )
 
@@ -108,8 +107,8 @@ def main():
     parser.add_argument("--hop_length", type=int, default=256)
     parser.add_argument("--fmin", type=float, default=125)
     parser.add_argument("--fmax", type=float, default=12000)
-    parser.add_argument("--min_level_db", type=float, default=-100)
-    parser.add_argument("--max_level_db", type=float)
+    parser.add_argument("--min_level", type=float, default=1e-5)
+    parser.add_argument("--max_level", type=float)
     parser.add_argument("--disable_normalize", action="store_true")
     extract_melspectrogram(**vars(parser.parse_args()))
 
