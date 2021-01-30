@@ -1,7 +1,9 @@
 import unittest
+from itertools import product
 
 import numpy
 from acoustic_feature_extractor.data.sampling_data import SamplingData
+from parameterized import parameterized
 
 
 class TestSamplingData(unittest.TestCase):
@@ -22,7 +24,7 @@ class TestSamplingData(unittest.TestCase):
         numpy.testing.assert_equal(a, b)
 
     def test_resample_random(self):
-        for _ in range(1000):
+        for _ in range(10):
             num = numpy.random.randint(256 ** 2) + 1
             size = numpy.random.randint(5) + 1
             rate = numpy.random.randint(100) + 1
@@ -36,6 +38,29 @@ class TestSamplingData(unittest.TestCase):
             a = data.resample(sampling_rate=rate * scale, index=index, length=length)
             b = numpy.repeat(sample, scale, axis=0)[index : index + length]
             numpy.testing.assert_equal(a, b)
+
+    @parameterized.expand(product([100, 200, 24000 / 512], [100, 200, 24000 / 512]))
+    def test_resample_float(self, source_rate: float, target_rate: float):
+        length = 1000
+        for _ in range(10):
+            sample = numpy.arange(length, dtype=numpy.float32)
+            data = SamplingData(array=sample, rate=source_rate)
+            output = data.resample(target_rate)
+            expect = numpy.interp(
+                (
+                    numpy.arange(
+                        length * target_rate // source_rate, dtype=numpy.float32
+                    )
+                    * source_rate
+                    / target_rate
+                ),
+                sample,
+                sample,
+            )
+
+            assert numpy.all(
+                numpy.abs(expect - output) < numpy.ceil(source_rate / target_rate)
+            )
 
     def test_split(self):
         sample100 = numpy.arange(100)

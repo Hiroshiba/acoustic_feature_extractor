@@ -11,19 +11,13 @@ class SamplingData:
     array: numpy.ndarray  # shape: (N, ?)
     rate: float
 
-    def resample(self, sampling_rate: float, index: int, length: int):
-        assert sampling_rate % self.rate == 0, f"{sampling_rate} {self.rate}"
-        scale = int(sampling_rate // self.rate)
-
-        ni = index // scale
-        nl = length // scale + 2
-
-        array = self.array[ni : ni + nl]
-        if scale > 1:
-            array = numpy.repeat(array, scale, axis=0)
-
-        i = index - ni * scale
-        return array[i : i + length]
+    def resample(self, sampling_rate: float, index: int = 0, length: int = None):
+        if length is None:
+            length = int(len(self.array) / self.rate * sampling_rate)
+        indexes = (numpy.random.rand() + index + numpy.arange(length)) * (
+            self.rate / sampling_rate
+        )
+        return self.array[indexes.astype(int)]
 
     def split(
         self,

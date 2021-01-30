@@ -6,4 +6,5 @@ pyworld
 pysptk
 tqdm
 pytest
+parameterized
 AMFM-decompy<1.1.0
