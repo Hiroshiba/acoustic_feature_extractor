@@ -5,6 +5,7 @@ import numpy
 from acoustic_feature_extractor.data.wave import Wave
 
 true_data_base_dir = Path(__file__).parent / "true_data"
+data_base_dir = Path(__file__).parent / "data"
 
 
 def generate_music_file(data_dir: Path, prefix: str, time_scale: float):

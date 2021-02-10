@@ -1,0 +1,19 @@
+# OS
+.DS_Store
+
+# editor
+.idea/
+.vscode/
+
+# python
+.python-version
+__pycache__/
+.mypy_cache/
+.ipynb_checkpoints/
+.venv/
+
+# docker
+.dockerignore
+
+# my utility
+hiho*

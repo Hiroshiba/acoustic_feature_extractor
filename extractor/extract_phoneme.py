@@ -7,8 +7,10 @@ from typing import Sequence
 
 import numpy
 import tqdm
-
-from acoustic_feature_extractor.data.linguistic_feature import LinguisticFeature
+from acoustic_feature_extractor.data.linguistic_feature import (
+    LinguisticFeature,
+    LinguisticFeatureType,
+)
 from acoustic_feature_extractor.data.phoneme import PhonemeType, phoneme_type_to_class
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -18,7 +20,7 @@ def process(
     output_directory: Path,
     phoneme_type: PhonemeType,
     rate: int,
-    types: Sequence[LinguisticFeature.FeatureType],
+    types: Sequence[LinguisticFeatureType],
 ):
     phoneme_class = phoneme_type_to_class[phoneme_type]
     ps = phoneme_class.load_julius_list(path)
@@ -43,25 +45,25 @@ def extract_phoneme(
     save_arguments(locals(), output_directory / "arguments.json")
 
     # Linguistic Feature Type
-    types = [LinguisticFeature.FeatureType.PHONEME]
+    types = [LinguisticFeatureType.PHONEME]
 
     if with_pre_post:
         types += [
-            LinguisticFeature.FeatureType.PRE_PHONEME,
-            LinguisticFeature.FeatureType.POST_PHONEME,
+            LinguisticFeatureType.PRE_PHONEME,
+            LinguisticFeatureType.POST_PHONEME,
         ]
 
     if with_duration:
-        types += [LinguisticFeature.FeatureType.PHONEME_DURATION]
+        types += [LinguisticFeatureType.PHONEME_DURATION]
 
         if with_pre_post:
             types += [
-                LinguisticFeature.FeatureType.PRE_PHONEME_DURATION,
-                LinguisticFeature.FeatureType.POST_PHONEME_DURATION,
+                LinguisticFeatureType.PRE_PHONEME_DURATION,
+                LinguisticFeatureType.POST_PHONEME_DURATION,
             ]
 
     if with_relative_pos:
-        types += [LinguisticFeature.FeatureType.POS_IN_PHONEME]
+        types += [LinguisticFeatureType.POS_IN_PHONEME]
 
     print("types:", [t.value for t in types])
 

@@ -1,15 +1,15 @@
 from abc import abstractmethod
 from enum import Enum
 from pathlib import Path
-from typing import List
+from typing import List, Sequence
 
 import numpy
 
 
 class BasePhoneme(object):
-    phoneme_list = None
-    num_phoneme = None
-    space_phoneme = None
+    phoneme_list: Sequence[str]
+    num_phoneme: int
+    space_phoneme: str
 
     def __init__(
         self,
