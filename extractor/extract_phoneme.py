@@ -2,8 +2,9 @@ import argparse
 import glob
 import multiprocessing
 from functools import partial
+from operator import attrgetter
 from pathlib import Path
-from typing import Sequence
+from typing import Iterable, Optional, Sequence, Tuple, Union
 
 import numpy
 import tqdm
@@ -15,17 +16,34 @@ from acoustic_feature_extractor.data.phoneme import PhonemeType, phoneme_type_to
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
+def sorted_with_stem(paths: Iterable[Path]):
+    return sorted(paths, key=attrgetter("stem"))
+
+
 def process(
-    path: Path,
+    path: Union[Path, Tuple[Path, Path, Path]],
     output_directory: Path,
     phoneme_type: PhonemeType,
     rate: int,
     types: Sequence[LinguisticFeatureType],
 ):
+    if isinstance(path, Path):
+        start_accents = None
+        end_accents = None
+    else:
+        path, start_accent_path, end_accent_path = path
+        start_accents = [bool(int(s)) for s in start_accent_path.read_text().split()]
+        end_accents = [bool(int(s)) for s in end_accent_path.read_text().split()]
+
     phoneme_class = phoneme_type_to_class[phoneme_type]
     ps = phoneme_class.load_julius_list(path)
     array = LinguisticFeature(
-        phonemes=ps, phoneme_class=phoneme_class, rate=rate, feature_types=types
+        phonemes=ps,
+        phoneme_class=phoneme_class,
+        rate=rate,
+        feature_types=types,
+        start_accents=start_accents,
+        end_accents=end_accents,
     ).make_array()
 
     out = output_directory / (path.stem + ".npy")
@@ -33,9 +51,12 @@ def process(
 
 
 def extract_phoneme(
-    input_glob,
+    input_glob: str,
     output_directory: Path,
+    input_start_accent_glob: Optional[str],
+    input_end_accent_glob: Optional[str],
     phoneme_type: PhonemeType,
+    with_phoneme_id: bool,
     with_pre_post: bool,
     with_duration: bool,
     with_relative_pos: bool,
@@ -45,7 +66,14 @@ def extract_phoneme(
     save_arguments(locals(), output_directory / "arguments.json")
 
     # Linguistic Feature Type
-    types = [LinguisticFeatureType.PHONEME]
+    with_accent = input_start_accent_glob is not None
+
+    types = []
+
+    if not with_phoneme_id:
+        types += [LinguisticFeatureType.PHONEME]
+    else:
+        types += [LinguisticFeatureType.PHONEME_ID]
 
     if with_pre_post:
         types += [
@@ -65,9 +93,27 @@ def extract_phoneme(
     if with_relative_pos:
         types += [LinguisticFeatureType.POS_IN_PHONEME]
 
+    if with_accent:
+        types += [LinguisticFeatureType.ACCENT]
+
     print("types:", [t.value for t in types])
 
     paths = [Path(p) for p in glob.glob(str(input_glob))]
+
+    if with_accent:
+        paths = sorted_with_stem(paths)
+        start_accent_paths = sorted_with_stem(
+            [Path(p) for p in glob.glob(str(input_start_accent_glob))]
+        )
+        end_accent_paths = sorted_with_stem(
+            [Path(p) for p in glob.glob(str(input_end_accent_glob))]
+        )
+
+        paths = [
+            (p1, p2, p3)
+            for p1, p2, p3 in zip(paths, start_accent_paths, end_accent_paths)
+        ]
+
     _process = partial(
         process,
         output_directory=output_directory,
@@ -87,6 +133,9 @@ def main():
     parser.add_argument(
         "--phoneme_type", "-pt", type=PhonemeType, default=PhonemeType.seg_kit
     )
+    parser.add_argument("--input_start_accent_glob", "-isag")
+    parser.add_argument("--input_end_accent_glob", "-ieag")
+    parser.add_argument("--with_phoneme_id", "-wpi", action="store_true")
     parser.add_argument("--with_pre_post", "-wpp", action="store_true")
     parser.add_argument("--with_duration", "-wd", action="store_true")
     parser.add_argument("--with_relative_pos", "-wrp", action="store_true")

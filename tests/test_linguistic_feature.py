@@ -12,7 +12,7 @@ from tests.utility import data_base_dir
 
 @pytest.fixture(
     params=(
-        data_base_dir.joinpath("phoneme")
+        data_base_dir.joinpath("phonemes")
         .joinpath("voiceactoress100_phoneme_openjtalk.txt")
         .read_text()
         .strip()
@@ -45,7 +45,7 @@ def feature_types(request):
 
 @pytest.fixture(
     params=(
-        data_base_dir.joinpath("accent")
+        data_base_dir.joinpath("accents")
         .joinpath("voiceactoress100_accent_start.txt")
         .read_text()
         .strip()
@@ -58,7 +58,7 @@ def start_accents(request):
 
 @pytest.fixture(
     params=(
-        data_base_dir.joinpath("accent")
+        data_base_dir.joinpath("accents")
         .joinpath("voiceactoress100_accent_end.txt")
         .read_text()
         .strip()
