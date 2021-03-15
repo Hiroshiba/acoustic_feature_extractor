@@ -7,7 +7,6 @@ from typing import List
 
 import numpy
 import tqdm
-
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 

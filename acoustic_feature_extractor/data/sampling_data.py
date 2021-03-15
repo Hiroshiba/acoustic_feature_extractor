@@ -57,10 +57,11 @@ class SamplingData:
     def collect(
         datas: Sequence["SamplingData"], rate: int, mode: str, error_time_length: float
     ):
-        scales = [(rate // d.rate) for d in datas]
         arrays: Sequence[numpy.ndarray] = [
-            d.resample(sampling_rate=rate, index=0, length=int(len(d.array) * s))
-            for d, s in zip(datas, scales)
+            d.resample(
+                sampling_rate=rate, index=0, length=int(len(d.array) * rate / d.rate)
+            )
+            for d in datas
         ]
 
         # assert that nearly length
