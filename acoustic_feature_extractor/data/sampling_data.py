@@ -76,14 +76,32 @@ class SamplingData:
             array = numpy.concatenate([a[:min_length] for a in arrays], axis=1).astype(
                 numpy.float32
             )
+
         elif mode == "max":
             arrays = [
-                numpy.pad(a, ((0, max_length - len(a)), (0, 0)))
-                if len(a) < max_length
-                else a
+                (
+                    numpy.pad(a, ((0, max_length - len(a)), (0, 0)))
+                    if len(a) < max_length
+                    else a
+                )
                 for a in arrays
             ]
             array = numpy.concatenate(arrays, axis=1).astype(numpy.float32)
+
+        elif mode == "first":
+            first_length = len(arrays[0])
+            arrays = [
+                (
+                    numpy.pad(a, ((0, first_length - len(a)), (0, 0)))
+                    if len(a) < first_length
+                    else a
+                )
+                for a in arrays
+            ]
+            array = numpy.concatenate(
+                [a[:first_length] for a in arrays], axis=1
+            ).astype(numpy.float32)
+
         else:
             raise ValueError(mode)
 
