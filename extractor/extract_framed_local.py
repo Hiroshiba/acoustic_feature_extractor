@@ -1,24 +1,13 @@
 import argparse
 import glob
 import multiprocessing
-from enum import Enum
 from functools import partial
 from pathlib import Path
 from typing import Optional
 
-import librosa
-import numpy
 import tqdm
-
-from acoustic_feature_extractor.data.sampling_data import SamplingData
+from acoustic_feature_extractor.data.sampling_data import DegenerateType, SamplingData
 from acoustic_feature_extractor.utility.json_utility import save_arguments
-
-
-class DegenerateType(str, Enum):
-    min = "min"
-    max = "max"
-    mean = "mean"
-    median = "median"
 
 
 def process(
@@ -31,33 +20,14 @@ def process(
     padding_mode: Optional[str],
     degenerate_type: DegenerateType,
 ):
-    data = SamplingData.load(path)
-    array = data.array
-
-    if centering:
-        width = [[frame_length // 2, frame_length // 2]] + [[0, 0]] * (array.ndim - 1)
-        array = numpy.pad(
-            array, width, mode=padding_mode, constant_values=padding_value
-        )
-
-    array = numpy.ascontiguousarray(array)
-    frame = librosa.util.frame(
-        array, frame_length=frame_length, hop_length=hop_length, axis=0
-    )
-
-    if degenerate_type == DegenerateType.min:
-        array = frame.min(axis=1)
-    elif degenerate_type == DegenerateType.max:
-        array = frame.max(axis=1)
-    elif degenerate_type == DegenerateType.mean:
-        array = frame.mean(axis=1)
-    elif degenerate_type == DegenerateType.median:
-        array = frame.median(axis=1)
-    else:
-        raise ValueError(degenerate_type)
-
-    out = output_directory / (path.stem + ".npy")
-    numpy.save(str(out), dict(array=array, rate=data.rate / hop_length))
+    SamplingData.load(path).degenerate(
+        frame_length=frame_length,
+        hop_length=hop_length,
+        centering=centering,
+        padding_value=padding_value,
+        padding_mode=padding_mode,
+        degenerate_type=degenerate_type,
+    ).save(output_directory / (path.stem + ".npy"))
 
 
 def extract_framed_local(

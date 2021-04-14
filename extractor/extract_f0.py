@@ -5,7 +5,6 @@ from functools import partial
 from pathlib import Path
 
 import tqdm
-
 from acoustic_feature_extractor.data.f0 import F0, F0Type
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments

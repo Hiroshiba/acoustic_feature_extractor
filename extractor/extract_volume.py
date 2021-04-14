@@ -8,7 +8,6 @@ from pathlib import Path
 import librosa
 import numpy
 import tqdm
-
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -75,8 +74,8 @@ def extract_volume(
         volume_type=volume_type,
     )
 
-    pool = multiprocessing.Pool()
-    list(tqdm.tqdm(pool.imap(_process, paths), total=len(paths)))
+    with multiprocessing.Pool() as pool:
+        list(tqdm.tqdm(pool.imap(_process, paths), total=len(paths)))
 
 
 def main():

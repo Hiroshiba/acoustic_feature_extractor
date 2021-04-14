@@ -7,7 +7,6 @@ from pathlib import Path
 import librosa
 import numpy
 import tqdm
-
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 

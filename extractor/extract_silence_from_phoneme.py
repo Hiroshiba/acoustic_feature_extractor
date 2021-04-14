@@ -7,7 +7,6 @@ from typing import Tuple
 
 import numpy
 import tqdm
-
 from acoustic_feature_extractor.data.phoneme import PhonemeType, phoneme_type_to_class
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments

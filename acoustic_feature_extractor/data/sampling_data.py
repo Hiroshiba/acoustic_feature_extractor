@@ -1,9 +1,18 @@
 from copy import deepcopy
 from dataclasses import dataclass
+from enum import Enum
 from pathlib import Path
-from typing import Dict, Sequence, Union
+from typing import Dict, Optional, Sequence, Union
 
+import librosa
 import numpy
+
+
+class DegenerateType(str, Enum):
+    min = "min"
+    max = "max"
+    mean = "mean"
+    median = "median"
 
 
 @dataclass
@@ -106,6 +115,43 @@ class SamplingData:
             raise ValueError(mode)
 
         return array
+
+    def degenerate(
+        self,
+        frame_length: int,
+        hop_length: int,
+        centering: bool,
+        padding_value: Optional[int],
+        padding_mode: Optional[str],
+        degenerate_type: DegenerateType,
+    ):
+        array = self.array
+
+        if centering:
+            width = [[frame_length // 2, frame_length // 2]] + [[0, 0]] * (
+                array.ndim - 1
+            )
+            array = numpy.pad(
+                array, width, mode=padding_mode, constant_values=padding_value
+            )
+
+        array = numpy.ascontiguousarray(array)
+        frame = librosa.util.frame(
+            array, frame_length=frame_length, hop_length=hop_length, axis=0
+        )
+
+        if degenerate_type == DegenerateType.min:
+            array = numpy.min(frame, axis=1)
+        elif degenerate_type == DegenerateType.max:
+            array = numpy.max(frame, axis=1)
+        elif degenerate_type == DegenerateType.mean:
+            array = numpy.mean(frame, axis=1)
+        elif degenerate_type == DegenerateType.median:
+            array = numpy.median(frame, axis=1)
+        else:
+            raise ValueError(degenerate_type)
+
+        return SamplingData(array=array, rate=self.rate / hop_length)
 
     @classmethod
     def load(cls, path: Path):
