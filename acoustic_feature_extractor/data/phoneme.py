@@ -24,6 +24,11 @@ class BasePhoneme(object):
     def __repr__(self):
         return f"Phoneme(phoneme='{self.phoneme}', start={self.start}, end={self.end})"
 
+    def __eq__(self, o: object):
+        return isinstance(o, BasePhoneme) and (
+            self.phoneme == o.phoneme and self.start == o.start and self.end == o.end
+        )
+
     def verify(self):
         assert self.phoneme in self.phoneme_list, f"{self.phoneme} is not defined."
 
@@ -67,6 +72,18 @@ class BasePhoneme(object):
         for phoneme in phonemes:
             phoneme.verify()
         return phonemes
+
+    @classmethod
+    def save_julius_list(cls, phonemes: List["BasePhoneme"], path: Path):
+        text = "\n".join(
+            [
+                f"{numpy.round(p.start, decimals=2):.2f}\t"
+                f"{numpy.round(p.end, decimals=2):.2f}\t"
+                f"{p.phoneme}"
+                for p in phonemes
+            ]
+        )
+        path.write_text(text)
 
 
 class SegKitPhoneme(BasePhoneme):
