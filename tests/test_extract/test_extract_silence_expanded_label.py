@@ -12,6 +12,7 @@ def test_extract_silence_expanded_label(data_dir: Path):
         input_silence_glob=str(data_base_dir / "silence/*.npy"),
         output_directory=output_dir,
         phoneme_type=PhonemeType.jvs,
+        phoneme_minimum_second=0.03,
     )
 
     true_data_dir = true_data_base_dir.joinpath("output_extract_silence_expanded_label")

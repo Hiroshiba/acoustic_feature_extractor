@@ -7,11 +7,7 @@ from typing import Tuple
 
 import numpy
 import tqdm
-from acoustic_feature_extractor.data.phoneme import (
-    JvsPhoneme,
-    PhonemeType,
-    phoneme_type_to_class,
-)
+from acoustic_feature_extractor.data.phoneme import PhonemeType, phoneme_type_to_class
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -20,6 +16,7 @@ def process(
     paths: Tuple[Path, Path],
     output_directory: Path,
     phoneme_type: PhonemeType,
+    phoneme_minimum_second: float,
 ):
     label_path, silence_path = paths
 
@@ -40,18 +37,22 @@ def process(
         / silence.rate,
     ):
         for i, l in enumerate(label):
-            if l.phoneme != JvsPhoneme.space_phoneme:
+            if l.phoneme != phoneme_class.space_phoneme:
                 continue
 
             if silence_start < l.start and l.start <= silence_end:
-                l.start = silence_start
                 if i > 0:
+                    if label[i - 1].start + phoneme_minimum_second > silence_start:
+                        silence_start = label[i - 1].start + phoneme_minimum_second
                     label[i - 1].end = silence_start
+                l.start = silence_start
 
             if silence_start <= l.end and l.end < silence_end:
-                l.end = silence_end
                 if i < len(label) - 1:
+                    if label[i + 1].end - phoneme_minimum_second < silence_end:
+                        silence_end = label[i + 1].end - phoneme_minimum_second
                     label[i + 1].start = silence_end
+                l.end = silence_end
 
     out = output_directory / (label_path.stem + ".lab")
     phoneme_class.save_julius_list(phonemes=label, path=out)
@@ -62,6 +63,7 @@ def extract_silence_expanded_label(
     input_silence_glob: str,
     output_directory: Path,
     phoneme_type: PhonemeType,
+    phoneme_minimum_second: float,
 ):
     output_directory.mkdir(exist_ok=True)
     save_arguments(locals(), output_directory / "arguments.json")
@@ -74,6 +76,7 @@ def extract_silence_expanded_label(
         process,
         output_directory=output_directory,
         phoneme_type=phoneme_type,
+        phoneme_minimum_second=phoneme_minimum_second,
     )
 
     with multiprocessing.Pool() as pool:
@@ -93,6 +96,7 @@ def main():
     parser.add_argument(
         "--phoneme_type", "-pt", type=PhonemeType, default=PhonemeType.seg_kit
     )
+    parser.add_argument("--phoneme_minimum_second", "-pms", type=float, default=0.03)
     extract_silence_expanded_label(**vars(parser.parse_args()))
 
 
