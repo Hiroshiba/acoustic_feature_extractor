@@ -4,6 +4,7 @@ import librosa
 import numpy
 import soundfile
 from acoustic_feature_extractor.data.sampling_data import SamplingData
+from resampy import resample
 
 
 class Wave(object):
@@ -15,7 +16,11 @@ class Wave(object):
     def load(path: Path, sampling_rate: int = None, dtype=numpy.float32):
         if path.suffix == ".npy" or path.suffix == ".npz":
             a = SamplingData.load(path)
-            return Wave(wave=numpy.squeeze(a.array), sampling_rate=a.rate)
+            a.array = numpy.squeeze(a.array)
+            if sampling_rate is not None:
+                a.array = resample(a.array, a.rate, sampling_rate)
+                a.rate = sampling_rate
+            return Wave(wave=a.array, sampling_rate=a.rate)
         else:
             wave, sampling_rate = librosa.core.load(
                 str(path), sr=sampling_rate, dtype=dtype

@@ -7,9 +7,9 @@ from pathlib import Path
 
 import tqdm
 from acoustic_feature_extractor.data.sampling_data import DegenerateType, SamplingData
+from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 from mosqito.functions.loudness_zwicker.comp_loudness import comp_loudness
-from mosqito.functions.shared.load import load
 
 
 class FieldType(str, Enum):
@@ -27,9 +27,13 @@ def process(
     rate = 500
     assert rate % sampling_rate == 0
 
-    signal, fs = load(is_stationary=False, file=str(path), calib=calibration_value)
+    wave = Wave.load(path, sampling_rate=48000)
+    wave_array = wave.wave * calibration_value
     loudness = comp_loudness(
-        is_stationary=False, signal=signal, fs=fs, field_type=field_type.value
+        is_stationary=False,
+        signal=wave_array,
+        fs=wave.sampling_rate,
+        field_type=field_type.value,
     )
 
     data = SamplingData(array=loudness["values"], rate=rate)
