@@ -43,16 +43,28 @@ def extract_collected_local(
     rate: int,
     mode: str,
     error_time_length: float,
+    only_union: bool,
 ):
     output_directory.mkdir(exist_ok=True)
     save_arguments(locals(), output_directory / "arguments.json")
 
     paths_list = [
-        [Path(p) for p in p_list]
-        for p_list in zip(
-            *[sorted(glob.glob(input_glob)) for input_glob in input_glob_list]
-        )
+        {Path(p).stem: Path(p) for p in glob.glob(input_glob)}
+        for input_glob in input_glob_list
     ]
+
+    names_list = [set(n for n in paths.keys()) for paths in paths_list]
+
+    names = names_list[0]
+    if not only_union:
+        for i in range(1, len(names_list)):
+            assert names == names_list[i]
+    else:
+        for i in range(1, len(names_list)):
+            names = names & names_list[i]
+
+    pair_paths_list = [[paths[name] for paths in paths_list] for name in names]
+
     _process = partial(
         process if not ignore_error else process_ignore_error,
         output_directory=output_directory,
@@ -61,10 +73,13 @@ def extract_collected_local(
         error_time_length=error_time_length,
     )
 
-    pool = multiprocessing.Pool()
-    results = list(
-        tqdm.tqdm(pool.imap_unordered(_process, paths_list), total=len(paths_list))
-    )
+    with multiprocessing.Pool() as pool:
+        results = list(
+            tqdm.tqdm(
+                pool.imap_unordered(_process, pair_paths_list),
+                total=len(pair_paths_list),
+            )
+        )
 
     if ignore_error:
         errors = list(filter(None, results))
@@ -82,6 +97,7 @@ def main():
     parser.add_argument("--mode", "-m", choices=["min", "max", "first"], default="min")
     parser.add_argument("--error_time_length", "-etl", type=float, default=0.015)
     parser.add_argument("--ignore_error", "-ig", action="store_true")
+    parser.add_argument("--only_union", "-uo", action="store_true")
     extract_collected_local(**vars(parser.parse_args()))
 
 
