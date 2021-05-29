@@ -50,6 +50,13 @@ def process(
     numpy.save(str(out), dict(array=array, rate=rate))
 
 
+def process_ignore_error(*args, **kwargs):
+    try:
+        return process(*args, **kwargs)
+    except Exception as e:
+        return e
+
+
 def extract_phoneme(
     input_glob: str,
     output_directory: Path,
@@ -61,6 +68,7 @@ def extract_phoneme(
     with_duration: bool,
     with_relative_pos: bool,
     rate: int,
+    ignore_error: bool,
 ):
     output_directory.mkdir(exist_ok=True)
     save_arguments(locals(), output_directory / "arguments.json")
@@ -115,15 +123,24 @@ def extract_phoneme(
         ]
 
     _process = partial(
-        process,
+        process if not ignore_error else process_ignore_error,
         output_directory=output_directory,
         phoneme_type=phoneme_type,
         rate=rate,
         types=types,
     )
 
-    pool = multiprocessing.Pool()
-    list(tqdm.tqdm(pool.imap_unordered(_process, paths), total=len(paths)))
+    with multiprocessing.Pool() as pool:
+        results = list(
+            tqdm.tqdm(pool.imap_unordered(_process, paths), total=len(paths))
+        )
+
+    if ignore_error:
+        errors = list(filter(None, results))
+        print(f"num of error: {len(errors)}")
+
+        for e in errors:
+            print(e)
 
 
 def main():
@@ -140,6 +157,7 @@ def main():
     parser.add_argument("--with_duration", "-wd", action="store_true")
     parser.add_argument("--with_relative_pos", "-wrp", action="store_true")
     parser.add_argument("--rate", "-r", type=int, default=100)
+    parser.add_argument("--ignore_error", "-ie", action="store_true")
     extract_phoneme(**vars(parser.parse_args()))
 
 

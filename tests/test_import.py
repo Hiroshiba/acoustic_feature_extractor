@@ -36,6 +36,11 @@ class TestImport(unittest.TestCase):
 
         dir(extract_wave)
 
+    def test_import_tool(self):
+        from tool import tool_split_wave
+
+        dir(tool_split_wave)
+
     def test_import_data(self):
         from acoustic_feature_extractor.data import linguistic_feature
 

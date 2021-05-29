@@ -21,6 +21,13 @@ console_scripts += [
     for path in analyzers
 ]
 
+tools = list(Path("tool").glob("tool_*"))
+assert len(tools) > 0
+console_scripts += [
+    f'{path.stem.replace("tool_", "acoustic_feature_tool_")}' f"=tool.{path.stem}:main"
+    for path in tools
+]
+
 # setup
 install_requires = [
     r if not r.startswith("git+") else f"{Path(r).stem.split('@')[0]} @ {r}"
