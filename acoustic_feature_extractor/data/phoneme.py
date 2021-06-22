@@ -196,6 +196,66 @@ class JvsPhoneme(BasePhoneme):
         return phonemes
 
 
+class OjtPhoneme(BasePhoneme):
+    phoneme_list = (
+        "pau",
+        "A",
+        "E",
+        "I",
+        "N",
+        "O",
+        "U",
+        "a",
+        "b",
+        "by",
+        "ch",
+        "cl",
+        "d",
+        "dy",
+        "e",
+        "f",
+        "g",
+        "gw",
+        "gy",
+        "h",
+        "hy",
+        "i",
+        "j",
+        "k",
+        "kw",
+        "ky",
+        "m",
+        "my",
+        "n",
+        "ny",
+        "o",
+        "p",
+        "py",
+        "r",
+        "ry",
+        "s",
+        "sh",
+        "t",
+        "ts",
+        "ty",
+        "u",
+        "v",
+        "w",
+        "y",
+        "z",
+    )
+    num_phoneme = len(phoneme_list)
+    space_phoneme = "pau"
+
+    @classmethod
+    def convert(cls, phonemes: List["OjtPhoneme"]):
+        if "sil" in phonemes[0].phoneme:
+            phonemes[0].phoneme = cls.space_phoneme
+        if "sil" in phonemes[-1].phoneme:
+            phonemes[-1].phoneme = cls.space_phoneme
+        return phonemes
+
+
 class KiritanPhoneme(BasePhoneme):
     phoneme_list = (
         "pau",
@@ -250,10 +310,12 @@ class PhonemeType(str, Enum):
     seg_kit = "seg_kit"
     jvs = "jvs"
     kiritan = "kiritan"
+    openjtalk = "openjtalk"
 
 
 phoneme_type_to_class = {
     PhonemeType.seg_kit: SegKitPhoneme,
     PhonemeType.jvs: JvsPhoneme,
     PhonemeType.kiritan: KiritanPhoneme,
+    PhonemeType.openjtalk: OjtPhoneme,
 }
