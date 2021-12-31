@@ -1,5 +1,5 @@
-librosa==0.8.0
-mosqito==0.2.1
+librosa==0.8.1
+mosqito==0.3.4
 numba
 numpy
 parameterized
