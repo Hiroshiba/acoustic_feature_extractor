@@ -18,21 +18,26 @@ def process(
     frame_second: Optional[float],
     time_axis: int,
 ):
-    assert (sampling_rate is None) != (frame_second is None)
+    try:
+        assert (sampling_rate is None) != (frame_second is None)
 
-    if frame_second is not None:
-        sampling_rate = 1 / frame_second
+        if frame_second is not None:
+            sampling_rate = 1 / frame_second
 
-    assert sampling_rate is not None
+        assert sampling_rate is not None
 
-    array = numpy.load(path)
-    if time_axis != 0:
-        array = numpy.moveaxis(array, time_axis, 0)
+        array = numpy.load(path)
+        if time_axis != 0:
+            array = numpy.moveaxis(array, time_axis, 0)
 
-    data = SamplingData(array=array, rate=sampling_rate)
+        data = SamplingData(array=array, rate=sampling_rate)
 
-    out = output_directory / (path.stem + ".npy")
-    data.save(out)
+        out = output_directory / (path.stem + ".npy")
+        data.save(out)
+    
+    except:
+        print("error:", path)
+        raise
 
 
 def extract_sampling_data(

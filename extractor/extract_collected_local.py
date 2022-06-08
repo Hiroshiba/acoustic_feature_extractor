@@ -18,15 +18,19 @@ def process(
     mode: str,
     error_time_length: float,
 ):
-    assert all(paths[0].stem == p.stem for p in paths[1:])
+    try:
+        assert all(paths[0].stem == p.stem for p in paths[1:])
 
-    datas = [SamplingData.load(p) for p in paths]
-    array = SamplingData.collect(
-        datas, rate=rate, mode=mode, error_time_length=error_time_length
-    )
+        datas = [SamplingData.load(p) for p in paths]
+        array = SamplingData.collect(
+            datas, rate=rate, mode=mode, error_time_length=error_time_length
+        )
 
-    out = output_directory / (paths[0].stem + ".npy")
-    numpy.save(str(out), dict(array=array, rate=rate))
+        out = output_directory / (paths[0].stem + ".npy")
+        numpy.save(str(out), dict(array=array, rate=rate))
+    except:
+        print("error:", paths)
+        raise
 
 
 def process_ignore_error(*args, **kwargs):

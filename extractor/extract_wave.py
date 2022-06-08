@@ -20,23 +20,30 @@ def process(
     clipping_range: Optional[Tuple[float, float]],
     clipping_auto: bool,
 ):
-    assert sum((scale_db is not None, clipping_range is not None, clipping_auto)) <= 1
-
-    w = Wave.load(path, sampling_rate).wave
-
-    if scale_db is not None:
-        w *= librosa.db_to_amplitude(scale_db)
-
-    elif clipping_range is not None:
-        w = numpy.clip(w, clipping_range[0], clipping_range[1]) / numpy.max(
-            numpy.abs(clipping_range)
+    try:
+        assert (
+            sum((scale_db is not None, clipping_range is not None, clipping_auto)) <= 1
         )
 
-    elif clipping_auto:
-        w /= numpy.abs(w).max() * 0.999
+        w = Wave.load(path, sampling_rate).wave
 
-    out = output_directory / (path.stem + ".npy")
-    numpy.save(str(out), dict(array=w, rate=sampling_rate))
+        if scale_db is not None:
+            w *= librosa.db_to_amplitude(scale_db)
+
+        elif clipping_range is not None:
+            w = numpy.clip(w, clipping_range[0], clipping_range[1]) / numpy.max(
+                numpy.abs(clipping_range)
+            )
+
+        elif clipping_auto:
+            w /= numpy.abs(w).max() * 0.999
+
+        out = output_directory / (path.stem + ".npy")
+        numpy.save(str(out), dict(array=w, rate=sampling_rate))
+
+    except:
+        print("error:", path)
+        raise
 
 
 def extract_wave(

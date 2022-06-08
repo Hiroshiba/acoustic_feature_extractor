@@ -20,29 +20,36 @@ def process(
     padding: bool,
     remove_all_same: bool,
 ):
-    base = SamplingData.load(path)
-    datas = dict(enumerate(base.split(keypoint_seconds=keypoint_seconds)))
+    try:
+        base = SamplingData.load(path)
+        datas = dict(enumerate(base.split(keypoint_seconds=keypoint_seconds)))
 
-    if remove_all_same:
-        datas = {index: data for index, data in datas.items() if not data.all_same()}
+        if remove_all_same:
+            datas = {
+                index: data for index, data in datas.items() if not data.all_same()
+            }
 
-    if padding:
-        padding_value = base.estimate_padding_value()
-        items = datas.items()
-        indexes, datas = (
-            list(map(itemgetter(0), items)),
-            list(map(itemgetter(1), items)),
-        )
-        datas = SamplingData.padding(datas, padding_value=padding_value)
-        datas = {key: data for key, data in zip(indexes, datas)}
+        if padding:
+            padding_value = base.estimate_padding_value()
+            items = datas.items()
+            indexes, datas = (
+                list(map(itemgetter(0), items)),
+                list(map(itemgetter(1), items)),
+            )
+            datas = SamplingData.padding(datas, padding_value=padding_value)
+            datas = {key: data for key, data in zip(indexes, datas)}
 
-    for i, data in datas.items():
-        if data is None:
-            continue
-        out = output_directory / file_format.format(
-            stem=path.stem, suffix=path.suffix, i=i
-        )
-        data.save(out)
+        for i, data in datas.items():
+            if data is None:
+                continue
+            out = output_directory / file_format.format(
+                stem=path.stem, suffix=path.suffix, i=i
+            )
+            data.save(out)
+
+    except:
+        print("error:", path)
+        raise
 
 
 def extract_splited_local(

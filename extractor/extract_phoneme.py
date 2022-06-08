@@ -27,27 +27,34 @@ def process(
     rate: int,
     types: Sequence[LinguisticFeatureType],
 ):
-    if isinstance(path, Path):
-        start_accents = None
-        end_accents = None
-    else:
-        path, start_accent_path, end_accent_path = path
-        start_accents = [bool(int(s)) for s in start_accent_path.read_text().split()]
-        end_accents = [bool(int(s)) for s in end_accent_path.read_text().split()]
+    try:
+        if isinstance(path, Path):
+            start_accents = None
+            end_accents = None
+        else:
+            path, start_accent_path, end_accent_path = path
+            start_accents = [
+                bool(int(s)) for s in start_accent_path.read_text().split()
+            ]
+            end_accents = [bool(int(s)) for s in end_accent_path.read_text().split()]
 
-    phoneme_class = phoneme_type_to_class[phoneme_type]
-    ps = phoneme_class.load_julius_list(path)
-    array = LinguisticFeature(
-        phonemes=ps,
-        phoneme_class=phoneme_class,
-        rate=rate,
-        feature_types=types,
-        start_accents=start_accents,
-        end_accents=end_accents,
-    ).make_array()
+        phoneme_class = phoneme_type_to_class[phoneme_type]
+        ps = phoneme_class.load_julius_list(path)
+        array = LinguisticFeature(
+            phonemes=ps,
+            phoneme_class=phoneme_class,
+            rate=rate,
+            feature_types=types,
+            start_accents=start_accents,
+            end_accents=end_accents,
+        ).make_array()
 
-    out = output_directory / (path.stem + ".npy")
-    numpy.save(str(out), dict(array=array, rate=rate))
+        out = output_directory / (path.stem + ".npy")
+        numpy.save(str(out), dict(array=array, rate=rate))
+
+    except:
+        print("error:", path)
+        raise
 
 
 def process_ignore_error(*args, **kwargs):

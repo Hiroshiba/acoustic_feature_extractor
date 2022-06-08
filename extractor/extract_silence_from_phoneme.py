@@ -18,21 +18,26 @@ def process(
     phoneme_type: PhonemeType,
     sampling_rate: int,
 ):
-    wave_path, phoneme_path = paths
+    try:
+        wave_path, phoneme_path = paths
 
-    phoneme_class = phoneme_type_to_class[phoneme_type]
-    phonemes = phoneme_class.load_julius_list(phoneme_path)
+        phoneme_class = phoneme_type_to_class[phoneme_type]
+        phonemes = phoneme_class.load_julius_list(phoneme_path)
 
-    length = len(Wave.load(wave_path, sampling_rate=sampling_rate).wave)
-    array = numpy.ones((length,), dtype=numpy.bool)
+        length = len(Wave.load(wave_path, sampling_rate=sampling_rate).wave)
+        array = numpy.ones((length,), dtype=numpy.bool)
 
-    for p in filter(lambda p: p.phoneme != phoneme_class.space_phoneme, phonemes):
-        s = int(round(p.start * sampling_rate))
-        e = int(round(p.end * sampling_rate))
-        array[s : e + 1] = False
+        for p in filter(lambda p: p.phoneme != phoneme_class.space_phoneme, phonemes):
+            s = int(round(p.start * sampling_rate))
+            e = int(round(p.end * sampling_rate))
+            array[s : e + 1] = False
 
-    out = output_directory / (wave_path.stem + ".npy")
-    numpy.save(str(out), dict(array=array, rate=sampling_rate))
+        out = output_directory / (wave_path.stem + ".npy")
+        numpy.save(str(out), dict(array=array, rate=sampling_rate))
+
+    except:
+        print("error:", paths)
+        raise
 
 
 def extract_silence_from_phoneme(

@@ -51,6 +51,7 @@ def test_extract_phoneme(
         with_duration=with_duration,
         with_relative_pos=with_relative_pos,
         rate=100,
+        ignore_error=False,
     )
 
 
@@ -79,4 +80,5 @@ def test_extract_phoneme_with_accent(
         with_duration=with_duration,
         with_relative_pos=with_relative_pos,
         rate=100,
+        ignore_error=False,
     )

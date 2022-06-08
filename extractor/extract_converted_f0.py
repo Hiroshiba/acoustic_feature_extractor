@@ -21,21 +21,30 @@ def process(
     target_mean: Optional[float],
     target_var: Optional[float],
 ):
-    f0 = F0.load(path=path).convert(
-        input_statistics=load_numpy_object(input_statistics)
-        if input_statistics is not None
-        else None,
-        target_statistics=load_numpy_object(target_statistics)
-        if target_statistics is not None
-        else None,
-        input_mean=input_mean,
-        input_var=input_var,
-        target_mean=target_mean,
-        target_var=target_var,
-    )
+    try:
+        f0 = F0.load(path=path).convert(
+            input_statistics=(
+                load_numpy_object(input_statistics)
+                if input_statistics is not None
+                else None
+            ),
+            target_statistics=(
+                load_numpy_object(target_statistics)
+                if target_statistics is not None
+                else None
+            ),
+            input_mean=input_mean,
+            input_var=input_var,
+            target_mean=target_mean,
+            target_var=target_var,
+        )
 
-    out = output_directory / (path.stem + ".npy")
-    f0.save(out)
+        out = output_directory / (path.stem + ".npy")
+        f0.save(out)
+
+    except:
+        print("error:", path)
+        raise
 
 
 def extract_converted_f0(

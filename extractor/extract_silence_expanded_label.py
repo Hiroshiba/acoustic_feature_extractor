@@ -18,44 +18,53 @@ def process(
     phoneme_type: PhonemeType,
     phoneme_minimum_second: float,
 ):
-    label_path, silence_path = paths
+    try:
+        label_path, silence_path = paths
 
-    phoneme_class = phoneme_type_to_class[phoneme_type]
-    label = phoneme_class.load_julius_list(label_path)
+        phoneme_class = phoneme_type_to_class[phoneme_type]
+        label = phoneme_class.load_julius_list(label_path)
 
-    silence = SamplingData.load(silence_path)
-    silence_array = numpy.squeeze(silence.array)
+        silence = SamplingData.load(silence_path)
+        silence_array = numpy.squeeze(silence.array)
 
-    for silence_start, silence_end in zip(
-        numpy.where(
-            numpy.logical_and(numpy.diff(numpy.r_[False, silence_array]), silence_array)
-        )[0]
-        / silence.rate,
-        numpy.where(
-            numpy.logical_and(numpy.diff(numpy.r_[silence_array, False]), silence_array)
-        )[0]
-        / silence.rate,
-    ):
-        for i, l in enumerate(label):
-            if l.phoneme != phoneme_class.space_phoneme:
-                continue
+        for silence_start, silence_end in zip(
+            numpy.where(
+                numpy.logical_and(
+                    numpy.diff(numpy.r_[False, silence_array]), silence_array
+                )
+            )[0]
+            / silence.rate,
+            numpy.where(
+                numpy.logical_and(
+                    numpy.diff(numpy.r_[silence_array, False]), silence_array
+                )
+            )[0]
+            / silence.rate,
+        ):
+            for i, l in enumerate(label):
+                if l.phoneme != phoneme_class.space_phoneme:
+                    continue
 
-            if silence_start < l.start and l.start <= silence_end:
-                if i > 0:
-                    if label[i - 1].start + phoneme_minimum_second > silence_start:
-                        silence_start = label[i - 1].start + phoneme_minimum_second
-                    label[i - 1].end = silence_start
-                l.start = silence_start
+                if silence_start < l.start and l.start <= silence_end:
+                    if i > 0:
+                        if label[i - 1].start + phoneme_minimum_second > silence_start:
+                            silence_start = label[i - 1].start + phoneme_minimum_second
+                        label[i - 1].end = silence_start
+                    l.start = silence_start
 
-            if silence_start <= l.end and l.end < silence_end:
-                if i < len(label) - 1:
-                    if label[i + 1].end - phoneme_minimum_second < silence_end:
-                        silence_end = label[i + 1].end - phoneme_minimum_second
-                    label[i + 1].start = silence_end
-                l.end = silence_end
+                if silence_start <= l.end and l.end < silence_end:
+                    if i < len(label) - 1:
+                        if label[i + 1].end - phoneme_minimum_second < silence_end:
+                            silence_end = label[i + 1].end - phoneme_minimum_second
+                        label[i + 1].start = silence_end
+                    l.end = silence_end
 
-    out = output_directory / (label_path.stem + ".lab")
-    phoneme_class.save_julius_list(phonemes=label, path=out)
+        out = output_directory / (label_path.stem + ".lab")
+        phoneme_class.save_julius_list(phonemes=label, path=out)
+
+    except:
+        print("error:", paths)
+        raise
 
 
 def extract_silence_expanded_label(

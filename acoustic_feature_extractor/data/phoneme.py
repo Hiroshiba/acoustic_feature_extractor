@@ -18,8 +18,8 @@ class BasePhoneme(object):
         end: float,
     ):
         self.phoneme = phoneme
-        self.start = numpy.round(start, decimals=2)
-        self.end = numpy.round(end, decimals=2)
+        self.start = numpy.round(start, decimals=4)
+        self.end = numpy.round(end, decimals=4)
 
     def __repr__(self):
         return f"Phoneme(phoneme='{self.phoneme}', start={self.start}, end={self.end})"
@@ -30,6 +30,7 @@ class BasePhoneme(object):
         )
 
     def verify(self):
+        assert self.start < self.end, f"{self.phoneme} start must be less than end"
         assert self.phoneme in self.phoneme_list, f"{self.phoneme} is not defined."
 
     @property
@@ -50,7 +51,7 @@ class BasePhoneme(object):
     def parse(cls, s: str):
         """
         >>> BasePhoneme.parse('1.7425000 1.9125000 o:')
-        Phoneme(phoneme='o:', start=1.74, end=1.91)
+        Phoneme(phoneme='o:', start=1.7425, end=1.9125)
         """
         words = s.split()
         return cls(
@@ -65,20 +66,38 @@ class BasePhoneme(object):
         pass
 
     @classmethod
-    def load_julius_list(cls, path: Path):
+    def verify_list(cls, phonemes: List["BasePhoneme"]):
+        for phoneme in phonemes:
+            phoneme.verify()
+        for pre, post in zip(phonemes[:-1], phonemes[1:]):
+            assert pre.end == post.start
+
+    @classmethod
+    def load_julius_list(cls, path: Path, verify=True):
         phonemes = [cls.parse(s) for s in path.read_text().split("\n") if len(s) > 0]
         phonemes = cls.convert(phonemes)
 
-        for phoneme in phonemes:
-            phoneme.verify()
+        if verify:
+            try:
+                cls.verify_list(phonemes)
+            except:
+                print(f"{path} is not valid.")
+                raise
         return phonemes
 
     @classmethod
-    def save_julius_list(cls, phonemes: List["BasePhoneme"], path: Path):
+    def save_julius_list(cls, phonemes: List["BasePhoneme"], path: Path, verify=True):
+        if verify:
+            try:
+                cls.verify_list(phonemes)
+            except:
+                print(f"{path} is not valid.")
+                raise
+
         text = "\n".join(
             [
-                f"{numpy.round(p.start, decimals=2):.2f}\t"
-                f"{numpy.round(p.end, decimals=2):.2f}\t"
+                f"{numpy.round(p.start, decimals=4):.4f}\t"
+                f"{numpy.round(p.end, decimals=4):.4f}\t"
                 f"{p.phoneme}"
                 for p in phonemes
             ]
@@ -306,16 +325,31 @@ class KiritanPhoneme(BasePhoneme):
         return phonemes
 
 
+class DummyPhoneme(BasePhoneme):
+    """
+    デバッグ用。verifyなどがない。
+    """
+
+    def verify(self):
+        return True
+
+    @classmethod
+    def convert(cls, phonemes: List["DummyPhoneme"]):
+        return phonemes
+
+
 class PhonemeType(str, Enum):
     seg_kit = "seg_kit"
     jvs = "jvs"
-    kiritan = "kiritan"
     openjtalk = "openjtalk"
+    kiritan = "kiritan"
+    dummy = "dummy"
 
 
 phoneme_type_to_class = {
     PhonemeType.seg_kit: SegKitPhoneme,
     PhonemeType.jvs: JvsPhoneme,
-    PhonemeType.kiritan: KiritanPhoneme,
     PhonemeType.openjtalk: OjtPhoneme,
+    PhonemeType.kiritan: KiritanPhoneme,
+    PhonemeType.dummy: DummyPhoneme,
 }
