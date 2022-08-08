@@ -19,6 +19,7 @@ def process(
     scale_db: Optional[float],
     clipping_range: Optional[Tuple[float, float]],
     clipping_auto: bool,
+    check_out_of_range: bool,
 ):
     try:
         assert (
@@ -38,6 +39,9 @@ def process(
         elif clipping_auto:
             w /= numpy.abs(w).max() * 0.999
 
+        if check_out_of_range:
+            assert w.min() >= -1 and w.max() <= 1
+
         out = output_directory / (path.stem + ".npy")
         numpy.save(str(out), dict(array=w, rate=sampling_rate))
 
@@ -53,6 +57,7 @@ def extract_wave(
     scale_db: Optional[float],
     clipping_range: Optional[Tuple[float, float]],
     clipping_auto: bool,
+    check_out_of_range: bool,
 ):
     assert sum((scale_db is not None, clipping_range is not None, clipping_auto)) <= 1
 
@@ -68,6 +73,7 @@ def extract_wave(
         scale_db=scale_db,
         clipping_range=clipping_range,
         clipping_auto=clipping_auto,
+        check_out_of_range=check_out_of_range,
     )
 
     with multiprocessing.Pool() as pool:
@@ -84,6 +90,7 @@ def main():
         "--clipping_range", "-cr", type=float, nargs=2, help="(min, max)"
     )
     parser.add_argument("--clipping_auto", "-ca", action="store_true")
+    parser.add_argument("--check_out_of_range", "-co", action="store_true")
     extract_wave(**vars(parser.parse_args()))
 
 
