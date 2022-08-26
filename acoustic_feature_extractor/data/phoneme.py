@@ -275,6 +275,67 @@ class OjtPhoneme(BasePhoneme):
         return phonemes
 
 
+class RohanPhoneme(BasePhoneme):
+    phoneme_list = (
+        "pau",
+        "A",
+        "E",
+        "I",
+        "N",
+        "O",
+        "U",
+        "a",
+        "b",
+        "by",
+        "ch",
+        "cl",
+        "d",
+        "dy",
+        "e",
+        "f",
+        "g",
+        "gw",
+        "gy",
+        "h",
+        "hy",
+        "i",
+        "j",
+        "k",
+        "kw",
+        "ky",
+        "m",
+        "my",
+        "n",
+        "ny",
+        "o",
+        "p",
+        "py",
+        "r",
+        "ry",
+        "s",
+        "sh",
+        "t",
+        "ts",
+        "ty",
+        "u",
+        "v",
+        "w",
+        "y",
+        "z",
+        "fy",
+    )
+    num_phoneme = len(phoneme_list)
+    space_phoneme = "pau"
+
+    @classmethod
+    def convert(cls, phonemes: List["RohanPhoneme"]):
+        if "sil" in phonemes[0].phoneme:
+            phonemes[0].phoneme = cls.space_phoneme
+        if "sil" in phonemes[-1].phoneme:
+            phonemes[-1].phoneme = cls.space_phoneme
+        return phonemes
+
+
 class KiritanPhoneme(BasePhoneme):
     phoneme_list = (
         "pau",
@@ -325,6 +386,70 @@ class KiritanPhoneme(BasePhoneme):
         return phonemes
 
 
+class SongPhoneme(BasePhoneme):
+    phoneme_list = (
+        "pau",
+        "A",
+        "E",
+        "I",
+        "N",
+        "O",
+        "U",
+        "a",
+        "b",
+        "by",
+        "ch",
+        "cl",
+        "d",
+        "dy",
+        "e",
+        "f",
+        "g",
+        "gw",
+        "gy",
+        "h",
+        "hy",
+        "i",
+        "j",
+        "k",
+        "kw",
+        "ky",
+        "m",
+        "my",
+        "n",
+        "ny",
+        "o",
+        "p",
+        "py",
+        "r",
+        "ry",
+        "s",
+        "sh",
+        "t",
+        "ts",
+        "ty",
+        "u",
+        "v",
+        "w",
+        "y",
+        "z",
+        "fy",
+        "br",
+        "Edge",
+        "GlottalStop",
+    )
+
+    num_phoneme = len(phoneme_list)
+    space_phoneme = "pau"
+
+    @classmethod
+    def convert(cls, phonemes: List["SongPhoneme"]):
+        for phoneme in phonemes:
+            if phoneme.phoneme.startswith("sil"):
+                phoneme.phoneme = cls.space_phoneme
+        return phonemes
+
+
 class DummyPhoneme(BasePhoneme):
     """
     デバッグ用。verifyなどがない。
@@ -342,7 +467,9 @@ class PhonemeType(str, Enum):
     seg_kit = "seg_kit"
     jvs = "jvs"
     openjtalk = "openjtalk"
+    rohan = "rohan"
     kiritan = "kiritan"
+    song = "song"
     dummy = "dummy"
 
 
@@ -350,6 +477,8 @@ phoneme_type_to_class = {
     PhonemeType.seg_kit: SegKitPhoneme,
     PhonemeType.jvs: JvsPhoneme,
     PhonemeType.openjtalk: OjtPhoneme,
+    PhonemeType.rohan: RohanPhoneme,
     PhonemeType.kiritan: KiritanPhoneme,
+    PhonemeType.song: SongPhoneme,
     PhonemeType.dummy: DummyPhoneme,
 }
