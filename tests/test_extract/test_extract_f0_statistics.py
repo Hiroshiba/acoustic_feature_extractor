@@ -43,5 +43,5 @@ def test_extract_f0_statistics_lowhigh(
 
     assert statistics_low["mean"] < statistics_high["mean"]
     numpy.testing.assert_allclose(
-        statistics_low["var"], statistics_high["var"], rtol=0, atol=1e-6
+        statistics_low["var"], statistics_high["var"], rtol=0, atol=1e-4
     )

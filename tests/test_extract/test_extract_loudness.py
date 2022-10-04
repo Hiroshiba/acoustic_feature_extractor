@@ -36,6 +36,6 @@ def test_extract_loudness(
         true_data = SamplingData.load(true_path)
 
         numpy.testing.assert_allclose(
-            output_data.array, true_data.array, rtol=0, atol=1e-6
+            output_data.array, true_data.array, rtol=0, atol=1e-4
         )
         assert output_data.rate == true_data.rate

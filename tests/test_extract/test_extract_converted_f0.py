@@ -46,6 +46,6 @@ def test_extract_converted_f0(
 
     for output_datum, true_datum in zip(output_data, true_data):
         numpy.testing.assert_allclose(
-            output_datum.array, true_datum.array, rtol=0, atol=1e-6
+            output_datum.array, true_datum.array, rtol=0, atol=1e-4
         )
         assert output_datum.rate == true_datum.rate
