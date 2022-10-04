@@ -6,6 +6,7 @@ from typing import Dict, Optional, Sequence, Union
 
 import librosa
 import numpy
+import scipy
 
 
 class DegenerateType(str, Enum):
@@ -15,18 +16,39 @@ class DegenerateType(str, Enum):
     median = "median"
 
 
+class ResampleInterpolateKind(str, Enum):
+    nearest = "nearest"
+    linear = "linear"
+
+
 @dataclass
 class SamplingData:
     array: numpy.ndarray  # shape: (N, ?)
     rate: float
 
-    def resample(self, sampling_rate: float, index: int = 0, length: int = None):
+    def resample(
+        self,
+        sampling_rate: float,
+        index: int = 0,
+        length: int = None,
+        kind: ResampleInterpolateKind = ResampleInterpolateKind.nearest,
+    ):
         if length is None:
             length = int(len(self.array) / self.rate * sampling_rate)
-        indexes = (numpy.random.rand() + index + numpy.arange(length)) * (
-            self.rate / sampling_rate
-        )
-        return self.array[indexes.astype(int)]
+        if kind == ResampleInterpolateKind.nearest:
+            indexes = (numpy.random.rand() + index + numpy.arange(length)) * (
+                self.rate / sampling_rate
+            )
+            return self.array[indexes.astype(int)]
+        else:
+            indexes = (index + numpy.arange(length)) * (self.rate / sampling_rate)
+            return scipy.interpolate.interp1d(
+                numpy.arange(len(self.array)),
+                self.array,
+                kind=kind.value,
+                axis=0,
+                fill_value="extrapolate",
+            )(indexes)
 
     def split(
         self,

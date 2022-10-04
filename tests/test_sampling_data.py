@@ -2,7 +2,10 @@ import unittest
 from itertools import product
 
 import numpy
-from acoustic_feature_extractor.data.sampling_data import SamplingData
+from acoustic_feature_extractor.data.sampling_data import (
+    ResampleInterpolateKind,
+    SamplingData,
+)
 from parameterized import parameterized
 
 
@@ -39,13 +42,21 @@ class TestSamplingData(unittest.TestCase):
             b = numpy.repeat(sample, scale, axis=0)[index : index + length]
             numpy.testing.assert_equal(a, b)
 
-    @parameterized.expand(product([100, 200, 24000 / 512], [100, 200, 24000 / 512]))
-    def test_resample_float(self, source_rate: float, target_rate: float):
+    @parameterized.expand(
+        product(
+            [100, 200, 24000 / 512],
+            [100, 200, 24000 / 512],
+            list(ResampleInterpolateKind),
+        )
+    )
+    def test_resample_float(
+        self, source_rate: float, target_rate: float, kind: ResampleInterpolateKind
+    ):
         length = 1000
         for _ in range(10):
             sample = numpy.arange(length, dtype=numpy.float32)
             data = SamplingData(array=sample, rate=source_rate)
-            output = data.resample(target_rate)
+            output = data.resample(target_rate, kind=kind)
             expect = numpy.interp(
                 (
                     numpy.arange(
