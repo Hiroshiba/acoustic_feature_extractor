@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict
+from typing import Dict, Optional
 
 import numpy
 import pyworld
@@ -11,6 +11,7 @@ from scipy.interpolate import interp1d
 class F0Type(str, Enum):
     world = "world"
     true_world = "true_world"
+    refine_world = "refine_world"
 
 
 class F0(SamplingData):
@@ -30,18 +31,20 @@ class F0(SamplingData):
         w = wave.wave.astype(numpy.float64)
         sampling_rate = wave.sampling_rate
 
-        if f0_type == F0Type.world or f0_type == F0Type.true_world:
-            f0, t = pyworld.harvest(
-                w,
-                sampling_rate,
-                frame_period=frame_period,
-                f0_floor=f0_floor,
-                f0_ceil=f0_ceil,
-            )
-            if f0_type != F0Type.true_world:
-                f0 = pyworld.stonemask(w, f0, t, sampling_rate)
-        else:
-            raise ValueError(f0_type)
+        f0, t = pyworld.harvest(
+            w,
+            sampling_rate,
+            frame_period=frame_period,
+            f0_floor=f0_floor,
+            f0_ceil=f0_ceil,
+        )
+        
+        if f0_type == F0Type.world:
+            f0 = pyworld.stonemask(w, f0, t, sampling_rate)
+        
+        if f0_type == F0Type.refine_world:
+            ap = pyworld.d4c(w, f0, t, sampling_rate)
+            f0[ap[:, 0] >= 0.5] = 0
 
         return F0.from_frequency(
             frequency=f0,
