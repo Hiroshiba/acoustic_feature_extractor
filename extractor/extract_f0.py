@@ -3,6 +3,7 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
+from typing import Optional
 
 import tqdm
 from acoustic_feature_extractor.data.f0 import F0, F0Type
@@ -13,7 +14,7 @@ from acoustic_feature_extractor.utility.json_utility import save_arguments
 def process(
     path: Path,
     output_directory: Path,
-    sampling_rate: int,
+    sampling_rate: Optional[int],
     frame_period: float,
     f0_floor: float,
     f0_ceil: float,
@@ -66,7 +67,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_glob", "-ig", required=True)
     parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument("--sampling_rate", "-sr", type=int, required=True)
+    parser.add_argument("--sampling_rate", "-sr", type=int)
     parser.add_argument("--frame_period", "-fp", type=float, default=5.0)
     parser.add_argument("--f0_floor", "-ff", type=int, default=71.0)
     parser.add_argument("--f0_ceil", "-fc", type=int, default=800.0)
