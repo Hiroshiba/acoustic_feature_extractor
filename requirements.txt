@@ -1,7 +1,7 @@
 librosa==0.8.1
 mosqito==0.3.4
-numba
-numpy
+numba<0.58
+numpy<1.25
 parameterized
 pysptk
 pytest

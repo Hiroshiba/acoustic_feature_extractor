@@ -30,8 +30,8 @@ class BasePhoneme(object):
         )
 
     def verify(self):
-        assert self.start < self.end, f"{self.phoneme} start must be less than end"
-        assert self.phoneme in self.phoneme_list, f"{self.phoneme} is not defined."
+        assert self.start < self.end, f"{self} start must be less than end"
+        assert self.phoneme in self.phoneme_list, f"{self} is not defined."
 
     @property
     def phoneme_id(self):
@@ -67,10 +67,11 @@ class BasePhoneme(object):
 
     @classmethod
     def verify_list(cls, phonemes: List["BasePhoneme"]):
+        assert phonemes[0].start == 0, f"{phonemes[0]} start must be 0."
         for phoneme in phonemes:
             phoneme.verify()
         for pre, post in zip(phonemes[:-1], phonemes[1:]):
-            assert pre.end == post.start
+            assert pre.end == post.start, f"{pre} and {post} must be continuous."
 
     @classmethod
     def load_julius_list(cls, path: Path, verify=True):
