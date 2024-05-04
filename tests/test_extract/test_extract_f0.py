@@ -11,7 +11,9 @@ def test_extract_f0(
     with_vuv: bool,
     f0_type: F0Type,
 ):
-    output_dir = data_dir / f"output_extract_f0-with_vuv={with_vuv}-f0_type={f0_type}"
+    output_dir = (
+        data_dir / f"output_extract_f0-with_vuv={with_vuv}-f0_type={f0_type.value}"
+    )
     extract_f0(
         input_glob=data_dir / "music*.wav",
         output_directory=output_dir,
@@ -24,7 +26,7 @@ def test_extract_f0(
     )
 
     true_data_dir = true_data_base_dir.joinpath(
-        f"output_extract_f0-with_vuv={with_vuv}-f0_type={f0_type}"
+        f"output_extract_f0-with_vuv={with_vuv}-f0_type={f0_type.value}"
     )
 
     output_paths = sorted(output_dir.glob("*.npy"))

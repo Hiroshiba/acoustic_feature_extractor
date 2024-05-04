@@ -28,7 +28,7 @@ def to_log_melspectrogram(
         librosa.stft(x, n_fft=n_fft, hop_length=hop_length, win_length=win_length)
     )
     mel_basis = librosa.filters.mel(
-        sampling_rate, n_fft, n_mels=n_mels, fmin=fmin, fmax=fmax
+        sr=sampling_rate, n_fft=n_fft, n_mels=n_mels, fmin=fmin, fmax=fmax
     )
     sp = numpy.dot(mel_basis, sp)
 
