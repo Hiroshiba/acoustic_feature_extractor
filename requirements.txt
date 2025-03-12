@@ -8,4 +8,5 @@ pytest
 pyworld
 tqdm
 
-matplotlib  # for mosqito
+# for mosqito
+matplotlib
