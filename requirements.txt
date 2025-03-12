@@ -7,6 +7,4 @@ parameterized
 pytest
 pyworld
 tqdm
-
-# for mosqito
 matplotlib
