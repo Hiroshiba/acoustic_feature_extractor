@@ -1,0 +1,28 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: <Setup> コードをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: <Setup> uvをインストール
+        uses: astral-sh/setup-uv@v6
+
+      - name: <Setup> 依存関係をインストール
+        run: |
+          uv sync --dev
+
+      - name: <Setup> 静的解析とフォーマットを実行
+        run: |
+          uv run ruff check --fix && uv run ruff format
+
+      - name: <Test> テストを実行
+        run: |
+          uv run pytest -sv tests/
