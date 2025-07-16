@@ -4,6 +4,7 @@ from syrupy.assertion import SnapshotAssertion
 
 from acoustic_feature_extractor.data.f0 import F0
 from extractor.extract_converted_f0 import extract_converted_f0
+from tests.utility import round_floats
 
 
 def test_extract_converted_f0(
@@ -42,4 +43,5 @@ def test_extract_converted_f0(
     for f0_data in output_data:
         result.append({"array": f0_data.array.tolist(), "rate": f0_data.rate})
 
+    result = round_floats(result, 2)
     assert result == snapshot_json

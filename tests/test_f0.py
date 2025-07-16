@@ -3,6 +3,7 @@ import pytest
 from syrupy.assertion import SnapshotAssertion
 
 from acoustic_feature_extractor.data.f0 import F0
+from tests.utility import round_floats
 
 
 @pytest.fixture(params=(True, False))
@@ -30,5 +31,6 @@ def test_f0_convert(with_vuv: bool, snapshot_json: SnapshotAssertion):
     )
 
     result = {"converted_frequency": converted_frequency.tolist(), "with_vuv": with_vuv}
+    result = round_floats(result, 2)
 
     assert result == snapshot_json

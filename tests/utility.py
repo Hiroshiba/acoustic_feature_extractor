@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any
 
 import librosa
 import numpy
@@ -40,3 +41,18 @@ def generate_f0_file(
         str(data_dir / f"f0_{prefix}_with_vuv={with_vuv}.npy"),
         dict(array=array, rate=200),
     )
+
+
+def round_floats(value: Any, round_value: int) -> Any:
+    """浮動小数点数を再帰的に丸める"""
+    match value:
+        case float():
+            return round(value, round_value)
+        case numpy.ndarray() if numpy.issubdtype(value.dtype, numpy.floating):
+            return numpy.round(value, round_value)
+        case list():
+            return [round_floats(v, round_value) for v in value]
+        case dict():
+            return {k: round_floats(v, round_value) for k, v in value.items()}
+        case _:
+            return value
