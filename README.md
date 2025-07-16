@@ -4,6 +4,17 @@ Python 3.11
 
 ## 使い方
 
+### uvx
+
+```bash
+# 例：メルスペクトログラムを抽出
+uvx \
+  --from git+https://github.com/Hiroshiba/acoustic_feature_extractor \
+  acoustic_feature_extract_melspectrogram \
+  --input_glob "/path/to/dir/*" \
+  --output_directory /path/to/dir
+```
+
 ### PyPI
 
 ```bash

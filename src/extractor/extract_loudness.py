@@ -1,7 +1,6 @@
 import argparse
 import glob
 import multiprocessing
-from enum import Enum
 from functools import partial
 from pathlib import Path
 
@@ -10,12 +9,8 @@ from mosqito.sq_metrics.loudness.loudness_zwtv.loudness_zwtv import loudness_zwt
 
 from acoustic_feature_extractor.data.sampling_data import DegenerateType, SamplingData
 from acoustic_feature_extractor.data.wave import Wave
+from acoustic_feature_extractor.data.processing_enums import FieldType
 from acoustic_feature_extractor.utility.json_utility import save_arguments
-
-
-class FieldType(str, Enum):
-    free = "free"
-    diffuse = "diffuse"
 
 
 def process(

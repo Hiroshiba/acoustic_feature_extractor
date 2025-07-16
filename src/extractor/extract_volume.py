@@ -1,7 +1,6 @@
 import argparse
 import glob
 import multiprocessing
-from enum import Enum
 from functools import partial
 from pathlib import Path
 
@@ -10,14 +9,9 @@ import numpy
 import tqdm
 
 from acoustic_feature_extractor.data.wave import Wave
+from acoustic_feature_extractor.data.processing_enums import VolumeType
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
-
-class VolumeType(str, Enum):
-    rms_power = "rms_power"
-    mse_power = "mse_power"
-    rms_db = "rms_db"
-    mse_db = "mse_db"
 
 
 def process(
