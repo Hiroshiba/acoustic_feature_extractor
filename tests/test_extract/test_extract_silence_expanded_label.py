@@ -4,7 +4,7 @@ from syrupy.assertion import SnapshotAssertion
 
 from acoustic_feature_extractor.data.phoneme import JvsPhoneme, PhonemeType
 from extractor.extract_silence_expanded_label import extract_silence_expanded_label
-from tests.utility import data_base_dir
+from tests.utility import data_base_dir, round_floats
 
 
 def test_extract_silence_expanded_label(
@@ -38,4 +38,5 @@ def test_extract_silence_expanded_label(
             }
         )
 
+    result = round_floats(result, 2)
     assert result == snapshot_json

@@ -8,8 +8,8 @@ import numpy
 import tqdm
 from mosqito.functions.loudness_zwicker.comp_loudness import comp_loudness
 
-from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.data.processing_enums import FieldType
+from acoustic_feature_extractor.data.wave import Wave
 
 
 def process(

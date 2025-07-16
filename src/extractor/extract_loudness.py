@@ -7,9 +7,9 @@ from pathlib import Path
 import tqdm
 from mosqito.sq_metrics.loudness.loudness_zwtv.loudness_zwtv import loudness_zwtv
 
+from acoustic_feature_extractor.data.processing_enums import FieldType
 from acoustic_feature_extractor.data.sampling_data import DegenerateType, SamplingData
 from acoustic_feature_extractor.data.wave import Wave
-from acoustic_feature_extractor.data.processing_enums import FieldType
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 

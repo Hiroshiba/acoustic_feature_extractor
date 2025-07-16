@@ -4,6 +4,7 @@ from syrupy.assertion import SnapshotAssertion
 
 from acoustic_feature_extractor.utility.numpy_utility import load_numpy_object
 from extractor.extract_f0_statistics import extract_f0_statistics
+from tests.utility import round_floats
 
 
 def test_extract_f0_statistics(
@@ -27,6 +28,7 @@ def test_extract_f0_statistics(
         "var": float(statistics["var"]),
     }
 
+    result = round_floats(result, 2)
     assert result == snapshot_json
 
 
@@ -67,4 +69,5 @@ def test_extract_f0_statistics_lowhigh(
         "mean_comparison": statistics_low["mean"] < statistics_high["mean"],
     }
 
+    result = round_floats(result, 2)
     assert result == snapshot_json

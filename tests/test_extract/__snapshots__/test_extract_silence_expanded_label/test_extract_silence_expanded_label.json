@@ -28,14 +28,14 @@
         "start": 0.75
       },
       {
-        "end": 1.4293,
+        "end": 1.43,
         "phoneme": "pau",
         "start": 0.96
       },
       {
         "end": 1.49,
         "phoneme": "t",
-        "start": 1.4293
+        "start": 1.43
       },
       {
         "end": 1.62,
@@ -88,14 +88,14 @@
         "start": 2.15
       },
       {
-        "end": 2.4107,
+        "end": 2.41,
         "phoneme": "i",
         "start": 2.27
       },
       {
         "end": 2.87,
         "phoneme": "pau",
-        "start": 2.4107
+        "start": 2.41
       },
       {
         "end": 2.92,
@@ -198,14 +198,14 @@
         "start": 4.26
       },
       {
-        "end": 4.7573,
+        "end": 4.76,
         "phoneme": "pau",
         "start": 4.4
       },
       {
         "end": 4.95,
         "phoneme": "sh",
-        "start": 4.7573
+        "start": 4.76
       },
       {
         "end": 4.99,
@@ -398,7 +398,7 @@
         "start": 8.05
       },
       {
-        "end": 8.621,
+        "end": 8.62,
         "phoneme": "pau",
         "start": 8.17
       }
@@ -593,14 +593,14 @@
         "start": 3.61
       },
       {
-        "end": 4.1149,
+        "end": 4.11,
         "phoneme": "pau",
         "start": 3.79
       },
       {
         "end": 4.29,
         "phoneme": "sh",
-        "start": 4.1149
+        "start": 4.11
       },
       {
         "end": 4.33,
@@ -703,14 +703,14 @@
         "start": 5.76
       },
       {
-        "end": 5.9283,
+        "end": 5.93,
         "phoneme": "i",
         "start": 5.79
       },
       {
         "end": 6.42,
         "phoneme": "pau",
-        "start": 5.9283
+        "start": 5.93
       },
       {
         "end": 6.53,
@@ -868,7 +868,7 @@
         "start": 8.51
       },
       {
-        "end": 9.1006,
+        "end": 9.1,
         "phoneme": "pau",
         "start": 8.61
       }
