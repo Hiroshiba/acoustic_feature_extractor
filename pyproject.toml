@@ -30,6 +30,7 @@ acoustic_feature_extract_collected_local = "extractor.extract_collected_local:ma
 acoustic_feature_extract_converted_f0 = "extractor.extract_converted_f0:main"
 acoustic_feature_extract_f0 = "extractor.extract_f0:main"
 acoustic_feature_extract_f0_statistics = "extractor.extract_f0_statistics:main"
+acoustic_feature_extract_f0_range = "extractor.extract_f0_range:main"
 acoustic_feature_extract_framed_local = "extractor.extract_framed_local:main"
 acoustic_feature_extract_loudness = "extractor.extract_loudness:main"
 acoustic_feature_extract_melspectrogram = "extractor.extract_melspectrogram:main"
