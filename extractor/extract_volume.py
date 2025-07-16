@@ -8,6 +8,7 @@ from pathlib import Path
 import librosa
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -36,7 +37,7 @@ def process(
     array = librosa.feature.rms(w, frame_length=frame_length, hop_length=hop_length)
     array = array.squeeze()
     if volume_type in (VolumeType.mse_power, VolumeType.mse_db):
-        array = array ** 2
+        array = array**2
     if volume_type in (VolumeType.rms_db, VolumeType.mse_db):
         array = librosa.power_to_db(array, top_db=top_db)
 

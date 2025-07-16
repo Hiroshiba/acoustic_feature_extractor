@@ -1,0 +1,12 @@
+{
+  "mean_comparison": "True",
+  "statistics_high": {
+    "mean": 5.289857864379883,
+    "var": 0.017059149220585823
+  },
+  "statistics_low": {
+    "mean": 3.903563976287842,
+    "var": 0.017059151083230972
+  },
+  "with_vuv": true
+}

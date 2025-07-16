@@ -3,12 +3,12 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import List
 
 import librosa
 import numpy
 import soundfile
 import tqdm
+
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -49,8 +49,8 @@ def tool_split_wave(
     pad_length = int(pad_second * sampling_rate)
 
     # split with silent position
-    starts: List[int] = []
-    ends: List[int] = []
+    starts: list[int] = []
+    ends: list[int] = []
     for i, (start, end) in enumerate(intervals.tolist()):
         if len(starts) == len(ends):
             start = max(start - pad_length, 0)
@@ -67,7 +67,7 @@ def tool_split_wave(
     old_starts, old_ends = starts, ends
     starts = []
     ends = []
-    for start, end in zip(old_starts, old_ends):
+    for start, end in zip(old_starts, old_ends, strict=False):
         starts.append(start)
         for c in cumsum_lengths:
             if start + pad_length * 2 < c and c < end - pad_length * 2:  # widely trim
@@ -75,7 +75,7 @@ def tool_split_wave(
                 starts.append(c)
         ends.append(end)
 
-    for i, (s, e) in enumerate(zip(starts, ends)):
+    for i, (s, e) in enumerate(zip(starts, ends, strict=False)):
         out = output_directory / f"{prefix}{i}.wav"
         soundfile.write(out, wave[s:e], sampling_rate)
 

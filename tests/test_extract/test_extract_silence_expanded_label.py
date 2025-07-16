@@ -1,11 +1,16 @@
 from pathlib import Path
 
+from syrupy.assertion import SnapshotAssertion
+
 from acoustic_feature_extractor.data.phoneme import JvsPhoneme, PhonemeType
 from extractor.extract_silence_expanded_label import extract_silence_expanded_label
-from tests.utility import data_base_dir, true_data_base_dir
+from tests.utility import data_base_dir
 
 
-def test_extract_silence_expanded_label(data_dir: Path):
+def test_extract_silence_expanded_label(
+    data_dir: Path,
+    snapshot_json: SnapshotAssertion,
+):
     output_dir = data_dir / "output_extract_silence_expanded_label"
     extract_silence_expanded_label(
         input_label_glob=str(data_base_dir / "phoneme/*.txt"),
@@ -15,22 +20,22 @@ def test_extract_silence_expanded_label(data_dir: Path):
         phoneme_minimum_second=0.03,
     )
 
-    true_data_dir = true_data_base_dir.joinpath("output_extract_silence_expanded_label")
-
     output_paths = sorted(output_dir.glob("*.lab"))
-    true_paths = sorted(true_data_dir.glob("*.lab"))
-
-    # # overwrite true data
-    # true_data_dir.mkdir(exist_ok=True)
-    # for output_path in output_paths:
-    #     output_data = JvsPhoneme.load_julius_list(output_path)
-    #     true_data_dir.mkdir(parents=True, exist_ok=True)
-    #     true_path = true_data_dir.joinpath(output_path.name)
-    #     JvsPhoneme.save_julius_list(output_data, true_path)
-
-    assert len(output_paths) == len(true_paths)
-    for output_path, true_path in zip(output_paths, true_paths):
+    result = []
+    for output_path in output_paths:
         output_data = JvsPhoneme.load_julius_list(output_path)
-        true_data = JvsPhoneme.load_julius_list(true_path)
+        result.append(
+            {
+                "filename": output_path.name,
+                "phonemes": [
+                    {
+                        "start": phoneme.start,
+                        "end": phoneme.end,
+                        "phoneme": phoneme.phoneme,
+                    }
+                    for phoneme in output_data
+                ],
+            }
+        )
 
-        assert output_data == true_data
+    assert result == snapshot_json

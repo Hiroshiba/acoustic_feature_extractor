@@ -6,10 +6,11 @@ from functools import partial
 from pathlib import Path
 
 import tqdm
+from mosqito.sq_metrics.loudness.loudness_zwtv.loudness_zwtv import loudness_zwtv
+
 from acoustic_feature_extractor.data.sampling_data import DegenerateType, SamplingData
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
-from mosqito.sq_metrics.loudness.loudness_zwtv.loudness_zwtv import loudness_zwtv
 
 
 class FieldType(str, Enum):

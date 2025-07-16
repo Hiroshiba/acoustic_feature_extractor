@@ -3,17 +3,17 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Tuple
 
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.phoneme import PhonemeType, phoneme_type_to_class
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
 def process(
-    paths: Tuple[Path, Path],
+    paths: tuple[Path, Path],
     output_directory: Path,
     phoneme_type: PhonemeType,
     phoneme_minimum_second: float,
@@ -40,8 +40,9 @@ def process(
                 )
             )[0]
             / silence.rate,
+            strict=False,
         ):
-            for i, l in enumerate(label):
+            for i, l in enumerate(label):  # noqa: E741
                 if l.phoneme != phoneme_class.space_phoneme:
                     continue
 
@@ -91,7 +92,9 @@ def extract_silence_expanded_label(
     with multiprocessing.Pool() as pool:
         list(
             tqdm.tqdm(
-                pool.imap_unordered(_process, zip(label_paths, silence_paths)),
+                pool.imap_unordered(
+                    _process, zip(label_paths, silence_paths, strict=False)
+                ),
                 total=len(label_paths),
             )
         )

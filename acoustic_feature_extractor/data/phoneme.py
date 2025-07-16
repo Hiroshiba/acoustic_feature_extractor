@@ -1,12 +1,12 @@
 from abc import abstractmethod
+from collections.abc import Sequence
 from enum import Enum
 from pathlib import Path
-from typing import List, Sequence
 
 import numpy
 
 
-class BasePhoneme(object):
+class BasePhoneme:
     phoneme_list: Sequence[str]
     num_phoneme: int
     space_phoneme: str
@@ -62,15 +62,15 @@ class BasePhoneme(object):
 
     @classmethod
     @abstractmethod
-    def convert(cls, phonemes: List["BasePhoneme"]) -> List["BasePhoneme"]:
+    def convert(cls, phonemes: list["BasePhoneme"]) -> list["BasePhoneme"]:
         pass
 
     @classmethod
-    def verify_list(cls, phonemes: List["BasePhoneme"]):
+    def verify_list(cls, phonemes: list["BasePhoneme"]):
         assert phonemes[0].start == 0, f"{phonemes[0]} start must be 0."
         for phoneme in phonemes:
             phoneme.verify()
-        for pre, post in zip(phonemes[:-1], phonemes[1:]):
+        for pre, post in zip(phonemes[:-1], phonemes[1:], strict=False):
             assert pre.end == post.start, f"{pre} and {post} must be continuous."
 
     @classmethod
@@ -87,7 +87,7 @@ class BasePhoneme(object):
         return phonemes
 
     @classmethod
-    def save_julius_list(cls, phonemes: List["BasePhoneme"], path: Path, verify=True):
+    def save_julius_list(cls, phonemes: list["BasePhoneme"], path: Path, verify=True):
         if verify:
             try:
                 cls.verify_list(phonemes)
@@ -154,7 +154,7 @@ class SegKitPhoneme(BasePhoneme):
     space_phoneme = "sp"
 
     @classmethod
-    def convert(cls, phonemes: List["SegKitPhoneme"]):
+    def convert(cls, phonemes: list["SegKitPhoneme"]):
         if "sil" in phonemes[0].phoneme:
             phonemes[0].phoneme = cls.space_phoneme
         if "sil" in phonemes[-1].phoneme:
@@ -208,7 +208,7 @@ class JvsPhoneme(BasePhoneme):
     space_phoneme = "pau"
 
     @classmethod
-    def convert(cls, phonemes: List["JvsPhoneme"]):
+    def convert(cls, phonemes: list["JvsPhoneme"]):
         if "sil" in phonemes[0].phoneme:
             phonemes[0].phoneme = cls.space_phoneme
         if "sil" in phonemes[-1].phoneme:
@@ -268,7 +268,7 @@ class OjtPhoneme(BasePhoneme):
     space_phoneme = "pau"
 
     @classmethod
-    def convert(cls, phonemes: List["OjtPhoneme"]):
+    def convert(cls, phonemes: list["OjtPhoneme"]):
         if "sil" in phonemes[0].phoneme:
             phonemes[0].phoneme = cls.space_phoneme
         if "sil" in phonemes[-1].phoneme:
@@ -329,7 +329,7 @@ class RohanPhoneme(BasePhoneme):
     space_phoneme = "pau"
 
     @classmethod
-    def convert(cls, phonemes: List["RohanPhoneme"]):
+    def convert(cls, phonemes: list["RohanPhoneme"]):
         if "sil" in phonemes[0].phoneme:
             phonemes[0].phoneme = cls.space_phoneme
         if "sil" in phonemes[-1].phoneme:
@@ -380,7 +380,7 @@ class KiritanPhoneme(BasePhoneme):
     space_phoneme = "pau"
 
     @classmethod
-    def convert(cls, phonemes: List["KiritanPhoneme"]):
+    def convert(cls, phonemes: list["KiritanPhoneme"]):
         for phoneme in phonemes:
             if phoneme.phoneme == "br":
                 phoneme.phoneme = cls.space_phoneme
@@ -444,7 +444,7 @@ class SongPhoneme(BasePhoneme):
     space_phoneme = "pau"
 
     @classmethod
-    def convert(cls, phonemes: List["SongPhoneme"]):
+    def convert(cls, phonemes: list["SongPhoneme"]):
         for phoneme in phonemes:
             if phoneme.phoneme.startswith("sil"):
                 phoneme.phoneme = cls.space_phoneme
@@ -460,7 +460,7 @@ class DummyPhoneme(BasePhoneme):
         return True
 
     @classmethod
-    def convert(cls, phonemes: List["DummyPhoneme"]):
+    def convert(cls, phonemes: list["DummyPhoneme"]):
         return phonemes
 
 

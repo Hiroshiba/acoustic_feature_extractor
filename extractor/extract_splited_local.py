@@ -1,13 +1,14 @@
 import argparse
 import glob
 import multiprocessing
+from collections.abc import Sequence
 from functools import partial
 from operator import itemgetter
 from pathlib import Path
-from typing import Sequence
 
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -37,7 +38,7 @@ def process(
                 list(map(itemgetter(1), items)),
             )
             datas = SamplingData.padding(datas, padding_value=padding_value)
-            datas = {key: data for key, data in zip(indexes, datas)}
+            datas = {key: data for key, data in zip(indexes, datas, strict=False)}
 
         for i, data in datas.items():
             if data is None:

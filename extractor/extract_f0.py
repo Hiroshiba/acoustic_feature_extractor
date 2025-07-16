@@ -3,9 +3,9 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Optional
 
 import tqdm
+
 from acoustic_feature_extractor.data.f0 import F0, F0Type
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
@@ -14,7 +14,7 @@ from acoustic_feature_extractor.utility.json_utility import save_arguments
 def process(
     path: Path,
     output_directory: Path,
-    sampling_rate: Optional[int],
+    sampling_rate: int | None,
     frame_period: float,
     f0_floor: float,
     f0_ceil: float,

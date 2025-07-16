@@ -6,9 +6,10 @@ from pathlib import Path
 
 import numpy
 import tqdm
+from mosqito.functions.loudness_zwicker.comp_loudness import comp_loudness
+
 from acoustic_feature_extractor.data.wave import Wave
 from extractor.extract_loudness import FieldType
-from mosqito.functions.loudness_zwicker.comp_loudness import comp_loudness
 
 
 def process(
@@ -51,7 +52,7 @@ def analyze_loudness(
     x = numpy.percentile(all_data, q=q)
 
     print("q", "x")
-    for q_, x_ in zip(q, x):
+    for q_, x_ in zip(q, x, strict=False):
         print(q_, x_)
 
 

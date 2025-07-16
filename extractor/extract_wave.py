@@ -3,11 +3,11 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Optional, Tuple
 
 import librosa
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -16,8 +16,8 @@ def process(
     path: Path,
     output_directory: Path,
     sampling_rate: int,
-    scale_db: Optional[float],
-    clipping_range: Optional[Tuple[float, float]],
+    scale_db: float | None,
+    clipping_range: tuple[float, float] | None,
     clipping_auto: bool,
     check_out_of_range: bool,
 ):
@@ -54,8 +54,8 @@ def extract_wave(
     input_glob,
     output_directory: Path,
     sampling_rate: int,
-    scale_db: Optional[float],
-    clipping_range: Optional[Tuple[float, float]],
+    scale_db: float | None,
+    clipping_range: tuple[float, float] | None,
     clipping_auto: bool,
     check_out_of_range: bool,
 ):

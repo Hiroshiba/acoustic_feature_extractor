@@ -7,6 +7,7 @@ from pathlib import Path
 import librosa
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -39,7 +40,7 @@ def extract_silence(
     for s, t in intervals:
         silence[s:t] = False
 
-    for i, (s, l) in enumerate(zip(numpy.cumsum([0] + lengths), lengths)):
+    for i, (s, l) in enumerate(zip(numpy.cumsum([0] + lengths), lengths, strict=False)):  # noqa: E741
         out = output_directory / (paths[i].stem + ".npy")
         numpy.save(str(out), dict(array=silence[s : s + l], rate=sampling_rate))
 

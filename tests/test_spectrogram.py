@@ -1,15 +1,13 @@
-from typing import Optional
-
 import librosa
 import numpy
-from acoustic_feature_extractor.data.spectrogram import to_log_melspectrogram
 
+from acoustic_feature_extractor.data.spectrogram import to_log_melspectrogram
 from tests.utility import data_base_dir
 
 
 def _to_log_melspectrogram(
     sampling_rate: int = 24000,
-    preemph: Optional[float] = 0.97,
+    preemph: float | None = 0.97,
     n_mels: int = 80,
     n_fft: int = 2048,
     win_length: int = 1024,

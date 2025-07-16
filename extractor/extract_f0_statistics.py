@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.f0 import F0
 
 

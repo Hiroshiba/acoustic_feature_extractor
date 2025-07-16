@@ -39,7 +39,7 @@ def analyze_f0(
     x = numpy.round(numpy.percentile(f0, q=q)).astype(numpy.int32)
 
     print("q", "x")
-    for q_, x_ in zip(q, x):
+    for q_, x_ in zip(q, x, strict=False):
         print(q_, x_)
 
 

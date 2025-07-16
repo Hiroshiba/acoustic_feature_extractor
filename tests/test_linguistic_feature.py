@@ -1,12 +1,12 @@
-from typing import List, Sequence
+from collections.abc import Sequence
 
 import pytest
+
 from acoustic_feature_extractor.data.linguistic_feature import (
     LinguisticFeature,
     LinguisticFeatureType,
 )
 from acoustic_feature_extractor.data.phoneme import JvsPhoneme
-
 from tests.utility import data_base_dir
 
 
@@ -70,7 +70,7 @@ def end_accents(request):
 
 
 def test_linguistic_feature(
-    phonemes: List[JvsPhoneme], feature_types: Sequence[LinguisticFeatureType]
+    phonemes: list[JvsPhoneme], feature_types: Sequence[LinguisticFeatureType]
 ):
     feature = LinguisticFeature(
         phonemes=phonemes,
@@ -82,7 +82,7 @@ def test_linguistic_feature(
 
 
 def test_linguistic_feature_with_accent(
-    phonemes: List[JvsPhoneme],
+    phonemes: list[JvsPhoneme],
     feature_types: Sequence[LinguisticFeatureType],
     start_accents: Sequence[bool],
     end_accents: Sequence[bool],
@@ -101,5 +101,5 @@ def test_linguistic_feature_with_accent(
     if len(phonemes) == len(start_accents) and len(phonemes) == len(end_accents):
         wrapper()
     else:
-        with pytest.raises(Exception):
+        with pytest.raises(AssertionError):
             wrapper()

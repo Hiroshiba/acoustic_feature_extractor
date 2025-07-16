@@ -1,0 +1,877 @@
+[
+  {
+    "filename": "VOICEACTRESS100_001.lab",
+    "phonemes": [
+      {
+        "end": 0.49,
+        "phoneme": "pau",
+        "start": 0.0
+      },
+      {
+        "end": 0.58,
+        "phoneme": "m",
+        "start": 0.49
+      },
+      {
+        "end": 0.7,
+        "phoneme": "a",
+        "start": 0.58
+      },
+      {
+        "end": 0.75,
+        "phoneme": "t",
+        "start": 0.7
+      },
+      {
+        "end": 0.96,
+        "phoneme": "a",
+        "start": 0.75
+      },
+      {
+        "end": 1.4293,
+        "phoneme": "pau",
+        "start": 0.96
+      },
+      {
+        "end": 1.49,
+        "phoneme": "t",
+        "start": 1.4293
+      },
+      {
+        "end": 1.62,
+        "phoneme": "o",
+        "start": 1.49
+      },
+      {
+        "end": 1.68,
+        "phoneme": "o",
+        "start": 1.62
+      },
+      {
+        "end": 1.77,
+        "phoneme": "j",
+        "start": 1.68
+      },
+      {
+        "end": 1.8,
+        "phoneme": "i",
+        "start": 1.77
+      },
+      {
+        "end": 1.86,
+        "phoneme": "n",
+        "start": 1.8
+      },
+      {
+        "end": 1.96,
+        "phoneme": "o",
+        "start": 1.86
+      },
+      {
+        "end": 2.03,
+        "phoneme": "y",
+        "start": 1.96
+      },
+      {
+        "end": 2.08,
+        "phoneme": "o",
+        "start": 2.03
+      },
+      {
+        "end": 2.15,
+        "phoneme": "o",
+        "start": 2.08
+      },
+      {
+        "end": 2.27,
+        "phoneme": "n",
+        "start": 2.15
+      },
+      {
+        "end": 2.4107,
+        "phoneme": "i",
+        "start": 2.27
+      },
+      {
+        "end": 2.87,
+        "phoneme": "pau",
+        "start": 2.4107
+      },
+      {
+        "end": 2.92,
+        "phoneme": "g",
+        "start": 2.87
+      },
+      {
+        "end": 3.05,
+        "phoneme": "o",
+        "start": 2.92
+      },
+      {
+        "end": 3.09,
+        "phoneme": "d",
+        "start": 3.05
+      },
+      {
+        "end": 3.21,
+        "phoneme": "a",
+        "start": 3.09
+      },
+      {
+        "end": 3.28,
+        "phoneme": "i",
+        "start": 3.21
+      },
+      {
+        "end": 3.41,
+        "phoneme": "my",
+        "start": 3.28
+      },
+      {
+        "end": 3.53,
+        "phoneme": "o",
+        "start": 3.41
+      },
+      {
+        "end": 3.58,
+        "phoneme": "o",
+        "start": 3.53
+      },
+      {
+        "end": 3.61,
+        "phoneme": "o",
+        "start": 3.58
+      },
+      {
+        "end": 3.7,
+        "phoneme": "o",
+        "start": 3.61
+      },
+      {
+        "end": 3.76,
+        "phoneme": "t",
+        "start": 3.7
+      },
+      {
+        "end": 3.83,
+        "phoneme": "o",
+        "start": 3.76
+      },
+      {
+        "end": 3.93,
+        "phoneme": "y",
+        "start": 3.83
+      },
+      {
+        "end": 3.98,
+        "phoneme": "o",
+        "start": 3.93
+      },
+      {
+        "end": 4.04,
+        "phoneme": "b",
+        "start": 3.98
+      },
+      {
+        "end": 4.09,
+        "phoneme": "a",
+        "start": 4.04
+      },
+      {
+        "end": 4.12,
+        "phoneme": "r",
+        "start": 4.09
+      },
+      {
+        "end": 4.19,
+        "phoneme": "e",
+        "start": 4.12
+      },
+      {
+        "end": 4.26,
+        "phoneme": "r",
+        "start": 4.19
+      },
+      {
+        "end": 4.4,
+        "phoneme": "u",
+        "start": 4.26
+      },
+      {
+        "end": 4.7573,
+        "phoneme": "pau",
+        "start": 4.4
+      },
+      {
+        "end": 4.95,
+        "phoneme": "sh",
+        "start": 4.7573
+      },
+      {
+        "end": 4.99,
+        "phoneme": "u",
+        "start": 4.95
+      },
+      {
+        "end": 5.14,
+        "phoneme": "y",
+        "start": 4.99
+      },
+      {
+        "end": 5.21,
+        "phoneme": "o",
+        "start": 5.14
+      },
+      {
+        "end": 5.27,
+        "phoneme": "o",
+        "start": 5.21
+      },
+      {
+        "end": 5.31,
+        "phoneme": "n",
+        "start": 5.27
+      },
+      {
+        "end": 5.41,
+        "phoneme": "a",
+        "start": 5.31
+      },
+      {
+        "end": 5.55,
+        "phoneme": "my",
+        "start": 5.41
+      },
+      {
+        "end": 5.63,
+        "phoneme": "o",
+        "start": 5.55
+      },
+      {
+        "end": 5.66,
+        "phoneme": "o",
+        "start": 5.63
+      },
+      {
+        "end": 5.8,
+        "phoneme": "o",
+        "start": 5.66
+      },
+      {
+        "end": 5.86,
+        "phoneme": "o",
+        "start": 5.8
+      },
+      {
+        "end": 5.92,
+        "phoneme": "n",
+        "start": 5.86
+      },
+      {
+        "end": 6.04,
+        "phoneme": "o",
+        "start": 5.92
+      },
+      {
+        "end": 6.28,
+        "phoneme": "ch",
+        "start": 6.04
+      },
+      {
+        "end": 6.35,
+        "phoneme": "u",
+        "start": 6.28
+      },
+      {
+        "end": 6.4,
+        "phoneme": "u",
+        "start": 6.35
+      },
+      {
+        "end": 6.45,
+        "phoneme": "o",
+        "start": 6.4
+      },
+      {
+        "end": 6.58,
+        "phoneme": "o",
+        "start": 6.45
+      },
+      {
+        "end": 6.65,
+        "phoneme": "n",
+        "start": 6.58
+      },
+      {
+        "end": 6.71,
+        "phoneme": "i",
+        "start": 6.65
+      },
+      {
+        "end": 6.86,
+        "phoneme": "h",
+        "start": 6.71
+      },
+      {
+        "end": 6.92,
+        "phoneme": "a",
+        "start": 6.86
+      },
+      {
+        "end": 7.0,
+        "phoneme": "i",
+        "start": 6.92
+      },
+      {
+        "end": 7.1,
+        "phoneme": "s",
+        "start": 7.0
+      },
+      {
+        "end": 7.14,
+        "phoneme": "a",
+        "start": 7.1
+      },
+      {
+        "end": 7.18,
+        "phoneme": "r",
+        "start": 7.14
+      },
+      {
+        "end": 7.25,
+        "phoneme": "e",
+        "start": 7.18
+      },
+      {
+        "end": 7.3,
+        "phoneme": "r",
+        "start": 7.25
+      },
+      {
+        "end": 7.35,
+        "phoneme": "u",
+        "start": 7.3
+      },
+      {
+        "end": 7.42,
+        "phoneme": "k",
+        "start": 7.35
+      },
+      {
+        "end": 7.48,
+        "phoneme": "o",
+        "start": 7.42
+      },
+      {
+        "end": 7.53,
+        "phoneme": "t",
+        "start": 7.48
+      },
+      {
+        "end": 7.57,
+        "phoneme": "o",
+        "start": 7.53
+      },
+      {
+        "end": 7.63,
+        "phoneme": "m",
+        "start": 7.57
+      },
+      {
+        "end": 7.71,
+        "phoneme": "o",
+        "start": 7.63
+      },
+      {
+        "end": 7.82,
+        "phoneme": "o",
+        "start": 7.71
+      },
+      {
+        "end": 8.05,
+        "phoneme": "o",
+        "start": 7.82
+      },
+      {
+        "end": 8.17,
+        "phoneme": "i",
+        "start": 8.05
+      },
+      {
+        "end": 8.621,
+        "phoneme": "pau",
+        "start": 8.17
+      }
+    ]
+  },
+  {
+    "filename": "VOICEACTRESS100_002.lab",
+    "phonemes": [
+      {
+        "end": 0.51,
+        "phoneme": "pau",
+        "start": 0.0
+      },
+      {
+        "end": 0.72,
+        "phoneme": "ny",
+        "start": 0.51
+      },
+      {
+        "end": 0.82,
+        "phoneme": "u",
+        "start": 0.72
+      },
+      {
+        "end": 0.9,
+        "phoneme": "u",
+        "start": 0.82
+      },
+      {
+        "end": 0.97,
+        "phoneme": "i",
+        "start": 0.9
+      },
+      {
+        "end": 1.08,
+        "phoneme": "N",
+        "start": 0.97
+      },
+      {
+        "end": 1.11,
+        "phoneme": "g",
+        "start": 1.08
+      },
+      {
+        "end": 1.15,
+        "phoneme": "u",
+        "start": 1.11
+      },
+      {
+        "end": 1.22,
+        "phoneme": "r",
+        "start": 1.15
+      },
+      {
+        "end": 1.28,
+        "phoneme": "a",
+        "start": 1.22
+      },
+      {
+        "end": 1.33,
+        "phoneme": "N",
+        "start": 1.28
+      },
+      {
+        "end": 1.38,
+        "phoneme": "d",
+        "start": 1.33
+      },
+      {
+        "end": 1.45,
+        "phoneme": "o",
+        "start": 1.38
+      },
+      {
+        "end": 1.53,
+        "phoneme": "f",
+        "start": 1.45
+      },
+      {
+        "end": 1.56,
+        "phoneme": "u",
+        "start": 1.53
+      },
+      {
+        "end": 1.65,
+        "phoneme": "u",
+        "start": 1.56
+      },
+      {
+        "end": 1.8,
+        "phoneme": "w",
+        "start": 1.65
+      },
+      {
+        "end": 1.94,
+        "phoneme": "a",
+        "start": 1.8
+      },
+      {
+        "end": 2.34,
+        "phoneme": "pau",
+        "start": 1.94
+      },
+      {
+        "end": 2.5,
+        "phoneme": "gy",
+        "start": 2.34
+      },
+      {
+        "end": 2.55,
+        "phoneme": "u",
+        "start": 2.5
+      },
+      {
+        "end": 2.59,
+        "phoneme": "u",
+        "start": 2.55
+      },
+      {
+        "end": 2.75,
+        "phoneme": "ny",
+        "start": 2.59
+      },
+      {
+        "end": 2.81,
+        "phoneme": "u",
+        "start": 2.75
+      },
+      {
+        "end": 2.84,
+        "phoneme": "u",
+        "start": 2.81
+      },
+      {
+        "end": 3.04,
+        "phoneme": "o",
+        "start": 2.84
+      },
+      {
+        "end": 3.08,
+        "phoneme": "b",
+        "start": 3.04
+      },
+      {
+        "end": 3.2,
+        "phoneme": "e",
+        "start": 3.08
+      },
+      {
+        "end": 3.25,
+        "phoneme": "e",
+        "start": 3.2
+      },
+      {
+        "end": 3.33,
+        "phoneme": "s",
+        "start": 3.25
+      },
+      {
+        "end": 3.36,
+        "phoneme": "U",
+        "start": 3.33
+      },
+      {
+        "end": 3.4,
+        "phoneme": "t",
+        "start": 3.36
+      },
+      {
+        "end": 3.46,
+        "phoneme": "o",
+        "start": 3.4
+      },
+      {
+        "end": 3.55,
+        "phoneme": "sh",
+        "start": 3.46
+      },
+      {
+        "end": 3.58,
+        "phoneme": "I",
+        "start": 3.55
+      },
+      {
+        "end": 3.61,
+        "phoneme": "t",
+        "start": 3.58
+      },
+      {
+        "end": 3.79,
+        "phoneme": "a",
+        "start": 3.61
+      },
+      {
+        "end": 4.1149,
+        "phoneme": "pau",
+        "start": 3.79
+      },
+      {
+        "end": 4.29,
+        "phoneme": "sh",
+        "start": 4.1149
+      },
+      {
+        "end": 4.33,
+        "phoneme": "i",
+        "start": 4.29
+      },
+      {
+        "end": 4.41,
+        "phoneme": "r",
+        "start": 4.33
+      },
+      {
+        "end": 4.49,
+        "phoneme": "o",
+        "start": 4.41
+      },
+      {
+        "end": 4.65,
+        "phoneme": "i",
+        "start": 4.49
+      },
+      {
+        "end": 4.75,
+        "phoneme": "k",
+        "start": 4.65
+      },
+      {
+        "end": 4.8,
+        "phoneme": "u",
+        "start": 4.75
+      },
+      {
+        "end": 4.87,
+        "phoneme": "r",
+        "start": 4.8
+      },
+      {
+        "end": 4.96,
+        "phoneme": "i",
+        "start": 4.87
+      },
+      {
+        "end": 5.01,
+        "phoneme": "i",
+        "start": 4.96
+      },
+      {
+        "end": 5.07,
+        "phoneme": "m",
+        "start": 5.01
+      },
+      {
+        "end": 5.11,
+        "phoneme": "u",
+        "start": 5.07
+      },
+      {
+        "end": 5.28,
+        "phoneme": "s",
+        "start": 5.11
+      },
+      {
+        "end": 5.35,
+        "phoneme": "u",
+        "start": 5.28
+      },
+      {
+        "end": 5.4,
+        "phoneme": "u",
+        "start": 5.35
+      },
+      {
+        "end": 5.46,
+        "phoneme": "p",
+        "start": 5.4
+      },
+      {
+        "end": 5.5,
+        "phoneme": "u",
+        "start": 5.46
+      },
+      {
+        "end": 5.53,
+        "phoneme": "d",
+        "start": 5.5
+      },
+      {
+        "end": 5.61,
+        "phoneme": "e",
+        "start": 5.53
+      },
+      {
+        "end": 5.76,
+        "phoneme": "a",
+        "start": 5.61
+      },
+      {
+        "end": 5.79,
+        "phoneme": "r",
+        "start": 5.76
+      },
+      {
+        "end": 5.9283,
+        "phoneme": "i",
+        "start": 5.79
+      },
+      {
+        "end": 6.42,
+        "phoneme": "pau",
+        "start": 5.9283
+      },
+      {
+        "end": 6.53,
+        "phoneme": "b",
+        "start": 6.42
+      },
+      {
+        "end": 6.63,
+        "phoneme": "o",
+        "start": 6.53
+      },
+      {
+        "end": 6.74,
+        "phoneme": "s",
+        "start": 6.63
+      },
+      {
+        "end": 6.77,
+        "phoneme": "u",
+        "start": 6.74
+      },
+      {
+        "end": 6.81,
+        "phoneme": "t",
+        "start": 6.77
+      },
+      {
+        "end": 6.89,
+        "phoneme": "o",
+        "start": 6.81
+      },
+      {
+        "end": 7.02,
+        "phoneme": "N",
+        "start": 6.89
+      },
+      {
+        "end": 7.08,
+        "phoneme": "k",
+        "start": 7.02
+      },
+      {
+        "end": 7.13,
+        "phoneme": "u",
+        "start": 7.08
+      },
+      {
+        "end": 7.2,
+        "phoneme": "r",
+        "start": 7.13
+      },
+      {
+        "end": 7.24,
+        "phoneme": "a",
+        "start": 7.2
+      },
+      {
+        "end": 7.29,
+        "phoneme": "m",
+        "start": 7.24
+      },
+      {
+        "end": 7.35,
+        "phoneme": "u",
+        "start": 7.29
+      },
+      {
+        "end": 7.47,
+        "phoneme": "ch",
+        "start": 7.35
+      },
+      {
+        "end": 7.58,
+        "phoneme": "a",
+        "start": 7.47
+      },
+      {
+        "end": 7.63,
+        "phoneme": "u",
+        "start": 7.58
+      },
+      {
+        "end": 7.66,
+        "phoneme": "d",
+        "start": 7.63
+      },
+      {
+        "end": 7.78,
+        "phoneme": "a",
+        "start": 7.66
+      },
+      {
+        "end": 7.84,
+        "phoneme": "a",
+        "start": 7.78
+      },
+      {
+        "end": 7.9,
+        "phoneme": "t",
+        "start": 7.84
+      },
+      {
+        "end": 7.93,
+        "phoneme": "o",
+        "start": 7.9
+      },
+      {
+        "end": 7.99,
+        "phoneme": "m",
+        "start": 7.93
+      },
+      {
+        "end": 8.08,
+        "phoneme": "o",
+        "start": 7.99
+      },
+      {
+        "end": 8.18,
+        "phoneme": "y",
+        "start": 8.08
+      },
+      {
+        "end": 8.24,
+        "phoneme": "o",
+        "start": 8.18
+      },
+      {
+        "end": 8.31,
+        "phoneme": "b",
+        "start": 8.24
+      },
+      {
+        "end": 8.35,
+        "phoneme": "a",
+        "start": 8.31
+      },
+      {
+        "end": 8.39,
+        "phoneme": "r",
+        "start": 8.35
+      },
+      {
+        "end": 8.44,
+        "phoneme": "e",
+        "start": 8.39
+      },
+      {
+        "end": 8.51,
+        "phoneme": "r",
+        "start": 8.44
+      },
+      {
+        "end": 8.61,
+        "phoneme": "u",
+        "start": 8.51
+      },
+      {
+        "end": 9.1006,
+        "phoneme": "pau",
+        "start": 8.61
+      }
+    ]
+  }
+]

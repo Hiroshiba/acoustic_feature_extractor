@@ -3,17 +3,17 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Tuple
 
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.phoneme import PhonemeType, phoneme_type_to_class
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
 
 def process(
-    paths: Tuple[Path, Path],
+    paths: tuple[Path, Path],
     output_directory: Path,
     phoneme_type: PhonemeType,
     sampling_rate: int,
@@ -54,7 +54,7 @@ def extract_silence_from_phoneme(
     phoneme_paths = sorted(Path(p) for p in glob.glob(input_phoneme_glob))
     assert len(wave_paths) == len(phoneme_paths)
 
-    paths = list(zip(wave_paths, phoneme_paths))
+    paths = list(zip(wave_paths, phoneme_paths, strict=False))
 
     _process = partial(
         process,

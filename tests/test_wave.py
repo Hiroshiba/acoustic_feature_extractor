@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import librosa
+
 from acoustic_feature_extractor.data.wave import Wave
 
 

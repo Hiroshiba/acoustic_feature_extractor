@@ -2,11 +2,12 @@ import unittest
 from itertools import product
 
 import numpy
+from parameterized import parameterized
+
 from acoustic_feature_extractor.data.sampling_data import (
     ResampleInterpolateKind,
     SamplingData,
 )
-from parameterized import parameterized
 
 
 class TestSamplingData(unittest.TestCase):
@@ -28,7 +29,7 @@ class TestSamplingData(unittest.TestCase):
 
     def test_resample_random(self):
         for _ in range(10):
-            num = numpy.random.randint(256 ** 2) + 1
+            num = numpy.random.randint(256**2) + 1
             size = numpy.random.randint(5) + 1
             rate = numpy.random.randint(100) + 1
             scale = numpy.random.randint(100) + 1
@@ -81,7 +82,7 @@ class TestSamplingData(unittest.TestCase):
         expected_arrays = numpy.split(sample100, 5)
 
         outputs = sample100_rate100.split(keypoint_seconds=seconds)
-        for output, expected in zip(outputs, expected_arrays):
+        for output, expected in zip(outputs, expected_arrays, strict=False):
             self.assertTrue(numpy.all(output.array == expected))
 
     def test_estimate_padding_value(self):
@@ -93,7 +94,7 @@ class TestSamplingData(unittest.TestCase):
 
     def test_estimate_padding_value_assert(self):
         sample100 = numpy.arange(100)
-        with self.assertRaises(BaseException):
+        with self.assertRaises(AssertionError):
             self.assertEqual(
                 SamplingData(array=sample100, rate=100).estimate_padding_value(), 0
             )
@@ -106,7 +107,7 @@ class TestSamplingData(unittest.TestCase):
         datas = [SamplingData(array=array, rate=100) for array in arrays]
         datas = SamplingData.padding(datas, padding_value=numpy.array(0))
 
-        for data, array in zip(datas, arrays):
+        for data, array in zip(datas, arrays, strict=False):
             expected_array = numpy.pad(array, pad_width=[0, 40 - len(array)])
             self.assertTrue(numpy.all(data.array == expected_array))
 

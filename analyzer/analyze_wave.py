@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 import tqdm
+
 from acoustic_feature_extractor.data.wave import Wave
 
 

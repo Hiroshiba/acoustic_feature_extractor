@@ -1,7 +1,8 @@
+from collections.abc import Sequence
 from enum import Enum
-from typing import List, Optional, Sequence, Type, Union
 
 import numpy
+
 from acoustic_feature_extractor.data.phoneme import BasePhoneme
 
 
@@ -29,15 +30,15 @@ class LinguisticFeatureType(str, Enum):
         )
 
 
-class LinguisticFeature(object):
+class LinguisticFeature:
     def __init__(
         self,
-        phonemes: List[BasePhoneme],
-        phoneme_class: Type[BasePhoneme],
+        phonemes: list[BasePhoneme],
+        phoneme_class: type[BasePhoneme],
         rate: int,
-        feature_types: Sequence[Union[LinguisticFeatureType, str]],
-        start_accents: Optional[Sequence[bool]] = None,
-        end_accents: Optional[Sequence[bool]] = None,
+        feature_types: Sequence[LinguisticFeatureType | str],
+        start_accents: Sequence[bool] | None = None,
+        end_accents: Sequence[bool] | None = None,
     ):
         if start_accents is not None:
             assert len(start_accents) == len(phonemes)
@@ -64,13 +65,13 @@ class LinguisticFeature(object):
             t.POS_IN_PHONEME: 2,
         }[t]
 
-    def sum_dims(self, types: List[LinguisticFeatureType]):
+    def sum_dims(self, types: list[LinguisticFeatureType]):
         return sum(self.get_dim(t) for t in types)
 
     def _to_index(self, t: float):
         return int(round(t * self.rate))
 
-    def _to_time(self, i: Union[int, numpy.ndarray]):
+    def _to_time(self, i: int | numpy.ndarray):
         return i / self.rate
 
     @property

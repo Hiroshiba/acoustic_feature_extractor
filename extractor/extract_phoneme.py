@@ -1,13 +1,14 @@
 import argparse
 import glob
 import multiprocessing
+from collections.abc import Iterable, Sequence
 from functools import partial
 from operator import attrgetter
 from pathlib import Path
-from typing import Iterable, Optional, Sequence, Tuple, Union
 
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.linguistic_feature import (
     LinguisticFeature,
     LinguisticFeatureType,
@@ -21,7 +22,7 @@ def sorted_with_stem(paths: Iterable[Path]):
 
 
 def process(
-    path: Union[Path, Tuple[Path, Path, Path]],
+    path: Path | tuple[Path, Path, Path],
     output_directory: Path,
     phoneme_type: PhonemeType,
     rate: int,
@@ -67,8 +68,8 @@ def process_ignore_error(*args, **kwargs):
 def extract_phoneme(
     input_glob: str,
     output_directory: Path,
-    input_start_accent_glob: Optional[str],
-    input_end_accent_glob: Optional[str],
+    input_start_accent_glob: str | None,
+    input_end_accent_glob: str | None,
     phoneme_type: PhonemeType,
     with_phoneme_id: bool,
     with_pre_post: bool,
@@ -126,7 +127,9 @@ def extract_phoneme(
 
         paths = [
             (p1, p2, p3)
-            for p1, p2, p3 in zip(paths, start_accent_paths, end_accent_paths)
+            for p1, p2, p3 in zip(
+                paths, start_accent_paths, end_accent_paths, strict=False
+            )
         ]
 
     _process = partial(

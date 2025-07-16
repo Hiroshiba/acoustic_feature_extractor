@@ -1,5 +1,3 @@
-from typing import Optional
-
 import librosa
 import numpy
 import scipy.signal
@@ -8,7 +6,7 @@ import scipy.signal
 def to_log_melspectrogram(
     x: numpy.ndarray,
     sampling_rate: int,
-    preemph: Optional[float],
+    preemph: float | None,
     n_mels: int,
     n_fft: int,
     win_length: int,
@@ -16,7 +14,7 @@ def to_log_melspectrogram(
     fmin: float,
     fmax: float,
     min_level: float,
-    max_level: Optional[float],
+    max_level: float | None,
     normalize: bool,
 ):
     # pre emphasis

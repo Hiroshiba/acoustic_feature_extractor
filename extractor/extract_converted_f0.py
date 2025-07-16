@@ -3,9 +3,9 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Optional
 
 import tqdm
+
 from acoustic_feature_extractor.data.f0 import F0
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 from acoustic_feature_extractor.utility.numpy_utility import load_numpy_object
@@ -14,12 +14,12 @@ from acoustic_feature_extractor.utility.numpy_utility import load_numpy_object
 def process(
     path: Path,
     output_directory: Path,
-    input_statistics: Optional[Path],
-    target_statistics: Optional[Path],
-    input_mean: Optional[float],
-    input_var: Optional[float],
-    target_mean: Optional[float],
-    target_var: Optional[float],
+    input_statistics: Path | None,
+    target_statistics: Path | None,
+    input_mean: float | None,
+    input_var: float | None,
+    target_mean: float | None,
+    target_var: float | None,
 ):
     try:
         f0 = F0.load(path=path).convert(
@@ -50,12 +50,12 @@ def process(
 def extract_converted_f0(
     input_glob,
     output_directory: Path,
-    input_statistics: Optional[Path],
-    target_statistics: Optional[Path],
-    input_mean: Optional[float],
-    input_var: Optional[float],
-    target_mean: Optional[float],
-    target_var: Optional[float],
+    input_statistics: Path | None,
+    target_statistics: Path | None,
+    input_mean: float | None,
+    input_var: float | None,
+    target_mean: float | None,
+    target_var: float | None,
 ):
     assert (input_statistics is None) != (input_mean is None and input_var is None)
     assert (target_statistics is None) != (target_mean is None and target_var is None)

@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+
 from acoustic_feature_extractor.data.phoneme import PhonemeType
 from extractor.extract_phoneme import extract_phoneme
 from tests.utility import data_base_dir

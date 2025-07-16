@@ -3,10 +3,10 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Optional
 
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -14,8 +14,8 @@ from acoustic_feature_extractor.utility.json_utility import save_arguments
 def process(
     path: Path,
     output_directory: Path,
-    sampling_rate: Optional[float],
-    frame_second: Optional[float],
+    sampling_rate: float | None,
+    frame_second: float | None,
     time_axis: int,
 ):
     try:
@@ -34,7 +34,7 @@ def process(
 
         out = output_directory / (path.stem + ".npy")
         data.save(out)
-    
+
     except:
         print("error:", path)
         raise
@@ -43,8 +43,8 @@ def process(
 def extract_sampling_data(
     input_glob,
     output_directory: Path,
-    sampling_rate: Optional[float],
-    frame_second: Optional[float],
+    sampling_rate: float | None,
+    frame_second: float | None,
     time_axis: int,
 ):
     output_directory.mkdir(exist_ok=True)

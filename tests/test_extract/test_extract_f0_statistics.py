@@ -1,6 +1,7 @@
 from pathlib import Path
 
-import numpy
+from syrupy.assertion import SnapshotAssertion
+
 from acoustic_feature_extractor.utility.numpy_utility import load_numpy_object
 from extractor.extract_f0_statistics import extract_f0_statistics
 
@@ -8,6 +9,7 @@ from extractor.extract_f0_statistics import extract_f0_statistics
 def test_extract_f0_statistics(
     data_dir: Path,
     with_vuv: bool,
+    snapshot_json: SnapshotAssertion,
 ):
     output_dir = data_dir / "output_extract_f0_statistics"
     output_dir.mkdir(exist_ok=True)
@@ -17,10 +19,21 @@ def test_extract_f0_statistics(
         output=output_dir / f"statistics-with_vuv={with_vuv}.npy",
     )
 
+    statistics = load_numpy_object(output_dir / f"statistics-with_vuv={with_vuv}.npy")
+
+    result = {
+        "with_vuv": with_vuv,
+        "mean": float(statistics["mean"]),
+        "var": float(statistics["var"]),
+    }
+
+    assert result == snapshot_json
+
 
 def test_extract_f0_statistics_lowhigh(
     data_dir: Path,
     with_vuv: bool,
+    snapshot_json: SnapshotAssertion,
 ):
     output_dir = data_dir / "output_extract_f0_statistics_lowhigh"
     output_dir.mkdir(exist_ok=True)
@@ -41,7 +54,17 @@ def test_extract_f0_statistics_lowhigh(
         output_dir / f"statistics_high-with_vuv={with_vuv}.npy"
     )
 
-    assert statistics_low["mean"] < statistics_high["mean"]
-    numpy.testing.assert_allclose(
-        statistics_low["var"], statistics_high["var"], rtol=0, atol=1e-4
-    )
+    result = {
+        "with_vuv": with_vuv,
+        "statistics_low": {
+            "mean": float(statistics_low["mean"]),
+            "var": float(statistics_low["var"]),
+        },
+        "statistics_high": {
+            "mean": float(statistics_high["mean"]),
+            "var": float(statistics_high["var"]),
+        },
+        "mean_comparison": statistics_low["mean"] < statistics_high["mean"],
+    }
+
+    assert result == snapshot_json

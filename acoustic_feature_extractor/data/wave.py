@@ -3,11 +3,12 @@ from pathlib import Path
 import librosa
 import numpy
 import soundfile
-from acoustic_feature_extractor.data.sampling_data import SamplingData
 from resampy import resample
 
+from acoustic_feature_extractor.data.sampling_data import SamplingData
 
-class Wave(object):
+
+class Wave:
     def __init__(self, wave: numpy.ndarray, sampling_rate: int):
         self.wave = wave
         self.sampling_rate = sampling_rate

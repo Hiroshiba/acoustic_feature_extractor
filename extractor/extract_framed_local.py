@@ -3,9 +3,9 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Optional
 
 import tqdm
+
 from acoustic_feature_extractor.data.sampling_data import DegenerateType, SamplingData
 from acoustic_feature_extractor.utility.json_utility import save_arguments
 
@@ -16,8 +16,8 @@ def process(
     frame_length: int,
     hop_length: int,
     centering: bool,
-    padding_value: Optional[int],
-    padding_mode: Optional[str],
+    padding_value: int | None,
+    padding_mode: str | None,
     degenerate_type: DegenerateType,
 ):
     SamplingData.load(path).degenerate(
@@ -36,8 +36,8 @@ def extract_framed_local(
     frame_length: int,
     hop_length: int,
     centering: bool,
-    padding_value: Optional[int],
-    padding_mode: Optional[str],
+    padding_value: int | None,
+    padding_mode: str | None,
     degenerate_type: DegenerateType,
 ):
     output_directory.mkdir(exist_ok=True)

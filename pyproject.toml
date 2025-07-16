@@ -1,0 +1,65 @@
+[project]
+name = "acoustic-feature-extractor"
+version = "0.0.1"
+description = "Acoustic feature extraction library"
+readme = "README.md"
+license = {text = "MIT License"}
+requires-python = ">=3.11"
+authors = [
+    {name = "Kazuyuki Hiroshiba", email = "hihokaruta@gmail.com"}
+]
+dependencies = [
+    "librosa<0.11",
+    "matplotlib>=3.10.3",
+    "mosqito<1.3",
+    "numpy<1.27",
+    "parameterized>=0.9.0",
+    "pytest>=8.4.1",
+    "pyworld>=0.3.5",
+    "resampy>=0.4.3",
+    "scipy<1.14",
+    "setuptools>=80.9.0",
+    "tqdm>=4.67.1",
+]
+
+[project.urls]
+Repository = "https://github.com/Hiroshiba/acoustic_feature_extractor"
+
+[project.scripts]
+acoustic_feature_extract_collected_local = "extractor.extract_collected_local:main"
+acoustic_feature_extract_converted_f0 = "extractor.extract_converted_f0:main"
+acoustic_feature_extract_f0 = "extractor.extract_f0:main"
+acoustic_feature_extract_f0_statistics = "extractor.extract_f0_statistics:main"
+acoustic_feature_extract_framed_local = "extractor.extract_framed_local:main"
+acoustic_feature_extract_loudness = "extractor.extract_loudness:main"
+acoustic_feature_extract_melspectrogram = "extractor.extract_melspectrogram:main"
+acoustic_feature_extract_phoneme = "extractor.extract_phoneme:main"
+acoustic_feature_extract_sampling_data = "extractor.extract_sampling_data:main"
+acoustic_feature_extract_silence = "extractor.extract_silence:main"
+acoustic_feature_extract_silence_expanded_label = "extractor.extract_silence_expanded_label:main"
+acoustic_feature_extract_silence_from_phoneme = "extractor.extract_silence_from_phoneme:main"
+acoustic_feature_extract_splited_local = "extractor.extract_splited_local:main"
+acoustic_feature_extract_volume = "extractor.extract_volume:main"
+acoustic_feature_extract_wave = "extractor.extract_wave:main"
+acoustic_feature_analyze_ebur128 = "analyzer.analyze_ebur128:main"
+acoustic_feature_analyze_f0 = "analyzer.analyze_f0:main"
+acoustic_feature_analyze_loudness = "analyzer.analyze_loudness:main"
+acoustic_feature_analyze_melspectrogram = "analyzer.analyze_melspectrogram:main"
+acoustic_feature_analyze_wave = "analyzer.analyze_wave:main"
+acoustic_feature_tool_split_wave = "tool.tool_split_wave:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.3",
+    "syrupy>=4.9.1",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "W", "UP"]
+ignore = [
+    "E501", # line-too-long
+]

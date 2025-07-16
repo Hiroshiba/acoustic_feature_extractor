@@ -3,10 +3,10 @@ import glob
 import multiprocessing
 from functools import partial
 from pathlib import Path
-from typing import Optional
 
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.spectrogram import to_log_melspectrogram
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.utility.json_utility import save_arguments
@@ -16,7 +16,7 @@ def process(
     path: Path,
     output_directory: Path,
     sampling_rate: int,
-    preemph: Optional[float],
+    preemph: float | None,
     n_mels: int,
     n_fft: int,
     win_length: int,
@@ -24,7 +24,7 @@ def process(
     fmin: float,
     fmax: float,
     min_level: float,
-    max_level: Optional[float],
+    max_level: float | None,
     disable_normalize: bool,
 ):
     wave = Wave.load(path, sampling_rate)
@@ -54,7 +54,7 @@ def extract_melspectrogram(
     input_glob,
     output_directory: Path,
     sampling_rate: int,
-    preemph: Optional[float],
+    preemph: float | None,
     n_mels: int,
     n_fft: int,
     win_length: int,
@@ -62,7 +62,7 @@ def extract_melspectrogram(
     fmin: float,
     fmax: float,
     min_level: float,
-    max_level: Optional[float],
+    max_level: float | None,
     disable_normalize: bool,
 ):
     output_directory.mkdir(exist_ok=True)

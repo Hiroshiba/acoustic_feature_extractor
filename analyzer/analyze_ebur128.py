@@ -7,6 +7,7 @@ from pathlib import Path
 
 import numpy
 import tqdm
+
 from acoustic_feature_extractor.data.wave import Wave
 from acoustic_feature_extractor.process.ffmpeg import Ebur128, calc_ebur128
 

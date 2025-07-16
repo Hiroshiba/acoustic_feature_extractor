@@ -1,8 +1,8 @@
+from collections.abc import Sequence
 from copy import deepcopy
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Dict, Optional, Sequence, Union
 
 import librosa
 import numpy
@@ -52,7 +52,7 @@ class SamplingData:
 
     def split(
         self,
-        keypoint_seconds: Union[Sequence[float], numpy.ndarray],
+        keypoint_seconds: Sequence[float] | numpy.ndarray,
     ):
         keypoint_seconds = numpy.array(keypoint_seconds)
         indexes = (keypoint_seconds * self.rate).astype(numpy.int32)
@@ -98,9 +98,9 @@ class SamplingData:
         # assert that nearly length
         max_length = max(len(a) for a in arrays)
         for i, a in enumerate(arrays):
-            assert (
-                abs((max_length - len(a)) / rate) <= error_time_length
-            ), f"{i}: {max_length / rate}, {len(a) / rate}"
+            assert abs((max_length - len(a)) / rate) <= error_time_length, (
+                f"{i}: {max_length / rate}, {len(a) / rate}"
+            )
 
         if mode == "min":
             min_length = min(len(a) for a in arrays)
@@ -143,8 +143,8 @@ class SamplingData:
         frame_length: int,
         hop_length: int,
         centering: bool,
-        padding_value: Optional[int],
-        padding_mode: Optional[str],
+        padding_value: int | None,
+        padding_mode: str | None,
         degenerate_type: DegenerateType,
     ):
         array = self.array
@@ -177,7 +177,7 @@ class SamplingData:
 
     @classmethod
     def load(cls, path: Path):
-        d: Dict = numpy.load(str(path), allow_pickle=True).item()
+        d: dict = numpy.load(str(path), allow_pickle=True).item()
         array, rate = d["array"], d["rate"]
 
         if array.ndim == 1:

@@ -1,11 +1,11 @@
 from enum import Enum
-from typing import Dict, Optional
 
 import numpy
 import pyworld
+from scipy.interpolate import interp1d
+
 from acoustic_feature_extractor.data.sampling_data import SamplingData
 from acoustic_feature_extractor.data.wave import Wave
-from scipy.interpolate import interp1d
 
 
 class F0Type(str, Enum):
@@ -38,10 +38,10 @@ class F0(SamplingData):
             f0_floor=f0_floor,
             f0_ceil=f0_ceil,
         )
-        
+
         if f0_type == F0Type.world:
             f0 = pyworld.stonemask(w, f0, t, sampling_rate)
-        
+
         if f0_type == F0Type.refine_world:
             ap = pyworld.d4c(w, f0, t, sampling_rate)
             f0[ap[:, 0] >= 0.5] = 0
@@ -91,8 +91,8 @@ class F0(SamplingData):
 
     def convert(
         self,
-        input_statistics: Dict[str, float] = None,
-        target_statistics: Dict[str, float] = None,
+        input_statistics: dict[str, float] = None,
+        target_statistics: dict[str, float] = None,
         input_mean: float = None,
         input_var: float = None,
         target_mean: float = None,

@@ -13,7 +13,7 @@ class Ebur128:
     ebur128の値
     """
 
-    I: float
+    I: float  # noqa: E741
     LRA_low: float
     LRA_high: float
 
