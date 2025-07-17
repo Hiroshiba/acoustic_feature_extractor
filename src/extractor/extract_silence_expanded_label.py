@@ -101,14 +101,42 @@ def extract_silence_expanded_label(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_label_glob", "-ilg", required=True)
-    parser.add_argument("--input_silence_glob", "-isg", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument(
-        "--phoneme_type", "-pt", type=PhonemeType, default=PhonemeType.seg_kit
+    parser = argparse.ArgumentParser(
+        description="音素ラベルを無音情報を使って拡張します。無音部分での音素境界を調整し、より精密な音素ラベルを生成します。"
     )
-    parser.add_argument("--phoneme_minimum_second", "-pms", type=float, default=0.03)
+    parser.add_argument(
+        "--input_label_glob",
+        "-ilg",
+        required=True,
+        help="入力音素ラベルファイルのパスパターン（例：'*.lab'）",
+    )
+    parser.add_argument(
+        "--input_silence_glob",
+        "-isg",
+        required=True,
+        help="入力無音データファイルのパスパターン（例：'*.npy'）。extract_silenceで生成されたデータを指定",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="拡張された音素ラベルを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--phoneme_type",
+        "-pt",
+        type=PhonemeType,
+        default=PhonemeType.seg_kit,
+        help="音素の種類。seg_kit, jvs, openjtalk, rohan, kiritan, song, dummy（デフォルト：seg_kit）",
+    )
+    parser.add_argument(
+        "--phoneme_minimum_second",
+        "-pms",
+        type=float,
+        default=0.03,
+        help="音素の最小継続時間（秒）。この値より短い音素は調整されます（デフォルト：0.03秒）",
+    )
     extract_silence_expanded_label(**vars(parser.parse_args()))
 
 

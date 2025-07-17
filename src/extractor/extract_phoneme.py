@@ -154,20 +154,76 @@ def extract_phoneme(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument(
-        "--phoneme_type", "-pt", type=PhonemeType, default=PhonemeType.seg_kit
+    parser = argparse.ArgumentParser(
+        description="音素情報ファイルから言語的特徴量を抽出します。アクセント情報、継続時間、位置情報等の特徴量を含められます。"
     )
-    parser.add_argument("--input_start_accent_glob", "-isag")
-    parser.add_argument("--input_end_accent_glob", "-ieag")
-    parser.add_argument("--with_phoneme_id", "-wpi", action="store_true")
-    parser.add_argument("--with_pre_post", "-wpp", action="store_true")
-    parser.add_argument("--with_duration", "-wd", action="store_true")
-    parser.add_argument("--with_relative_pos", "-wrp", action="store_true")
-    parser.add_argument("--rate", "-r", type=int, default=100)
-    parser.add_argument("--ignore_error", "-ie", action="store_true")
+    parser.add_argument(
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力音素ファイルのパスパターン（例：'*.txt'）。Julius形式の音素ファイルを指定",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="抽出された音素特徴量を保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--phoneme_type",
+        "-pt",
+        type=PhonemeType,
+        default=PhonemeType.seg_kit,
+        help="音素の種類。seg_kit, jvs, openjtalk, rohan, kiritan, song, dummy（デフォルト：seg_kit）",
+    )
+    parser.add_argument(
+        "--input_start_accent_glob",
+        "-isag",
+        help="開始アクセント情報ファイルのパスパターン。指定すると音素にアクセント情報が追加されます",
+    )
+    parser.add_argument(
+        "--input_end_accent_glob",
+        "-ieag",
+        help="終了アクセント情報ファイルのパスパターン。開始アクセントと合わせて指定",
+    )
+    parser.add_argument(
+        "--with_phoneme_id",
+        "-wpi",
+        action="store_true",
+        help="音素IDを含めるかどうか。指定すると音素を数値IDで表現します",
+    )
+    parser.add_argument(
+        "--with_pre_post",
+        "-wpp",
+        action="store_true",
+        help="前後の音素情報を含めるかどうか。指定すると前音素・後音素の情報も出力されます",
+    )
+    parser.add_argument(
+        "--with_duration",
+        "-wd",
+        action="store_true",
+        help="継続時間情報を含めるかどうか。指定すると音素の継続時間情報が追加されます",
+    )
+    parser.add_argument(
+        "--with_relative_pos",
+        "-wrp",
+        action="store_true",
+        help="相対位置情報を含めるかどうか。指定すると音素内の相対位置情報が追加されます",
+    )
+    parser.add_argument(
+        "--rate",
+        "-r",
+        type=int,
+        default=100,
+        help="出力データのサンプリングレート（Hz）。特徴量の時間解像度を決定（デフォルト：100Hz）",
+    )
+    parser.add_argument(
+        "--ignore_error",
+        "-ie",
+        action="store_true",
+        help="エラーを無視するかどうか。指定すると処理エラーが発生してもスキップして続行します",
+    )
     extract_phoneme(**vars(parser.parse_args()))
 
 

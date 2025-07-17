@@ -68,14 +68,42 @@ def extract_silence_from_phoneme(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_wave_glob", "-iwg")
-    parser.add_argument("--input_phoneme_glob", "-ipg")
-    parser.add_argument("--output_directory", "-od", type=Path)
-    parser.add_argument(
-        "--phoneme_type", "-pt", type=PhonemeType, default=PhonemeType.seg_kit
+    parser = argparse.ArgumentParser(
+        description="音素ラベル情報から無音部分を抽出します。音素ラベルでの無音音素部分をバイナリラベルとして出力します。"
     )
-    parser.add_argument("--sampling_rate", "-sr", type=int)
+    parser.add_argument(
+        "--input_wave_glob",
+        "-iwg",
+        required=True,
+        help="入力音声ファイルのパスパターン（例：'*.wav'）",
+    )
+    parser.add_argument(
+        "--input_phoneme_glob",
+        "-ipg",
+        required=True,
+        help="入力音素ラベルファイルのパスパターン（例：'*.lab'）",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="抽出された無音ラベルを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--phoneme_type",
+        "-pt",
+        type=PhonemeType,
+        default=PhonemeType.seg_kit,
+        help="音素の種類。seg_kit, jvs, openjtalk, rohan, kiritan, song, dummy（デフォルト：seg_kit）",
+    )
+    parser.add_argument(
+        "--sampling_rate",
+        "-sr",
+        type=int,
+        required=True,
+        help="サンプリングレート（Hz）。出力ラベルの時間解像度を決定",
+    )
     extract_silence_from_phoneme(**vars(parser.parse_args()))
 
 

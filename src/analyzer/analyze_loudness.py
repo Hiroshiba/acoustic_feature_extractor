@@ -57,11 +57,28 @@ def analyze_loudness(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--calibration_value", "-cv", type=float, default=1)
+    parser = argparse.ArgumentParser(
+        description="音声ファイルのラウドネスを分析し、統計情報を表示します。特に分位数情報を表示します。"
+    )
     parser.add_argument(
-        "--field_type", "-ft", type=FieldType, default=FieldType.diffuse
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力音声ファイルのパスパターン（例：'*.wav'）",
+    )
+    parser.add_argument(
+        "--calibration_value",
+        "-cv",
+        type=float,
+        default=1,
+        help="音声の校正値。音声信号に掛ける係数（デフォルト：1）",
+    )
+    parser.add_argument(
+        "--field_type",
+        "-ft",
+        type=FieldType,
+        default=FieldType.diffuse,
+        help="音場の種類。free: 自由音場、diffuse: 拡散音場（デフォルト：diffuse）",
     )
     analyze_loudness(**vars(parser.parse_args()))
 

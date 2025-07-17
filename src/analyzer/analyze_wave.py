@@ -45,9 +45,22 @@ def analyze_wave(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--sampling_rate", "-sr", type=int, required=True)
+    parser = argparse.ArgumentParser(
+        description="音声ファイルの波形データを分析し、最大値・最小値を表示します。正規化パラメータの決定に使用します。"
+    )
+    parser.add_argument(
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力音声ファイルのパスパターン（例：'*.wav'）",
+    )
+    parser.add_argument(
+        "--sampling_rate",
+        "-sr",
+        type=int,
+        required=True,
+        help="サンプリングレート（Hz）",
+    )
     analyze_wave(**vars(parser.parse_args()))
 
 

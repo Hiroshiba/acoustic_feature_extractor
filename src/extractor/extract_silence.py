@@ -46,11 +46,36 @@ def extract_silence(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument("--sampling_rate", "-sr", type=int, required=True)
-    parser.add_argument("--silence_top_db", "-st", type=float, default=60)
+    parser = argparse.ArgumentParser(
+        description="音声ファイルから無音部分を検出・抽出します。音量レベルに基づいて無音区間を判定し、バイナリラベルを生成します。"
+    )
+    parser.add_argument(
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力音声ファイルのパスパターン（例：'*.wav'）",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="抽出された無音ラベルを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--sampling_rate",
+        "-sr",
+        type=int,
+        required=True,
+        help="サンプリングレート（Hz）。出力ラベルの時間解像度を決定",
+    )
+    parser.add_argument(
+        "--silence_top_db",
+        "-st",
+        type=float,
+        default=60,
+        help="無音判定の閾値（dB）。この値より小さい音量を無音とする（デフォルト：60dB）",
+    )
     extract_silence(**vars(parser.parse_args()))
 
 

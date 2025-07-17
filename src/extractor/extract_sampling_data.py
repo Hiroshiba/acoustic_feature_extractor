@@ -64,12 +64,41 @@ def extract_sampling_data(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument("--sampling_rate", "-sr", type=float)
-    parser.add_argument("--frame_second", "-fs", type=float)
-    parser.add_argument("--time_axis", "-ta", type=int, default=0)
+    parser = argparse.ArgumentParser(
+        description="データをSamplingData形式に変換します。サンプリングレートや時間軸情報を付加したデータに変換します。"
+    )
+    parser.add_argument(
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力データファイルのパスパターン（例：'*.npy'）",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="変換されたSamplingDataを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--sampling_rate",
+        "-sr",
+        type=float,
+        help="サンプリングレート（Hz）。frame_secondとどちらか一方を指定",
+    )
+    parser.add_argument(
+        "--frame_second",
+        "-fs",
+        type=float,
+        help="フレーム間隔（秒）。sampling_rateとどちらか一方を指定",
+    )
+    parser.add_argument(
+        "--time_axis",
+        "-ta",
+        type=int,
+        default=0,
+        help="時間軸のインデックス。データのどの次元が時間軸かを指定（デフォルト：0）",
+    )
     extract_sampling_data(**vars(parser.parse_args()))
 
 

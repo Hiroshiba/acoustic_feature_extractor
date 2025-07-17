@@ -79,15 +79,48 @@ def extract_splited_local(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument(
-        "--keypoint_seconds", "-ks", nargs="+", type=float, required=True
+    parser = argparse.ArgumentParser(
+        description="データを指定した時刻で分割します。時系列データを特定のキーポイントで切り分けます。"
     )
-    parser.add_argument("--file_format", "-ff", default="{stem}-{i}{suffix}")
-    parser.add_argument("--padding", "-p", action="store_true")
-    parser.add_argument("--remove_all_same", "-ras", action="store_true")
+    parser.add_argument(
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力データファイルのパスパターン（例：'*.npy'）",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="分割されたデータを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--keypoint_seconds",
+        "-ks",
+        nargs="+",
+        type=float,
+        required=True,
+        help="キーポイントの時刻リスト（秒）。この時刻でデータを分割します",
+    )
+    parser.add_argument(
+        "--file_format",
+        "-ff",
+        default="{stem}-{i}{suffix}",
+        help="出力ファイル名のフォーマット。{stem}, {suffix}, {i}を使用可能（デフォルト：{stem}-{i}{suffix}）",
+    )
+    parser.add_argument(
+        "--padding",
+        "-p",
+        action="store_true",
+        help="パディングを行うかどうか。指定すると分割されたデータを同じ長さに揃えます",
+    )
+    parser.add_argument(
+        "--remove_all_same",
+        "-ras",
+        action="store_true",
+        help="全て同じ値のデータを除去するかどうか。指定すると均一なデータをスキップします",
+    )
     extract_splited_local(**vars(parser.parse_args()))
 
 

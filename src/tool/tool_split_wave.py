@@ -81,14 +81,55 @@ def tool_split_wave(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument("--sampling_rate", "-sr", type=int)
-    parser.add_argument("--silence_top_db", "-st", type=float, default=60)
-    parser.add_argument("--min_silence_second", "-mss", type=float, default=0.45)
-    parser.add_argument("--pad_second", "-ps", type=float, default=0.3)
-    parser.add_argument("--prefix", "-p", default="")
+    parser = argparse.ArgumentParser(
+        description="音声ファイルを無音部分で分割します。長い音声ファイルを無音部分で自動分割し、複数の短いファイルに分けます。"
+    )
+    parser.add_argument(
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力音声ファイルのパスパターン（例：'*.wav'）",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="分割された音声ファイルを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--sampling_rate",
+        "-sr",
+        type=int,
+        help="サンプリングレート（Hz）。指定しない場合は元ファイルのサンプリングレートを使用",
+    )
+    parser.add_argument(
+        "--silence_top_db",
+        "-st",
+        type=float,
+        default=60,
+        help="無音判定の闾値（dB）。この値より小さい音量を無音とする（デフォルト：60dB）",
+    )
+    parser.add_argument(
+        "--min_silence_second",
+        "-mss",
+        type=float,
+        default=0.45,
+        help="分割するための最小無音継続時間（秒）。この時間以上の無音があると分割します（デフォルト：0.45秒）",
+    )
+    parser.add_argument(
+        "--pad_second",
+        "-ps",
+        type=float,
+        default=0.3,
+        help="分割点の前後に追加する時間（秒）。分割時の緩衝時間（デフォルト：0.3秒）",
+    )
+    parser.add_argument(
+        "--prefix",
+        "-p",
+        default="",
+        help="出力ファイル名の接頭辞。出力ファイル名の開始部分に付ける文字列（デフォルト：なし）",
+    )
     tool_split_wave(**vars(parser.parse_args()))
 
 

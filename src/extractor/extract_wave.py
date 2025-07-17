@@ -81,16 +81,54 @@ def extract_wave(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument("--sampling_rate", "-sr", type=int, required=True)
-    parser.add_argument("--scale_db", "-sd", type=float)
-    parser.add_argument(
-        "--clipping_range", "-cr", type=float, nargs=2, help="(min, max)"
+    parser = argparse.ArgumentParser(
+        description="音声ファイルの波形データを抽出・正規化します。音量調整、クリッピング、範囲チェックなどの処理が可能です。"
     )
-    parser.add_argument("--clipping_auto", "-ca", action="store_true")
-    parser.add_argument("--check_out_of_range", "-co", action="store_true")
+    parser.add_argument(
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力音声ファイルのパスパターン（例：'*.wav'）",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="抽出された波形データを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--sampling_rate",
+        "-sr",
+        type=int,
+        required=True,
+        help="出力データのサンプリングレート（Hz）",
+    )
+    parser.add_argument(
+        "--scale_db",
+        "-sd",
+        type=float,
+        help="音量をdBで調整する値。例：-6で6dB音量を下げる",
+    )
+    parser.add_argument(
+        "--clipping_range",
+        "-cr",
+        type=float,
+        nargs=2,
+        help="クリッピング範囲 (min, max)。指定した範囲外の値を制限します",
+    )
+    parser.add_argument(
+        "--clipping_auto",
+        "-ca",
+        action="store_true",
+        help="自動クリッピング。最大振幅の99.9%で正規化します",
+    )
+    parser.add_argument(
+        "--check_out_of_range",
+        "-co",
+        action="store_true",
+        help="範囲チェック。出力波形が[-1,1]の範囲内かチェックします",
+    )
     extract_wave(**vars(parser.parse_args()))
 
 

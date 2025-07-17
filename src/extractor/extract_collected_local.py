@@ -94,14 +94,56 @@ def extract_collected_local(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob_list", "-igl", nargs="+", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument("--rate", "-r", type=int, required=True)
-    parser.add_argument("--mode", "-m", choices=["min", "max", "first"], default="min")
-    parser.add_argument("--error_time_length", "-etl", type=float, default=0.015)
-    parser.add_argument("--ignore_error", "-ig", action="store_true")
-    parser.add_argument("--only_union", "-uo", action="store_true")
+    parser = argparse.ArgumentParser(
+        description="複数のローカルデータを結合します。异なるソースからのデータを時間同期して結合します。"
+    )
+    parser.add_argument(
+        "--input_glob_list",
+        "-igl",
+        nargs="+",
+        required=True,
+        help="入力データファイルのパスパターンリスト。複数のパターンを指定して結合します",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="結合されたデータを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--rate",
+        "-r",
+        type=int,
+        required=True,
+        help="出力データのサンプリングレート（Hz）",
+    )
+    parser.add_argument(
+        "--mode",
+        "-m",
+        choices=["min", "max", "first"],
+        default="min",
+        help="データ結合時のモード。min: 最小値、max: 最大値、first: 最初の値（デフォルト：min）",
+    )
+    parser.add_argument(
+        "--error_time_length",
+        "-etl",
+        type=float,
+        default=0.015,
+        help="許容エラー時間長（秒）。この範囲内の時間ズレは許容されます（デフォルト：0.015秒）",
+    )
+    parser.add_argument(
+        "--ignore_error",
+        "-ig",
+        action="store_true",
+        help="エラーを無視するかどうか。指定すると処理エラーが発生してもスキップして続行します",
+    )
+    parser.add_argument(
+        "--only_union",
+        "-uo",
+        action="store_true",
+        help="共通ファイルのみ処理するかどうか。指定すると全てのソースに存在するファイルのみ処理します",
+    )
     extract_collected_local(**vars(parser.parse_args()))
 
 

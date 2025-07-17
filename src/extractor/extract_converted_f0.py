@@ -80,15 +80,58 @@ def extract_converted_f0(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--output_directory", "-od", type=Path, required=True)
-    parser.add_argument("--input_statistics", "-is", type=Path)
-    parser.add_argument("--target_statistics", "-ts", type=Path)
-    parser.add_argument("--input_mean", "-im", type=float)
-    parser.add_argument("--input_var", "-iv", type=float)
-    parser.add_argument("--target_mean", "-tm", type=float)
-    parser.add_argument("--target_var", "-tv", type=float)
+    parser = argparse.ArgumentParser(
+        description="F0データを統計情報を用いて正規化・変換します。入力とターゲットの統計情報（平均・分散）を使って線形変換を行います。"
+    )
+    parser.add_argument(
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力F0ファイルのパスパターン（例：'*.npy'）。extract_f0で生成されたF0データを指定",
+    )
+    parser.add_argument(
+        "--output_directory",
+        "-od",
+        type=Path,
+        required=True,
+        help="変換されたF0データを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--input_statistics",
+        "-is",
+        type=Path,
+        help="入力F0の統計情報ファイル（.npy形式）。extract_f0_statisticsで生成されたファイルを指定",
+    )
+    parser.add_argument(
+        "--target_statistics",
+        "-ts",
+        type=Path,
+        help="ターゲットF0の統計情報ファイル（.npy形式）。変換先の統計情報を指定",
+    )
+    parser.add_argument(
+        "--input_mean",
+        "-im",
+        type=float,
+        help="入力F0の平均値。統計情報ファイルを使わない場合に直接指定",
+    )
+    parser.add_argument(
+        "--input_var",
+        "-iv",
+        type=float,
+        help="入力F0の分散値。統計情報ファイルを使わない場合に直接指定",
+    )
+    parser.add_argument(
+        "--target_mean",
+        "-tm",
+        type=float,
+        help="ターゲットF0の平均値。統計情報ファイルを使わない場合に直接指定",
+    )
+    parser.add_argument(
+        "--target_var",
+        "-tv",
+        type=float,
+        help="ターゲットF0の分散値。統計情報ファイルを使わない場合に直接指定",
+    )
     extract_converted_f0(**vars(parser.parse_args()))
 
 

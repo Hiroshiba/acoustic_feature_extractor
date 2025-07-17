@@ -58,9 +58,22 @@ def analyze_ebur128(input_glob: str, sampling_rate: int):
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-ig", required=True)
-    parser.add_argument("--sampling_rate", "-sr", type=int, required=True)
+    parser = argparse.ArgumentParser(
+        description="音声ファイルのEBU R128準拠のラウドネスを分析し、統計情報を表示します。放送標準のラウドネス測定を行います。"
+    )
+    parser.add_argument(
+        "--input_glob",
+        "-ig",
+        required=True,
+        help="入力音声ファイルのパスパターン（例：'*.wav'）",
+    )
+    parser.add_argument(
+        "--sampling_rate",
+        "-sr",
+        type=int,
+        required=True,
+        help="サンプリングレート（Hz）",
+    )
     analyze_ebur128(**vars(parser.parse_args()))
 
 

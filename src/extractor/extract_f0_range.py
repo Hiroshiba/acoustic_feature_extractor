@@ -371,14 +371,53 @@ def extract_f0_range(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-i", required=True)
-    parser.add_argument("--output", "-o", type=Path, required=True)
-    parser.add_argument("--sampling_rate", "-sr", type=int, default=None)
-    parser.add_argument("--max_num", type=int, default=100)
-    parser.add_argument("--num_loop", type=int, default=10)
-    parser.add_argument("--target_duration", type=int, default=180)
-    parser.add_argument("--verbose_dir", type=Path, default=None)
+    parser = argparse.ArgumentParser(
+        description="音声ファイルから適切なF0範囲を自動計算します。反復的にF0を分析し、最適なfloor/ceil値を推定します。統計情報をJSON形式で出力します。"
+    )
+    parser.add_argument(
+        "--input_glob",
+        "-i",
+        required=True,
+        help="入力音声ファイルのパスパターン（例：'*.wav'）",
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        type=Path,
+        required=True,
+        help="F0範囲統計を保存するファイルパス（.json形式）",
+    )
+    parser.add_argument(
+        "--sampling_rate",
+        "-sr",
+        type=int,
+        default=None,
+        help="サンプリングレート（Hz）。指定しない場合は自動で検出",
+    )
+    parser.add_argument(
+        "--max_num",
+        type=int,
+        default=100,
+        help="処理する最大ファイル数。大量のファイルがある場合の間引き処理（デフォルト：100）",
+    )
+    parser.add_argument(
+        "--num_loop",
+        type=int,
+        default=10,
+        help="F0範囲推定の反復回数。多いほど精度が向上（デフォルト：10）",
+    )
+    parser.add_argument(
+        "--target_duration",
+        type=int,
+        default=180,
+        help="各反復で処理する目標時間（秒）。処理時間の調整に使用（デフォルト：180秒）",
+    )
+    parser.add_argument(
+        "--verbose_dir",
+        type=Path,
+        default=None,
+        help="詳細な可視化結果を保存するディレクトリ。指定するとヒストグラムが生成されます",
+    )
     extract_f0_range(**vars(parser.parse_args()))
 
 

@@ -60,15 +60,49 @@ def extract_framed_local(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", required=True)
-    parser.add_argument("--output_directory", type=Path, required=True)
-    parser.add_argument("--frame_length", type=int, required=True)
-    parser.add_argument("--hop_length", type=int, required=True)
-    parser.add_argument("--centering", action="store_true")
-    parser.add_argument("--padding_value", type=int)
-    parser.add_argument("--padding_mode")
-    parser.add_argument("--degenerate_type", type=DegenerateType, required=True)
+    parser = argparse.ArgumentParser(
+        description="データをフレーム単位で集約します。時系列データをフレームごとに統計的に集約します。"
+    )
+    parser.add_argument(
+        "--input_glob",
+        required=True,
+        help="入力データファイルのパスパターン（例：'*.npy'）",
+    )
+    parser.add_argument(
+        "--output_directory",
+        type=Path,
+        required=True,
+        help="集約されたデータを保存するディレクトリ",
+    )
+    parser.add_argument(
+        "--frame_length",
+        type=int,
+        required=True,
+        help="フレーム長（サンプル数）。各フレームのサイズを指定",
+    )
+    parser.add_argument(
+        "--hop_length",
+        type=int,
+        required=True,
+        help="ホップ長（サンプル数）。フレーム間のステップサイズを指定",
+    )
+    parser.add_argument(
+        "--centering",
+        action="store_true",
+        help="センタリングを行うかどうか。指定するとフレームの中心を基準にします",
+    )
+    parser.add_argument(
+        "--padding_value", type=int, help="パディング値。フレームの端での補充値を指定"
+    )
+    parser.add_argument(
+        "--padding_mode", help="パディングモード。フレームの端での補充方法を指定"
+    )
+    parser.add_argument(
+        "--degenerate_type",
+        type=DegenerateType,
+        required=True,
+        help="集約方法の種類。フレーム内のデータをどのように統計的に集約するかを指定（min, max, mean, median）",
+    )
     extract_framed_local(**vars(parser.parse_args()))
 
 

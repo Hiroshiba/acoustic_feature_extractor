@@ -44,8 +44,15 @@ def analyze_f0(
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_glob", "-i", required=True)
+    parser = argparse.ArgumentParser(
+        description="抽出されたF0データを分析し、統計情報を表示します。特に分位数情報を表示します。"
+    )
+    parser.add_argument(
+        "--input_glob",
+        "-i",
+        required=True,
+        help="入力F0データファイルのパスパターン（例：'*.npy'）。extract_f0で生成されたデータを指定",
+    )
     analyze_f0(**vars(parser.parse_args()))
 
 
