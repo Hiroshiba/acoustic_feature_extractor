@@ -5,6 +5,7 @@ import numpy
 import pytest
 
 from acoustic_feature_extractor.data.f0 import F0Type
+from acoustic_feature_extractor.data.processing_enums import VolumeType
 from extractor.extract_f0 import extract_f0
 from extractor.extract_f0_statistics import extract_f0_statistics
 from tests.utility import generate_f0_file, generate_music_file
@@ -17,6 +18,11 @@ def with_vuv(request):
 
 @pytest.fixture(params=list(F0Type))
 def f0_type(request):
+    return request.param
+
+
+@pytest.fixture(params=list(VolumeType))
+def volume_type(request):
     return request.param
 
 

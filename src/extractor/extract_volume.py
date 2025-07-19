@@ -27,7 +27,7 @@ def process(
 
     w = Wave.load(path, sampling_rate).wave
 
-    array = librosa.feature.rms(w, frame_length=frame_length, hop_length=hop_length)
+    array = librosa.feature.rms(y=w, frame_length=frame_length, hop_length=hop_length)
     array = array.squeeze()
     if volume_type in (VolumeType.mse_power, VolumeType.mse_db):
         array = array**2
