@@ -39,7 +39,7 @@ def _check_sampling_rate(path: Path, sampling_rate: float):
         )
 
 
-def _load_wave(path: Path, sampling_rate: int):
+def _load_wave(path: Path, sampling_rate: float):
     return librosa.load(path, sr=sampling_rate, dtype=np.float64)[0]
 
 
@@ -62,7 +62,7 @@ def _split_wave_paths(paths: list[Path], target_duration: float):
     paths_list = []
     paths = []
     now_duration = 0
-    for path, duration in zip(copy_paths, durations, strict=False):
+    for path, duration in zip(copy_paths, durations, strict=True):
         paths.append(path)
         now_duration += duration
 
@@ -79,7 +79,7 @@ def _split_wave_paths(paths: list[Path], target_duration: float):
 
 
 def _calc_features(
-    paths: list[Path], sampling_rate: int, f0_floor: float, f0_ceil: float
+    paths: list[Path], sampling_rate: float, f0_floor: float, f0_ceil: float
 ):
     """与えられた音声ファイルの波形を接続してf0と音量を計算する"""
     wave = np.concatenate(
@@ -266,6 +266,8 @@ def _create_visualization(
     filename = verbose_dir / f"calc_lf0_statistics-{i_loop:02d}.png"
     plt.savefig(filename, transparent=False)
 
+    plt.close()
+
 
 def _compute_final_statistics(f0: np.ndarray) -> LogF0Statistics:
     """最終統計値の計算"""
@@ -289,11 +291,11 @@ def _compute_final_statistics(f0: np.ndarray) -> LogF0Statistics:
 
 def calc_lf0_statistics(
     input_paths: list[Path],
-    sampling_rate: float | None = None,
-    max_num: int = 100,
-    num_loop: int = 10,
-    target_duration: int = 180,
-    verbose_dir: Path | None = None,
+    sampling_rate: float | None,
+    max_num: int,
+    num_loop: int,
+    target_duration: int,
+    verbose_dir: Path | None,
 ) -> LogF0Statistics:
     """
     音声ファイルから対数f0の統計量を計算する。
@@ -313,12 +315,15 @@ def calc_lf0_statistics(
 
         # f0と音量を計算
         process = partial(
-            _calc_features, sampling_rate=24000, f0_floor=71.0, f0_ceil=800.0
+            _calc_features,
+            sampling_rate=sampling_rate,
+            f0_floor=f0_floor,
+            f0_ceil=f0_ceil,
         )
         paths_list = _split_wave_paths(paths, target_duration)
         with Pool() as p:
             features = list(p.imap_unordered(process, paths_list))
-            f0s, volumes = zip(*features, strict=False)
+            f0s, volumes = zip(*features, strict=True)
 
         f0 = np.concatenate(f0s)
         volume = np.concatenate(volumes)
@@ -335,6 +340,7 @@ def calc_lf0_statistics(
 
         # 可視化
         if verbose_dir is not None:
+            verbose_dir.mkdir(parents=True, exist_ok=True)
             _create_visualization(
                 f0, volume, norm_volume, f0_floor, f0_ceil, verbose_dir, i_loop
             )
@@ -350,11 +356,11 @@ def calc_lf0_statistics(
 def extract_f0_range(
     input_glob: str,
     output: Path,
-    sampling_rate: int | None = None,
-    max_num: int = 100,
-    num_loop: int = 10,
-    target_duration: int = 180,
-    verbose_dir: Path | None = None,
+    sampling_rate: int | None,
+    max_num: int,
+    num_loop: int,
+    target_duration: int,
+    verbose_dir: Path | None,
 ):
     input_paths = list(map(Path, glob(input_glob)))
     stats = calc_lf0_statistics(
