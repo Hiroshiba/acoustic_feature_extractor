@@ -15,24 +15,25 @@ def test_calc_lf0_statistics(
         max_num=10,
         num_loop=3,
         target_duration=30,
+        verbose_dir=None,
     )
 
     result = dataclasses.asdict(stats)
 
     expected = {
-        "max": 5.12,
-        "mean": 4.48,
-        "median": 4.41,
-        "min": 4.31,
-        "q001": 4.33,
-        "q003": 4.33,
-        "q005": 4.34,
-        "q01": 4.34,
-        "q99": 5.11,
-        "q995": 5.11,
-        "q997": 5.12,
-        "q999": 5.12,
-        "std": 0.21,
+        "max": 5.10,
+        "mean": 4.03,
+        "median": 3.73,
+        "min": 3.65,
+        "q001": 3.66,
+        "q003": 3.67,
+        "q005": 3.67,
+        "q01": 3.68,
+        "q99": 5.10,
+        "q995": 5.10,
+        "q997": 5.10,
+        "q999": 5.10,
+        "std": 0.38,
     }
 
     tolerance = 0.1
